@@ -173,7 +173,7 @@
     });
     
     characterToId.forEach(character => {
-        $("#character-filter").append(`<li><a href="#" class="filter-icon" data-filter-value="${Array.isArray(character.chara) ? character.chara.map(name => `.${name}`).join().replaceAll(",", "") : `.${character.chara}`}"><img src="assets/aside/tiny_${character.id}.png" alt=${Array.isArray(character.chara) ? character.chara.join("/") : character.chara} width="40" height="40" /></a></li>`)
+        $("#character-filter").append(`<li><a href="#" class="filter-icon" data-filter-value="${Array.isArray(character.chara) ? character.chara.map(name => `.${name}`).join().replaceAll(",", "") : `.${character.chara}`}"><img src="root/assets/aside/tiny_${character.id}.png" alt=${Array.isArray(character.chara) ? character.chara.join("/") : character.chara} width="40" height="40" /></a></li>`)
     })
     
      var filters = {};
@@ -279,11 +279,11 @@
                 <ul class="filter option-set" data-filter-group="country">
                 <li><b>COUNTRY</b></li>
                 <li><a href="#" data-filter-value="" class="selected">All</a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".central"><img src="assets/aside/country_central.png" alt="central" width="40" height="40"></a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".north"><img src="assets/aside/country_north.png" alt="north" width="40" height="40"></a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".east"><img src="assets/aside/country_east.png" alt="east" width="40" height="40"></a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".west"><img src="assets/aside/country_west.png" alt="west" width="40" height="40"></a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".south"><img src="assets/aside/country_south.png" alt="south" width="40" height="40"></a></li>
+                <li><a href="#" class="filter-icon" data-filter-value=".central"><img src="root/assets/aside/country_central.png" alt="central" width="40" height="40"></a></li>
+                <li><a href="#" class="filter-icon" data-filter-value=".north"><img src="root/assets/aside/country_north.png" alt="north" width="40" height="40"></a></li>
+                <li><a href="#" class="filter-icon" data-filter-value=".east"><img src="root/assets/aside/country_east.png" alt="east" width="40" height="40"></a></li>
+                <li><a href="#" class="filter-icon" data-filter-value=".west"><img src="root/assets/aside/country_west.png" alt="west" width="40" height="40"></a></li>
+                <li><a href="#" class="filter-icon" data-filter-value=".south"><img src="root/assets/aside/country_south.png" alt="south" width="40" height="40"></a></li>
                 </ul>
         
             </div>
