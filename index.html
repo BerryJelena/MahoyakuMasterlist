@@ -38,7 +38,10 @@
 	  let sheetObjects = csvToObjects(csvText);
 	  // sheetObjects is now an Array of Objects
 	  console.log(sheetObjects);
-	  // ADD CODE HERE
+
+	  for (const property in sheetObjects) {
+		  console.log(`${property}: ${object[property]}`);
+		}
 	}
 	
 	function csvToObjects(csv) {
@@ -50,12 +53,6 @@
 	    let row = csvSplit(csvRows[i]);
 	    for (let j = 0, max = row.length; j < max; j++) {
 	      thisObject[propertyNames[j]] = row[j];
-	      // BELOW 4 LINES WILL CONVERT DATES IN THE "ENROLLED" COLUMN TO JS DATE OBJECTS
-	      // if (propertyNames[j] === "Enrolled") {
-	      //   thisObject[propertyNames[j]] = new Date(row[j]);
-	      // } else {
-	      //   thisObject[propertyNames[j]] = row[j];
-	      // }
 	    }
 	    objects.push(thisObject);
 	  }
