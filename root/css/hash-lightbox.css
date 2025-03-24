@@ -1,0 +1,46 @@
+body.lightbox-visible > section {
+    filter: blur(5px);
+    pointer-events: none;
+    height: 0px !important;
+    overflow: hidden;
+}
+
+.lightbox {
+    position: absolute;
+    box-sizing: border-box;
+    z-index: 99;
+    width: 100%;
+    min-height: 100%;
+    background: var(--bg);
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem 0;
+}
+
+
+    .lightbox a.close-lightbox {
+    background: var(--header);
+    border: 1px solid var(--borders);
+    border-radius: 5px;
+    padding: 8px 20px;
+    font-size: 14px;
+    display: flex;
+    margin-top: 10px;
+    }
+    
+    .lightbox a.close-lightbox:hover {
+    color: var(--header);
+    background: var(--accent);
+    }
+
+    .night .lightbox {
+          background: var(--drk-bg);
+  color: var(--drk-font);
+    }
+
+
+    body.night .lightbox a.close-lightbox {background: var(--drk-accent); color: var(--drk-font);}
+    body.night .lightbox a.close-lightbox:hover {color: var(--drk-font); background: transparent; border: 1px solid var(--drk-accent);}
