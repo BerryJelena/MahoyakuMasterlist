@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- HTML Meta Tags -->
+<title>Event and Event Story Translation Masterlist</title>
+<meta name="description" content="A fan-made Mahoyaku masterlist that lists English translations of event and campaigns. ">
+
+
+<!-- Meta Tags Generated via https://www.opengraph.xyz -->
+
+<link rel="shortcut icon" href="{Favicon}">
+<link rel="alternate" type="application/rss+xml" href="{RSS}">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://unpkg.com/phosphor-icons"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+<script src="https://static.tumblr.com/p0knose/FpAp5c11c/magnusthemes.combofilters.js"></script>
+<script src="/js/hash-lightbox.js"></script>
+<link rel="stylesheet" href="css/styling.css">
+<link rel="stylesheet" href="css/hash-lightbox.css">
+
+<script>
+	// sheetID you can find in the URL of your spreadsheet after "spreadsheet/d/"
+	const sheetId = "1SHxrt80OQj4RfjnhmkFiGI_pLr03F-f6DUlBoOlsONU";
+	// sheetName is the name of the TAB in your spreadsheet
+	const sheetName = encodeURIComponent("test");
+	const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
+	console.log(sheetURL)
+	
+	fetch(sheetURL)
+	  .then((response) => response.text())
+	  .then((csvText) => handleResponse(csvText));
+	
+	function handleResponse(csvText) {
+	  // sheetObjects is now an Array of Objects
+	  console.log(csvText);
+	  // ADD CODE HERE
+	}
+
+	
+	
+    function getComboFilterCustom(filters) {
+        var i = 0;
+        var comboFilters = [];
+        for (var prop in filters) {
+            var filterGroup = filters[prop];
+            if (!filterGroup.length) {
+                continue;
+            }
+            if (i === 0) {
+                comboFilters = filterGroup.slice(0).join().replaceAll(",","");
+            } else {
+                var filterSelectors = [];
+                var groupCombo = Array.isArray(comboFilters) ? comboFilters.slice(0).join().replaceAll(",", "") : comboFilters;
+                for (var k = 0, len3 = filterGroup.length; k < len3; k++) {
+                        filterSelectors.push(groupCombo + filterGroup[k]);
+                }
+                comboFilters = filterSelectors;
+            }
+            i++;
+        }
+        var comboFilter = Array.isArray(comboFilters) ? comboFilters.join(", ") : comboFilters;
+        return comboFilter;
+    }
+    
+    // getting character ids to use chibi heads
+    const characterToId = [
+        {
+            chara: "oz",
+            id: 1,
+        },
+        {
+            chara: "arthur",
+            id: 2,
+        },
+        {
+            chara: "cain",
+            id: 3,
+        },
+        {
+            chara: "riquet",
+            id: 4,
+        },
+        {
+            chara: "snow",
+            id: 5,
+        },
+        {
+            chara: "white",
+            id: 6,
+        },
+        {
+            chara: "mithra",
+            id: 7,
+        },
+        {
+            chara: "owen",
+            id: 8,
+        },
+        {
+            chara: "bradley",
+            id: 9,
+        },
+        {
+            chara: "faust",
+            id: 10,
+        },
+        {
+            chara: "shino",
+            id: 11,
+        },
+        {
+            chara: "heathcliff",
+            id: 12,
+        },
+        {
+            chara: "nero",
+            id: 13,
+        },
+        {
+            chara: "shylock",
+            id: 14,
+        },
+        {
+            chara: "murr",
+            id: 15,
+        },
+        {
+            chara: "chloe",
+            id: 16,
+        },
+        {
+            chara: "rustica",
+            id: 17,
+        },
+        {
+            chara: "figaro",
+            id: 18,
+        },
+        {
+            chara: "rutile",
+            id: 19,
+        },
+        {
+            chara: "lennox",
+            id: 20,
+        },
+        {
+            chara: "mitile",
+            id: 21,
+        },
+        {
+            chara: "akira",
+            id: 22,
+        },
+        
+    ];
+    
+    // isotope-combination-filtering
+    $(document).ready(function() {
+        
+    // using javascript to remedy the situation
+    
+    // add character names to the div class list
+     var $container = $(".grid");
+    $container.children().each(function() {
+        const characters = $(this).children().find("p").text().split(':')[1].replaceAll(" ", "").split(',');
+        characters.forEach(character => {
+            $(this).addClass(character.toLowerCase());
+        });
+    });
+    
+    characterToId.forEach(character => {
+        $("#character-filter").append(`<li><a href="#" class="filter-icon" data-filter-value="${Array.isArray(character.chara) ? character.chara.map(name => `.${name}`).join().replaceAll(",", "") : `.${character.chara}`}"><img src="assets/aside/tiny_${character.id}.png" alt=${Array.isArray(character.chara) ? character.chara.join("/") : character.chara} width="40" height="40" /></a></li>`)
+    })
+    
+     var filters = {};
+     var $grid = $container.isotope({
+       itemSelector: ".item", 
+       percentPosition: true 
+     });
+    
+    
+    $(".option-set a").click(function(e) {
+       var $this = $(this); 
+       var filterAttr = "data-filter-value";
+       var filterValue = $this.attr(filterAttr);
+       var $optionSet = $this.parents(".option-set");
+       var group = $optionSet.attr("data-filter-group");
+       var filterGroup = filters[group];
+       if (!filterGroup) {
+         filterGroup = filters[group] = [];
+       }
+       var $selectAll = $optionSet.find('a['+filterAttr+'=""]');
+       var activeClass = "selected",
+         exclClass = "exclusive";
+     comboFiltering($this,filters,filterAttr,filterValue,$optionSet,group,$selectAll,activeClass,exclClass);
+       var comboFilter = getComboFilterCustom(filters);
+	   console.log(comboFilter)
+       $grid.isotope({
+         filter: comboFilter
+       });
+       $this.toggleClass(activeClass);
+       e.preventDefault();
+     });
+    });
+    // DARK MODE
+    window.addEventListener("DOMContentLoaded", function() {
+    const btn = document.querySelector(".lightswitch");
+    
+    const currentTheme = localStorage.getItem("theme");
+    if (currentTheme == "dark") {
+    document.body.classList.add("night");
+    }
+    
+    btn.addEventListener("click", function () {
+    document.body.classList.toggle("night");
+    
+    let theme = "light";
+    if (document.body.classList.contains("night")) {
+    theme = "dark";
+    }
+    localStorage.setItem("theme", theme);
+    });
+    });
+	
+
+	
+    </script>
+
+</head>
+<body>
+
+     <!-- The sidebar -->
+<div class="sidebar">
+ 
+    
+    <div class="small-button">
+        <table>
+            <tr>
+                <td> <a href="/faq"><i class="ph-arrow-u-down-left"></i></a> </td>
+                <td> <a href="https://neospring.org/@mhykmasterlist" target="_blank"><i class="ph-envelope-fill"></i></a></td>
+                <td> <a href="https://docs.google.com/spreadsheets/d/1MgcUjuoKyMkxDt715843NLYXpl6N5hbob8kAQ8-y7VY/edit?usp=sharing" target="_blank"><i class="ph-sparkle-fill"></i></a> </td>
+                <td> <a class="lightswitch"><i class="ph-moon-fill"></i></a> </td>
+            </tr>
+        </table>
+    </div>
+        
+        <div id="filters-container">
+        
+            <div class="filters">
+                <ul class="filter option-set exclusive" data-filter-group="gen">
+                <li class="filter option-set exclusive"><a href="#" data-filter-value="" class="reset selected">All</a></li> <!-- IMPROTANT! make sure not to delete! -->
+                <li class="filter option-set exclusive"><a href="#" data-filter-value=".tl">TL</a></li>
+                <li class="filter option-set exclusive"><a href="#" data-filter-value=".notl">No TL</a></li>
+                </ul>
+        
+                <ul class="filter option-set exclusive" data-filter-group="era">
+                <li><b>YEAR</b></li>
+                <li><a href="#" data-filter-value="" class="selected">All</a></li>
+                <li><a href="#" data-filter-value=".first">Year 1</a></li>
+                <li><a href="#" data-filter-value=".second">Year 2</a></li>
+                <li><a href="#" data-filter-value=".third">Year 3</a></li>
+                <li><a href="#" data-filter-value=".fourth">Year 4</a></li>
+                <li><a href="#" data-filter-value=".fifth">Year 5</a></li>
+                <li><a href="#" data-filter-value=".sixth">Year 6</a></li>
+                </ul>
+        
+                <ul class="filter option-set exclusive" data-filter-group="type">
+                <li><b>STORY</b></li>
+                <li><a href="#" data-filter-value="" class="selected">All</a></li>
+                <li><a href="#" data-filter-value=".main">Main</a></li>
+                <li><a href="#" data-filter-value=".event">Events</a></li>
+                <li><a href="#" data-filter-value=".camp">Campaign</a></li>
+                </ul>
+        
+                <ul class="filter option-set" data-filter-group="country">
+                <li><b>COUNTRY</b></li>
+                <li><a href="#" data-filter-value="" class="selected">All</a></li>
+                <li><a href="#" class="filter-icon" data-filter-value=".central"><img src="assets/aside/country_central.png" alt="central" width="40" height="40"></a></li>
+                <li><a href="#" class="filter-icon" data-filter-value=".north"><img src="assets/aside/country_north.png" alt="north" width="40" height="40"></a></li>
+                <li><a href="#" class="filter-icon" data-filter-value=".east"><img src="assets/aside/country_east.png" alt="east" width="40" height="40"></a></li>
+                <li><a href="#" class="filter-icon" data-filter-value=".west"><img src="assets/aside/country_west.png" alt="west" width="40" height="40"></a></li>
+                <li><a href="#" class="filter-icon" data-filter-value=".south"><img src="assets/aside/country_south.png" alt="south" width="40" height="40"></a></li>
+                </ul>
+        
+            </div>
+            <div class="charafilters">
+                <ul class="charafilter option-set" id="character-filter" data-filter-group="character">
+                    <li><b>CHARACTER</b></li>
+                    <li><a href="#" data-filter-value="" class="selected">All</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- HEADER ENDS -->
+    </div>
+  
+    <!-- Page content -->
+    <div class="content">
+      ..
+        <!-- GRID STARTS -->
+        <section class="grid">
+            <div class="item first event west tl">
+                <div class="box"><img src="assets/banner/event_banner_1.png"></div>
+                <div class="right"><h2>Prelude of Desire and Festival</h2>
+                <i>Tsushimi Bunta</i>
+                <table class="masterlist-chapters" style="width:100%;">
+                    <tr>
+                      <td> '''Chapters''' </td>
+                      <td right> '''Release''' </td>
+                    </tr>
+                    <tr>
+                      <td> 13 </td>
+                      <td right> December 10, 2019 </td>
+                    </tr>          </table>
+                <p><b>Characters: </b>Oz, Snow, White, Faust, Shino, Heathcliff, Nero, Shylock, Murr, Chloe, Rustica, Figaro, Cock Robin
+                </p>
+                <a class="second" href="https://mahoyaku.fandom.com/wiki/Prelude_of_Desire_and_Festival" target="_blank">Wiki</a></div>
+                </div>
+            </div> 
+        </section>
+            <!-- GRID ENDS -->
+            </body>
+            </html>
