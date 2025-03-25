@@ -155,7 +155,57 @@
 	const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
 	console.log(sheetURL)
 	
-	fetch(sheetURL)
+	
+	
+	function csvToObjects(csv) {
+	  const csvRows = csv.split("\n");
+	  const propertyNames = csvSplit(csvRows[0]);
+	  let objects = [];
+	  for (let i = 1, max = csvRows.length; i < max; i++) {
+	    let thisObject = {};
+	    let row = csvSplit(csvRows[i]);
+	    for (let j = 0, max = row.length; j < max; j++) {
+	      thisObject[propertyNames[j]] = row[j];
+	    }
+	    objects.push(thisObject);
+	  }
+	  return objects;
+	}
+	
+	function csvSplit(row) {
+	  return row.split(",").map((val) => val.substring(1, val.length - 1));
+	}
+	
+	
+    function getComboFilterCustom(filters) {
+        var i = 0;
+        var comboFilters = [];
+        for (var prop in filters) {
+            var filterGroup = filters[prop];
+            if (!filterGroup.length) {
+                continue;
+            }
+            if (i === 0) {
+                comboFilters = filterGroup.slice(0).join().replaceAll(",","");
+            } else {
+                var filterSelectors = [];
+                var groupCombo = Array.isArray(comboFilters) ? comboFilters.slice(0).join().replaceAll(",", "") : comboFilters;
+                for (var k = 0, len3 = filterGroup.length; k < len3; k++) {
+                        filterSelectors.push(groupCombo + filterGroup[k]);
+                }
+                comboFilters = filterSelectors;
+            }
+            i++;
+        }
+        var comboFilter = Array.isArray(comboFilters) ? comboFilters.join(", ") : comboFilters;
+        return comboFilter;
+    }
+    
+
+    // isotope-combination-filtering
+    $(document).ready(function() {
+
+	    fetch(sheetURL)
 	  .then((response) => response.text())
 	  .then((csvText) => handleResponse(csvText));
 	
@@ -205,54 +255,6 @@
 			$('#event-grid').append(`<div class="item ${flt}"><div class="box"><img src=""></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters" style="width:100%;"> <tr> <td> '''Chapters''' </td> <td right> '''Release''' </td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b> ${chars}</p> <a class="second" href="${currObj.Wiki_Link}" target="_blank">Wiki</a> ${linksTxt} </div> </div>` );
 		}
 	}
-	
-	function csvToObjects(csv) {
-	  const csvRows = csv.split("\n");
-	  const propertyNames = csvSplit(csvRows[0]);
-	  let objects = [];
-	  for (let i = 1, max = csvRows.length; i < max; i++) {
-	    let thisObject = {};
-	    let row = csvSplit(csvRows[i]);
-	    for (let j = 0, max = row.length; j < max; j++) {
-	      thisObject[propertyNames[j]] = row[j];
-	    }
-	    objects.push(thisObject);
-	  }
-	  return objects;
-	}
-	
-	function csvSplit(row) {
-	  return row.split(",").map((val) => val.substring(1, val.length - 1));
-	}
-	
-	
-    function getComboFilterCustom(filters) {
-        var i = 0;
-        var comboFilters = [];
-        for (var prop in filters) {
-            var filterGroup = filters[prop];
-            if (!filterGroup.length) {
-                continue;
-            }
-            if (i === 0) {
-                comboFilters = filterGroup.slice(0).join().replaceAll(",","");
-            } else {
-                var filterSelectors = [];
-                var groupCombo = Array.isArray(comboFilters) ? comboFilters.slice(0).join().replaceAll(",", "") : comboFilters;
-                for (var k = 0, len3 = filterGroup.length; k < len3; k++) {
-                        filterSelectors.push(groupCombo + filterGroup[k]);
-                }
-                comboFilters = filterSelectors;
-            }
-            i++;
-        }
-        var comboFilter = Array.isArray(comboFilters) ? comboFilters.join(", ") : comboFilters;
-        return comboFilter;
-    }
-    
-
-    // isotope-combination-filtering
-    $(document).ready(function() {
         
     // using javascript to remedy the situation
     
