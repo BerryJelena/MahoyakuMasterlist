@@ -232,7 +232,7 @@
 					linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">${linkN}</a>`;
 				}
 			}
-						       console.log('J');
+						       console.log('K');
 		//add characters as images
 			var characters = currObj.Character.replace(" ","");
 			characters= characters.toLowerCase().split("-");
@@ -279,7 +279,7 @@
 	
     
     
-    $(".option-set a").click(function(e) {
+    $(".option-set a").live('click', function()  {
        var $this = $(this); 
        var filterAttr = "data-filter-value";
        var filterValue = $this.attr(filterAttr);
