@@ -160,10 +160,10 @@
 			for (const character of characters) {
 				let charID = characterToId.find(o => o.chara === character);
 				console.log(charID)
-				chars=chars+ `<img src="root/assets/aside/tiny_${charID}.png" alt=${character} width="30" height="30" />`;
+				chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="30" height="30" />`;
 			}
 		//get filters			       
-			var flt= currObj.Story.toLowerCase() +' '+ currObj.Year.toString() +' '+ currObj.Country.toLowerCase() +' '+ currObj.Character.toLowerCase().split("-");
+			var flt= currObj.Story.toLowerCase() +' '+ currObj.Year.toString() +' '+ currObj.Country.toLowerCase() +' '+ characters.join(" ");
 			if (currObj.TL){
 				flt=flt+" tl "
 			}
