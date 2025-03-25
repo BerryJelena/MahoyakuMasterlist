@@ -324,7 +324,9 @@
     header {width: 100%;}
     .filters {width: flex; margin-right: 20px;}
     .charafilters {width: flex; margin-right: 20px;}
-    .item {height: 48%; display: inline-block;}
+    .item {width: 48%; display: inline-block;}
+    .item img {height: 80px;
+  }    
     }
     
     @media only screen and (max-width: 700px) {
