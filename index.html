@@ -41,8 +41,11 @@
 
 	  var arrayLength = sheetObjects.length;
 		for (var i = 0; i < arrayLength; i++) {
-			
-		    console.log(sheetObjects[i].Event_Name);
+			var currObj=sheet_Objects[i]
+			if (currObj.Event_Name==="") {
+			    break;
+			  }
+		    console.log(currObj.Event_Name);
 		    //Do something
 		}
 	}
