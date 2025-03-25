@@ -45,10 +45,10 @@
 			if (currObj.Event_Name==="") {
 			    break;
 			  }
-			console.log(currObj.Character)
+			console.log(currObj)
 			let eventName = currObj.Event_Name.replaceAll("_", " ");
 		    // loop on google sheet's event and add an event div for each
-			$('#event-grid').append(`<div class="item ${currObj.Event_Name}"><div class="box"><img src="https://static.wikia.nocookie.net/mahoyaku/images/a/ad/${currObj.Event_Name}_Event_Banner.png"></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters" style="width:100%;"> <tr> <td> '''Chapters''' </td> <td right> '''Release''' </td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b> </p> <a class="second" href="${currObj.Wiki_Link}" target="_blank">Wiki</a></div> </div>` );
+			$('#event-grid').append(`<div class="item ${currObj.Event_Name}"><div class="box"><img src="https://mahoyaku.fandom.com/wiki/Promise_of_Wizard_Wiki?file=${currObj.Event_Name}_Event_Banner.png"></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters" style="width:100%;"> <tr> <td> '''Chapters''' </td> <td right> '''Release''' </td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b> </p> <a class="second" href="" target="_blank">Wiki</a></div> </div>` );
 		}
 	}
 	
