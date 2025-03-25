@@ -212,7 +212,7 @@
     $(document).ready(function() {
 	var sheetObjects= []
 	    fetch(sheetURL)
-	  .then((response) => response.text());
+	  .then((response) => response.text())
 	  .then((csvText) => sheetObjects = handleResponse(csvText));
 	
 
@@ -234,7 +234,7 @@
 					linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">${linkN}</a>`;
 				}
 			}
-						       console.log('L');
+						       console.log('M');
 		//add characters as images
 			var characters = currObj.Character.replace(" ","");
 			characters= characters.toLowerCase().split("-");
