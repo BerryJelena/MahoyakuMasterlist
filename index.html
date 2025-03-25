@@ -279,7 +279,7 @@
 	
     
     
-    $(".option-set a").live('click', function()  {
+    $(".option-set a").live('click', function(e)  {
        var $this = $(this); 
        var filterAttr = "data-filter-value";
        var filterValue = $this.attr(filterAttr);
