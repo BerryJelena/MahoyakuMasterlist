@@ -152,7 +152,7 @@
 	const sheetId = "1SHxrt80OQj4RfjnhmkFiGI_pLr03F-f6DUlBoOlsONU";
 	// sheetName is the name of the TAB in your spreadsheet
 	const sheetName = encodeURIComponent("Output_(Events)");
-	const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:tsv&sheet=${sheetName}`;
+	const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
 	console.log(sheetURL)
 	
 	fetch(sheetURL)
@@ -223,7 +223,7 @@
 	}
 	
 	function csvSplit(row) {
-	  return row.split("\t").map((val) => val.substring(1, val.length - 1));
+	  return row.split(" ").map((val) => val.substring(1, val.length - 1));
 	}
 	
 	
