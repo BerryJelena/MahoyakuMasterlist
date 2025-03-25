@@ -210,10 +210,10 @@
 
     // isotope-combination-filtering
     $(document).ready(function() {
-
+	var sheetObjects= []
 	    fetch(sheetURL)
 	  .then((response) => response.text());
-	  .then((csvText) => const sheetObjects = handleResponse(csvText));
+	  .then((csvText) => sheetObjects = handleResponse(csvText));
 	
 
 	var arrayLength = sheetObjects.length;
