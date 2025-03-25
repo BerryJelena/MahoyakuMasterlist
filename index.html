@@ -40,18 +40,22 @@
 	  console.log(sheetObjects);
 
 	  var arrayLength = sheetObjects.length;
-		for (var i = 0; i < arrayLength; i++) {
-			var currObj=sheetObjects[i]
+		for (var i = 0; i < arrayLength; i++) {;
+			var currObj=sheetObjects[i];
 			if (currObj.Event_Name==="") {
 			    break;
 			  }
 			
 			var links = currObj.Links.split(" ");
-			var linksTxt=``
-			var n=1
-			for (const link of links){
-				linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">Link ${n.toString()}</a></div>`
-				n = n+1
+			var linksTxt=``;
+			for (const link of links) {
+				if link != ''{
+					var linkN = link.substr(8);
+					linkN = linkN.split('/')[0];
+					linkN= linkNstr.split(".", 2).join(" ");
+					
+					linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">${linkN}</a>`;
+				}
 			}
 				
 			let eventName = currObj.Event_Name.replaceAll("_", " ");
