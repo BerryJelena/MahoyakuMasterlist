@@ -187,16 +187,16 @@
 			characters= characters.toLowerCase().split("-");
 			var chars=``;
 			for (const character of characters) {
-				console.log(character)
 				let charID = characterToId.find(o => o.chara === character);
-				console.log(charID)
 				chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="30" height="30" />`;
 			}
 
+			console.log(currObj.Year)
 			let yearID = yearToId.find(o => o.id === currObj.Year);
+			console.log(yearID)       
 			
 		//get filters
-			var flt= currObj.Story.toLowerCase() +' '+ yearID.year +' '+ currObj.Country.toLowerCase() +' '+ characters.join(" ");
+			var flt= currObj.Story.toLowerCase() +' '+ yearID.Year +' '+ currObj.Country.toLowerCase() +' '+ characters.join(" ");
 			if (currObj.TL){
 				flt=flt+" tl "
 			}
