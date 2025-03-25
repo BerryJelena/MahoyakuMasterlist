@@ -232,7 +232,7 @@
 					linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">${linkN}</a>`;
 				}
 			}
-						       console.log('D');
+						       console.log('E');
 		//add characters as images
 			var characters = currObj.Character.replace(" ","");
 			characters= characters.toLowerCase().split("-");
@@ -260,7 +260,6 @@
     
     // add character names to the div class list
   var $container = $(".grid");
-	console.log($container)
     $container.children().each(function() {
         const characters = $(this).children().find("p").text().split(':')[1].replaceAll(" ", "").split(',');
         characters.forEach(character => {
