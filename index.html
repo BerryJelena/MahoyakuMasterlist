@@ -22,97 +22,7 @@
 <link rel="stylesheet" href="css/hash-lightbox.css">
 
 <script>
-	// sheetID you can find in the URL of your spreadsheet after "spreadsheet/d/"
-	const sheetId = "1SHxrt80OQj4RfjnhmkFiGI_pLr03F-f6DUlBoOlsONU";
-	// sheetName is the name of the TAB in your spreadsheet
-	const sheetName = encodeURIComponent("Output_(Events)");
-	const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
-	console.log(sheetURL)
-	
-	fetch(sheetURL)
-	  .then((response) => response.text())
-	  .then((csvText) => handleResponse(csvText));
-	
-
-	function handleResponse(csvText) {
-	  let sheetObjects = csvToObjects(csvText);
-	  // sheetObjects is now an Array of Objects
-
-	  var arrayLength = sheetObjects.length;
-		for (var i = 0; i < arrayLength; i++) {;
-			var currObj=sheetObjects[i];
-			if (currObj.Event_Name==="") {
-			    break;
-			  }
-			
-			var links = currObj.Links.split(" ");
-			var linksTxt=``;
-			for (const link of links) {
-				if (link != "''") {
-					var linkN = link.substr(9);
-					linkN = linkN.split('/')[0];
-					linkN= linkN.split(".", 2).join(" ");
-					
-					linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">${linkN}</a>`;
-				}
-			}
-
-			var flt= currObj.Story.toLowerCase() +' '+ currObj.Year.toString() +' '+ currObj.Country.toLowerCase() +' '+ currObj.Character.toLowerCase();
-			if (currObj.TL){
-				flt=flt+" tl "
-			}
-				
-			let eventName = currObj.Event_Name.replaceAll("_", " ");
-		    // loop on google sheet's event and add an event div for each
-			$('#event-grid').append(`<div class="item flt"><div class="box"><img src=""></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters" style="width:100%;"> <tr> <td> '''Chapters''' </td> <td right> '''Release''' </td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b> ${currObj.Character}</p> <a class="second" href="${currObj.Wiki_Link}" target="_blank">Wiki</a> ${linksTxt} </div> </div>` );
-		}
-	}
-	
-	function csvToObjects(csv) {
-	  const csvRows = csv.split("\n");
-	  const propertyNames = csvSplit(csvRows[0]);
-	  let objects = [];
-	  for (let i = 1, max = csvRows.length; i < max; i++) {
-	    let thisObject = {};
-	    let row = csvSplit(csvRows[i]);
-	    for (let j = 0, max = row.length; j < max; j++) {
-	      thisObject[propertyNames[j]] = row[j];
-	    }
-	    objects.push(thisObject);
-	  }
-	  return objects;
-	}
-	
-	function csvSplit(row) {
-	  return row.split(",").map((val) => val.substring(1, val.length - 1));
-	}
-	
-	
-    function getComboFilterCustom(filters) {
-        var i = 0;
-        var comboFilters = [];
-        for (var prop in filters) {
-            var filterGroup = filters[prop];
-            if (!filterGroup.length) {
-                continue;
-            }
-            if (i === 0) {
-                comboFilters = filterGroup.slice(0).join().replaceAll(",","");
-            } else {
-                var filterSelectors = [];
-                var groupCombo = Array.isArray(comboFilters) ? comboFilters.slice(0).join().replaceAll(",", "") : comboFilters;
-                for (var k = 0, len3 = filterGroup.length; k < len3; k++) {
-                        filterSelectors.push(groupCombo + filterGroup[k]);
-                }
-                comboFilters = filterSelectors;
-            }
-            i++;
-        }
-        var comboFilter = Array.isArray(comboFilters) ? comboFilters.join(", ") : comboFilters;
-        return comboFilter;
-    }
-    
-    // getting character ids to use chibi heads
+	    // getting character ids to use chibi heads
     const characterToId = [
         {
             chara: "oz",
@@ -205,6 +115,104 @@
         
     ];
     
+	// sheetID you can find in the URL of your spreadsheet after "spreadsheet/d/"
+	const sheetId = "1SHxrt80OQj4RfjnhmkFiGI_pLr03F-f6DUlBoOlsONU";
+	// sheetName is the name of the TAB in your spreadsheet
+	const sheetName = encodeURIComponent("Output_(Events)");
+	const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
+	console.log(sheetURL)
+	
+	fetch(sheetURL)
+	  .then((response) => response.text())
+	  .then((csvText) => handleResponse(csvText));
+	
+
+	function handleResponse(csvText) {
+	  let sheetObjects = csvToObjects(csvText);
+	  // sheetObjects is now an Array of Objects
+
+	  var arrayLength = sheetObjects.length;
+		for (var i = 0; i < arrayLength; i++) {;
+			var currObj=sheetObjects[i];
+			if (currObj.Event_Name==="") {
+			    break;
+			  }
+		//add links if they're there
+			var links = currObj.Links.split(" ");
+			var linksTxt=``;
+			for (const link of links) {
+				if (link != "''") {
+					var linkN = link.substr(9);
+					linkN = linkN.split('/')[0];
+					linkN= linkN.split(".", 2).join(" ");
+					
+					linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">${linkN}</a>`;
+				}
+			}
+		//add characters as images
+			var characters = currObj.Character.toLowerCase().split(" ");
+			var chars=``;
+			for (const character of characters) {
+				let charID = characterToId.find(o => o.chara === character);
+				chars=chars+ `<img src="root/assets/aside/tiny_${charID}.png" alt=${character} width="30" height="30" />`;
+			}
+
+			var flt= currObj.Story.toLowerCase() +' '+ currObj.Year.toString() +' '+ currObj.Country.toLowerCase() +' '+ currObj.Character.toLowerCase();
+			if (currObj.TL){
+				flt=flt+" tl "
+			}
+				
+			let eventName = currObj.Event_Name.replaceAll("_", " ");
+		    // loop on google sheet's event and add an event div for each
+			$('#event-grid').append(`<div class="item ${flt}"><div class="box"><img src=""></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters" style="width:100%;"> <tr> <td> '''Chapters''' </td> <td right> '''Release''' </td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b> ${currObj.Character}</p> <a class="second" href="${currObj.Wiki_Link}" target="_blank">Wiki</a> ${linksTxt} </div> </div>` );
+		}
+	}
+	
+	function csvToObjects(csv) {
+	  const csvRows = csv.split("\n");
+	  const propertyNames = csvSplit(csvRows[0]);
+	  let objects = [];
+	  for (let i = 1, max = csvRows.length; i < max; i++) {
+	    let thisObject = {};
+	    let row = csvSplit(csvRows[i]);
+	    for (let j = 0, max = row.length; j < max; j++) {
+	      thisObject[propertyNames[j]] = row[j];
+	    }
+	    objects.push(thisObject);
+	  }
+	  return objects;
+	}
+	
+	function csvSplit(row) {
+	  return row.split(",").map((val) => val.substring(1, val.length - 1));
+	}
+	
+	
+    function getComboFilterCustom(filters) {
+        var i = 0;
+        var comboFilters = [];
+        for (var prop in filters) {
+            var filterGroup = filters[prop];
+            if (!filterGroup.length) {
+                continue;
+            }
+            if (i === 0) {
+                comboFilters = filterGroup.slice(0).join().replaceAll(",","");
+            } else {
+                var filterSelectors = [];
+                var groupCombo = Array.isArray(comboFilters) ? comboFilters.slice(0).join().replaceAll(",", "") : comboFilters;
+                for (var k = 0, len3 = filterGroup.length; k < len3; k++) {
+                        filterSelectors.push(groupCombo + filterGroup[k]);
+                }
+                comboFilters = filterSelectors;
+            }
+            i++;
+        }
+        var comboFilter = Array.isArray(comboFilters) ? comboFilters.join(", ") : comboFilters;
+        return comboFilter;
+    }
+    
+
     // isotope-combination-filtering
     $(document).ready(function() {
         
