@@ -113,7 +113,7 @@
             id: 22,
         },
 	{   
-            chara: "cock robin",
+            chara: "cock_robin",
             id: 23,
         },
         
@@ -154,13 +154,15 @@
 				}
 			}
 		//add characters as images
-			var characters = currObj.Character.toLowerCase().split("-");
+			var characters = currObj.Character.replace(" ","_");
+			characters= characters.toLowerCase().split("-");
 			var chars=``;
 			for (const character of characters) {
 				let charID = characterToId.find(o => o.chara === character);
+				console.log(charID)
 				chars=chars+ `<img src="root/assets/aside/tiny_${charID}.png" alt=${character} width="30" height="30" />`;
 			}
-		//get filters
+		//get filters			       
 			var flt= currObj.Story.toLowerCase() +' '+ currObj.Year.toString() +' '+ currObj.Country.toLowerCase() +' '+ currObj.Character.toLowerCase().split("-");
 			if (currObj.TL){
 				flt=flt+" tl "
