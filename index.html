@@ -224,7 +224,7 @@
 		//add links if they're there
 			var links = currObj.Links.split(" ");
 			var linksTxt=``;
-			for (const link of links) {
+			for (var link of links) {
 				if (link != "''") {
 					var linkN = link.substr(9);
 					linkN = linkN.split('/')[0];
