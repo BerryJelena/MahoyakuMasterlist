@@ -259,13 +259,7 @@
     // using javascript to remedy the situation
     
     // add character names to the div class list
-     var $container = $(".grid");
-    $container.children().each(function() {
-        const characters = $(this).children().find("p").text().split(':')[1].replaceAll(" ", "").split(',');
-        characters.forEach(character => {
-            $(this).addClass(character.toLowerCase());
-        });
-    });
+
     
     characterToId.forEach(character => {
         $("#character-filter").append(`<li><a href="#" class="filter-icon" data-filter-value="${Array.isArray(character.chara) ? character.chara.map(name => `.${name}`).join().replaceAll(",", "") : `.${character.chara}`}"><img src="root/assets/aside/tiny_${character.id}.png" alt=${Array.isArray(character.chara) ? character.chara.join("/") : character.chara} width="40" height="40" /></a></li>`)
