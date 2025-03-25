@@ -6,6 +6,8 @@
     --box: #e1def5;
     --borders: #b5aef0;
     --accent: #b5afcf94;
+    --wiki: #857eb3
+    --chapters:#b5aef04d
     
     /* dark mode colors */
     --drk-bg: #282450;
@@ -14,6 +16,8 @@
     --drk-header: #2C3349;
     --drk-box: #2C3349;
     --drk-borders: #181825;
+    --drk-wiki: #857eb3
+    --drk-chapters: #b5aef04d
     }
 
     ::selection {
@@ -52,7 +56,7 @@
     
     body.night .item {background: var(--drk-box);}
     body.night .item a {background: var(--drk-accent); color: var(--drk-font);}
-    
+
     body.night .item a:hover {color: var(--drk-font); background: transparent; border: 1px solid var(--drk-accent);}
     
     a {
@@ -172,7 +176,7 @@
     .item a {
     display: block;
     text-align: center;
-    background: var(--header);
+    background: var(--wiki);
     padding: 6px 8px;
     margin: 1px auto;
     border-radius: 3px;
@@ -247,7 +251,7 @@
     }
     
     .masterlist-chapters{
-      background-color: var(--borders);
+      background-color: var(--chapters);
       padding: 0.4em;
       border-radius: 0.4em;
       width:100%
