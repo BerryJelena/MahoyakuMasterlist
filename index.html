@@ -121,31 +121,31 @@
     const yearToId = [
         {
             year: "first",
-            id: 1,
+            id:1,
         },
         {
             year: "second",
-            id: 2,
+            id:2,
         },
 	    
         {
             year: "third",
-            id: 3,
+            id:3,
         },
 	    
         {
             year: "fourth",
-            id: 4,
+            id:4,
         },
 	    
         {
             year: "fifth",
-            id: 5,
+            id:5,
         },
 	    
         {
             year: "sixth",
-            id: 6,
+            id:6,
         },
 	];
 	// sheetID you can find in the URL of your spreadsheet after "spreadsheet/d/"
@@ -187,12 +187,13 @@
 			characters= characters.toLowerCase().split("-");
 			var chars=``;
 			for (const character of characters) {
+				console.log(character);
 				let charID = characterToId.find(o => o.chara === character);
 				chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="30" height="30" />`;
 			}
 
 			console.log(currObj.Year);
-			let yearID = yearToId.find(y => y.year === "first");
+			let yearID = yearToId.find(y => y.id === currObj.Year.toInteger());
 			console.log(yearID);       
 			
 		//get filters
