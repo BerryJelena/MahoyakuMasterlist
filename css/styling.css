@@ -174,7 +174,7 @@
     .item a {
     display: block;
     text-align: center;
-    background: var(--wiki);
+    background: #857eb3;
     padding: 6px 8px;
     margin: 1px auto;
     border-radius: 3px;
@@ -185,7 +185,7 @@
     .item a.second {
       display: block;
       text-align: center;
-      background: #857eb3;
+      background: var(--borders);
       padding: 0.4em 0.6em;
       margin: 1px 1px;
       border-radius: 3px;
