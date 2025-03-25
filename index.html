@@ -45,8 +45,8 @@
 			if (currObj.Event_Name==="") {
 			    break;
 			  }
-		    console.log(currObj.Event_Name);
-		    //Do something
+		    // loop on google sheet's event and add an event div for each
+			$('#event-grid').append(`<div class="item ${currObj.Event_name}">`);
 		}
 	}
 	
@@ -330,7 +330,7 @@
     <div class="content">
       ..
         <!-- GRID STARTS -->
-        <section class="grid">
+        <section class="grid"  id="event-grid">
             <div class="item first event west tl">
                 <div class="box"><img src="assets/banner/event_banner_1.png"></div>
                 <div class="right"><h2>Prelude of Desire and Festival</h2>
