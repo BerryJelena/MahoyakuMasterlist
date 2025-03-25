@@ -229,7 +229,7 @@
 					linkN = linkN.split('/')[0];
 					linkN= linkN.split(".", 2).join(" ");
 					
-					linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">${linkN}</a>`;
+					linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">TL: ${linkN}</a>`;
 				}
 			}
 						       console.log('N');
@@ -252,7 +252,7 @@
 				
 			let eventName = currObj.Event_Name.replaceAll("_", " ");
 		    // loop on google sheet's event and add an event div for each
-			$('#event-grid').append(`<div class="item ${flt}"><div class="box"><img src="root/assets/banner/${currObj.Image}"></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters"> <tr> <td>Chapters</td> <td right>Release</td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b> ${currObj.Character.replaceAll("-",", ")}</p> <a class="second" href="${currObj.Wiki_Link}" target="_blank">Wiki</a> ${linksTxt} </div> </div>` );
+			$('#event-grid').append(`<div class="item ${flt}"><div class="box"><img src="root/assets/banner/${currObj.Image}"></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters"> <tr> <td>Chapters</td> <td right>Release</td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b> ${currObj.Character.replaceAll("-",", ")}</p> <a href="${currObj.Wiki_Link}" target="_blank">Wiki</a> ${linksTxt} </div> </div>` );
 		}
 		    // using javascript to remedy the situation
 
