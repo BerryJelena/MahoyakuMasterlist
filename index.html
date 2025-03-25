@@ -182,14 +182,14 @@
 					linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">${linkN}</a>`;
 				}
 			}
-						       console.log('C');
+						       console.log('D');
 		//add characters as images
 			var characters = currObj.Character.replace(" ","");
 			characters= characters.toLowerCase().split("-");
 			var chars=``;
 			for (const character of characters) {
 				let charID = characterToId.find(o => o.chara === character);
-				chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="10px" height="10px" />`;
+				chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="10px" height="10px" display=inline-block; />`;
 			}
 
 			let yearID = yearToId.find(y => y.id === currObj.Year.toString());      
@@ -258,7 +258,7 @@
     
     // add character names to the div class list
   var $container = $(".grid");
-	console.log($container.children)
+	console.log($container)
     $container.children().each(function() {
         const characters = $(this).children().find("p").text().split(':')[1].replaceAll(" ", "").split(',');
         characters.forEach(character => {
