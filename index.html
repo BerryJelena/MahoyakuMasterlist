@@ -115,7 +115,7 @@
 	{   
             chara: "cockrobin",
             id: 23,
-        }
+        },
         
     ];
     const yearToId = [
@@ -146,7 +146,7 @@
         {
             year: "sixth",
             id: 6,
-        }
+        },
 	];
 	// sheetID you can find in the URL of your spreadsheet after "spreadsheet/d/"
 	const sheetId = "1SHxrt80OQj4RfjnhmkFiGI_pLr03F-f6DUlBoOlsONU";
@@ -187,6 +187,7 @@
 			characters= characters.toLowerCase().split("-");
 			var chars=``;
 			for (const character of characters) {
+				console.log(character)
 				let charID = characterToId.find(o => o.chara === character);
 				console.log(charID)
 				chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="30" height="30" />`;
