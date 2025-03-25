@@ -6,8 +6,6 @@
     --box: #e1def5;
     --borders: #b5aef0;
     --accent: #b5afcf94;
-    --wiki: #857eb3
-    --chapters:#b5aef04d
     
     /* dark mode colors */
     --drk-bg: #282450;
@@ -187,7 +185,7 @@
     .item a.second {
       display: block;
       text-align: center;
-      background: var(--borders);
+      background: #857eb3;
       padding: 0.4em 0.6em;
       margin: 1px 1px;
       border-radius: 3px;
@@ -251,7 +249,7 @@
     }
     
     .masterlist-chapters{
-      background-color: var(--chapters);
+      background-color: #b5aef04d;
       padding: 0.4em;
       border-radius: 0.4em;
       width:100%
