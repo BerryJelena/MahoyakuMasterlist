@@ -193,11 +193,10 @@
 				chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="30" height="30" />`;
 			}
 
-			console.log(
 			let yearID = yearToId.find(y => y.id === currObj.Year.toString());      
 			
 		//get filters
-			var flt= currObj.Story.toLowerCase() +' '+ yearID.Year +' '+ currObj.Country.toLowerCase() +' '+ characters.join(" ");
+			var flt= currObj.Story.toLowerCase() +' '+ yearID.year +' '+ currObj.Country.toLowerCase() +' '+ characters.join(" ");
 			if (currObj.TL){
 				flt=flt+" tl "
 			}
