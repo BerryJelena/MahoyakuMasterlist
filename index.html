@@ -49,10 +49,13 @@
 			var links = currObj.Links.split(" ");
 			var linksTxt=``;
 			for (const link of links) {
-				if (link != '') {
+				if (link === '') {
 					var linkN = link.substr(8);
+					console.log(linkN)
 					linkN = linkN.split('/')[0];
+					console.log(linkN)
 					linkN= linkN.split(".", 2).join(" ");
+					console.log(linkN)
 					
 					linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">${linkN}</a>`;
 				}
