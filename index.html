@@ -115,10 +115,39 @@
 	{   
             chara: "cock_robin",
             id: 23,
-        },
+        }
         
     ];
-    
+    const yearToId = [
+        {
+            year: "first",
+            id: 1,
+        },
+        {
+            year: "second",
+            id: 2,
+        },
+	    
+        {
+            year: "third",
+            id: 3,
+        },
+	    
+        {
+            year: "fourth",
+            id: 4,
+        },
+	    
+        {
+            year: "fifth",
+            id: 5,
+        },
+	    
+        {
+            year: "sixth",
+            id: 6,
+        }
+	];
 	// sheetID you can find in the URL of your spreadsheet after "spreadsheet/d/"
 	const sheetId = "1SHxrt80OQj4RfjnhmkFiGI_pLr03F-f6DUlBoOlsONU";
 	// sheetName is the name of the TAB in your spreadsheet
@@ -154,7 +183,7 @@
 				}
 			}
 		//add characters as images
-			var characters = currObj.Character.replace(" ","_");
+			var characters = currObj.Character.replace(" ","");
 			characters= characters.toLowerCase().split("-");
 			var chars=``;
 			for (const character of characters) {
@@ -162,8 +191,11 @@
 				console.log(charID)
 				chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="30" height="30" />`;
 			}
-		//get filters			       
-			var flt= currObj.Story.toLowerCase() +' '+ currObj.Year.toString() +' '+ currObj.Country.toLowerCase() +' '+ characters.join(" ");
+
+			let yearID = yearToId.find(o => o.id === currObj.Year);
+			
+		//get filters
+			var flt= currObj.Story.toLowerCase() +' '+ yearID.year +' '+ currObj.Country.toLowerCase() +' '+ characters.join(" ");
 			if (currObj.TL){
 				flt=flt+" tl "
 			}
@@ -321,12 +353,12 @@
                 <ul class="filter option-set exclusive" data-filter-group="era">
                 <li><b>YEAR</b></li>
                 <li><a href="#" data-filter-value="" class="selected">All</a></li>
-                <li><a href="#" data-filter-value=".1">Year 1</a></li>
-                <li><a href="#" data-filter-value=".2">Year 2</a></li>
-                <li><a href="#" data-filter-value=".3">Year 3</a></li>
-                <li><a href="#" data-filter-value=".4">Year 4</a></li>
-                <li><a href="#" data-filter-value=".5">Year 5</a></li>
-                <li><a href="#" data-filter-value=".6">Year 6</a></li>
+                <li><a href="#" data-filter-value=".first">Year 1</a></li>
+                <li><a href="#" data-filter-value=".second">Year 2</a></li>
+                <li><a href="#" data-filter-value=".third">Year 3</a></li>
+                <li><a href="#" data-filter-value=".fourth">Year 4</a></li>
+                <li><a href="#" data-filter-value=".fifth">Year 5</a></li>
+                <li><a href="#" data-filter-value=".sixth">Year 6</a></li>
                 </ul>
         
                 <ul class="filter option-set exclusive" data-filter-group="type">
