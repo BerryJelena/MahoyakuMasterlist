@@ -248,6 +248,8 @@
 			var flt= currObj.Story.toLowerCase() +' '+ yearID.year +' '+ currObj.Country.toLowerCase() +' '+ characters.join(" ");
 			if (currObj.TL==="TRUE"){
 				flt=flt+" tl "
+			}else {
+				flt=flt+" notl "
 			}
 				
 			let eventName = currObj.Event_Name.replaceAll("_", " ");
