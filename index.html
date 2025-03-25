@@ -186,15 +186,15 @@
 			var characters = currObj.Character.replace(" ","");
 			characters= characters.toLowerCase().split("-");
 			var chars=``;
+			print(currObj)
 			for (const character of characters) {
 				console.log(character);
 				let charID = characterToId.find(o => o.chara === character);
 				chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="30" height="30" />`;
 			}
 
-			console.log(currObj.Year);
-			let yearID = yearToId.find(y => y.id === currObj.Year.toString());
-			console.log(yearID);       
+			
+			let yearID = yearToId.find(y => y.id === currObj.Year.toString());      
 			
 		//get filters
 			var flt= currObj.Story.toLowerCase() +' '+ yearID.Year +' '+ currObj.Country.toLowerCase() +' '+ characters.join(" ");
