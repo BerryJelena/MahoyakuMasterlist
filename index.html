@@ -204,7 +204,7 @@
 				
 			let eventName = currObj.Event_Name.replaceAll("_", " ");
 		    // loop on google sheet's event and add an event div for each
-			$('#event-grid').append(`<div class="item ${flt}"><div class="box"><img src=""></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters" style="width:100%;"> <tr> <td> '''Chapters''' </td> <td right> '''Release''' </td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b><ul> ${chars}</ul></p> <a class="second" href="${currObj.Wiki_Link}" target="_blank">Wiki</a> ${linksTxt} </div> </div>` );
+			$('#event-grid').append(`<div class="item ${flt}"><div class="box"><img src=""></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters" style="width:100%;"> <tr> <td> '''Chapters''' </td> <td right> '''Release''' </td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b><ul  class="charafilter option-set"> ${chars}</ul></p> <a class="second" href="${currObj.Wiki_Link}" target="_blank">Wiki</a> ${linksTxt} </div> </div>` );
 		}
 	}
 	
