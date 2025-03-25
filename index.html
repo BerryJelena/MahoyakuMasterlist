@@ -232,7 +232,7 @@
 					linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">${linkN}</a>`;
 				}
 			}
-						       console.log('G');
+						       console.log('H');
 		//add characters as images
 			var characters = currObj.Character.replace(" ","");
 			characters= characters.toLowerCase().split("-");
@@ -257,7 +257,7 @@
 	}
         
     // using javascript to remedy the situation
-    
+    console.log(document.getElementsByClassName('.grid').innerHTML)
     // add character names to the div class list
   var $container = $(".grid");
     /*$container.children().each(function() {
@@ -272,10 +272,10 @@
     })
     
      var filters = {};
-     /*var $grid = $container.isotope({
+     var $grid = $container.isotope({
        itemSelector: ".item", 
        percentPosition: true 
-     });*/
+     });
 	
     
     
