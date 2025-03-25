@@ -186,7 +186,7 @@
 			var characters = currObj.Character.replace(" ","");
 			characters= characters.toLowerCase().split("-");
 			var chars=``;
-			print(currObj)
+			console.log(currObj)
 			for (const character of characters) {
 				console.log(character);
 				let charID = characterToId.find(o => o.chara === character);
@@ -194,7 +194,7 @@
 			}
 
 			
-			//let yearID = yearToId.find(y => y.id === currObj.Year.toString());      
+			let yearID = yearToId.find(y => y.id === currObj.Year.toString());      
 			
 		//get filters
 			var flt= currObj.Story.toLowerCase() +' '+ yearID.Year +' '+ currObj.Country.toLowerCase() +' '+ characters.join(" ");
