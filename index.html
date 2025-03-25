@@ -201,22 +201,20 @@
         return comboFilter;
     }
     
-	function handleResponse(csvText) {
-	  let sheetObjects0 = csvToObjects(csvText);
-	  // sheetObjects is now an Array of Objects
-	return sheetObjects0
-	  
-	}
 
     // isotope-combination-filtering
     $(document).ready(function() {
-	var sheetObjects= []
+
 	    fetch(sheetURL)
 	  .then((response) => response.text())
-	  .then((csvText) => sheetObjects = handleResponse(csvText));
+	  .then((csvText) => handleResponse(csvText));
 	
 
-	var arrayLength = sheetObjects.length;
+	function handleResponse(csvText) {
+	  let sheetObjects = csvToObjects(csvText);
+	  // sheetObjects is now an Array of Objects
+
+	  var arrayLength = sheetObjects.length;
 		for (var i = 0; i < arrayLength; i++) {;
 			var currObj=sheetObjects[i];
 			if (currObj.Event_Name==="") {
@@ -234,7 +232,7 @@
 					linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">${linkN}</a>`;
 				}
 			}
-						       console.log('M');
+						       console.log('N');
 		//add characters as images
 			var characters = currObj.Character.replace(" ","");
 			characters= characters.toLowerCase().split("-");
@@ -256,8 +254,8 @@
 		    // loop on google sheet's event and add an event div for each
 			$('#event-grid').append(`<div class="item ${flt}"><div class="box"><img src=""></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters" style="width:100%;"> <tr> <td> '''Chapters''' </td> <td right> '''Release''' </td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b> ${currObj.Character.replaceAll("-",", ")}</p> <a class="second" href="${currObj.Wiki_Link}" target="_blank">Wiki</a> ${linksTxt} </div> </div>` );
 		}
-        
-    // using javascript to remedy the situation
+		    // using javascript to remedy the situation
+
     // add character names to the div class list
   var $container = $(".grid");
     /*$container.children().each(function() {
@@ -301,6 +299,9 @@
        $this.toggleClass(activeClass);
        e.preventDefault();
      });
+	}
+        
+
     });
     // DARK MODE
     window.addEventListener("DOMContentLoaded", function() {
