@@ -172,7 +172,7 @@
     .item a {
     display: block;
     text-align: center;
-    background: var(--accent);
+    background: var(--header);
     padding: 6px 8px;
     margin: 1px auto;
     border-radius: 3px;
@@ -250,6 +250,7 @@
       background-color: var(--borders);
       padding: 0.4em;
       border-radius: 0.4em;
+      width:100%
     }
 
 
