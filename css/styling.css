@@ -31,7 +31,6 @@
     font-family: "Montserrat", sans-serif;
     font-size: 14px;
     color: var(--font);
-    line-height: 120%;
     word-wrap: break-word;
     transition: all 0.4s;
     }
@@ -182,14 +181,14 @@
     }
     
     .item a.second {
-    display: block;
-    text-align: center;
-    background: var(--bg);
-    padding: 0.4em 0.6em;
-    margin: 1px 1px;
-    border-radius: 3px;
-    border: 1px solid var(--accent);
-    color: var(--accent);
+      display: block;
+      text-align: center;
+      background: var(--borders);
+      padding: 0.4em 0.6em;
+      margin: 1px 1px;
+      border-radius: 3px;
+      border: 1px solid var(--accent);
+      color: var(--bg);
     flex-basis: 60%
     }
     
@@ -200,8 +199,8 @@
     
     .right {
     height: 101%;
-    width: 100%;
-    padding: 15px;
+    width: 90%;
+    padding: 1em;
     margin: 1;
     flex: 3 3 250px;
     }
@@ -226,10 +225,8 @@
     
     
     .item img {
-        display: block;
-        max-width: 101%;
-        object-fit: cover;
-        height: auto
+        display: inline-block;
+        height: 85px;
     }
     
     
