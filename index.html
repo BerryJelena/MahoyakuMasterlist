@@ -191,7 +191,7 @@
 			for (const character of characters) {
 				console.log(character);
 				let charID = characterToId.find(o => o.chara === character);
-				chars=chars+ `<li><img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="30" height="30" /></li>`;
+				chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="10" height="10" />`;
 			}
 
 			let yearID = yearToId.find(y => y.id === currObj.Year.toString());      
@@ -204,7 +204,7 @@
 				
 			let eventName = currObj.Event_Name.replaceAll("_", " ");
 		    // loop on google sheet's event and add an event div for each
-			$('#event-grid').append(`<div class="item ${flt}"><div class="box"><img src=""></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters" style="width:100%;"> <tr> <td> '''Chapters''' </td> <td right> '''Release''' </td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b><ul  class="charafilter option-set"> ${chars}</ul></p> <a class="second" href="${currObj.Wiki_Link}" target="_blank">Wiki</a> ${linksTxt} </div> </div>` );
+			$('#event-grid').append(`<div class="item ${flt}"><div class="box"><img src=""></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters" style="width:100%;"> <tr> <td> '''Chapters''' </td> <td right> '''Release''' </td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b> ${chars}</p> <a class="second" href="${currObj.Wiki_Link}" target="_blank">Wiki</a> ${linksTxt} </div> </div>` );
 		}
 	}
 	
