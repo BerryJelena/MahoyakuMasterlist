@@ -168,6 +168,14 @@
     font-size: 0.85rem;
     padding: 0.6rem 1rem;
             }
+/* Header links */
+.header a {
+  display: block;
+  color: black;
+  padding: 0.4em;
+  text-decoration: none;
+}
+
 
 container .css-vwst2 {
   width: 760px;
@@ -260,16 +268,6 @@ container .css-vwst2 {
        width: 90%;
        text-align: center;
        border-bottom: 2px solid var(--borders);
-       line-height: 0.1em;
-       margin: 0 auto;
-       margin-top: 1em;
-    }
-    
-    h3 span {
-        background:#fff;
-        padding:0 15px;
-        color: var(--accent);
-        font-size: 0.85em;
     }
     
     .masterlist-chapters{
@@ -427,3 +425,4 @@ div.content {
     float: none;
   }
 } 
+
