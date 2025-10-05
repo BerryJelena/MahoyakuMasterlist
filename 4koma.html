@@ -119,36 +119,7 @@
         },
         
     ];
-    const yearToId = [
-        {
-            year: "first",
-            id:"1",
-        },
-        {
-            year: "second",
-            id:"2",
-        },
-	    
-        {
-            year: "third",
-            id:"3",
-        },
-	    
-        {
-            year: "fourth",
-            id:"4",
-        },
-	    
-        {
-            year: "fifth",
-            id:"5",
-        },
-	    
-        {
-            year: "sixth",
-            id:"6",
-        },
-	];
+
 	// sheetID you can find in the URL of your spreadsheet after "spreadsheet/d/"
 	const sheetId = "1SHxrt80OQj4RfjnhmkFiGI_pLr03F-f6DUlBoOlsONU";
 	// sheetName is the name of the TAB in your spreadsheet
@@ -244,8 +215,6 @@
 				let charID = characterToId.find(o => o.chara === character);
 				chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="10px" height="10px" display=inline-block; />`;
 			}
-
-			let yearID = yearToId.find(y => y.id === currObj.Year.toString());      
 			
 		//get filters
 			var flt= currObj.Story.toLowerCase() +' '+ yearID.year +' '+ currObj.Country.toLowerCase() +' '+ characters.join(" ");
@@ -257,7 +226,7 @@
 				
 			let eventName = currName.replaceAll("_", " ");
 		    // loop on google sheet's event and add an event div for each
-			$('#event-grid').append(`<div class="item ${flt}"><div class="box"><img src="root/assets/banner/${currObj.Image}"></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters"> <tr> <td>Chapters</td> <td right>Release</td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b> ${currObj.Character.replaceAll("-",", ")}</p> <a href="${currObj.Wiki_Link.replaceAll("$",",")}" target="_blank">Wiki</a> ${linksTxt} </div> </div>` );
+			$('#event-grid').append(`<div class="item ${flt}"><div class="box"><img src="root/assets/Chibis/${currObj.Image}"></div><div class="right"><h2>${eventName}</h2> <i>${currObj.Writer}</i> <table class="masterlist-chapters"> <tr> <td>Chapters</td> <td right>Release</td> </tr> <tr> <td> ${currObj.Chapters} </td> <td right> ${currObj.Release} </td> </tr> </table> <p><b>Characters: </b> ${currObj.Character.replaceAll("-",", ")}</p> <a href="${currObj.Wiki_Link.replaceAll("$",",")}" target="_blank">Wiki</a> ${linksTxt} </div> </div>` );
 		}
 		    // using javascript to remedy the situation
 
@@ -420,4 +389,5 @@
 </div>
 </div>
             </body>
+
             </html>
