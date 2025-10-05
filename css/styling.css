@@ -66,28 +66,7 @@
     -ms-transition: all 0.4s;
     -o-transition: all 0.4s;
     }
-    
-    header {
-    position: relative;
-    flex-shrink: 0;
-    display: block;
-    height: 4rem;
-    backdrop-filter: blur(30px);
-    border-bottom: 1px solid rgba(236, 72, 153, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 2rem;
-    z-index: 1002;
-    box-shadow: 0 4px 30px rgba(168, 85, 247, 0.08);
-    overflow: visible;
-        }
-
-container .css-vwst2 {
-  width: 760px;
-  height: 59px;
-}
-    
+       
     img.avtr {
     width: 125px;
     height: 125px;
@@ -164,6 +143,37 @@ container .css-vwst2 {
     .selected {font-weight: bold; border-bottom: 2px solid var(--accent);background:var(--accent);}
     
     /* content */
+
+    .header {
+    position: relative;
+    flex-shrink: 0;
+    display: block;
+    height: 4rem;
+    backdrop-filter: blur(30px);
+    border-bottom: 1px solid rgba(236, 72, 153, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    z-index: 1002;
+    box-shadow: 0 4px 30px rgba(168, 85, 247, 0.08);
+    overflow: visible;
+        }
+
+  .header-center {
+    gap: 1rem;
+            }
+            
+  .header-text-btn {
+    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
+            }
+
+container .css-vwst2 {
+  width: 760px;
+  height: 59px;
+}
+
     .grid {
     width: 90%;
     height: calc(100vh - 230px);
