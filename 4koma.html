@@ -207,9 +207,9 @@
 						       console.log('N');
 		//add characters as images
 			var characters = currObj.Character.replace(" ","");
-			characters= characters.toLowerCase().split("-");
 			characters=characters.replace("(","");
 			characters=characters.replace(")","");	
+			characters= characters.toLowerCase().split("-");
 			console.log(characters);
 			var chars=``;
 			for (const character of characters) {
@@ -240,7 +240,7 @@
         });
     });*/
 
-	console.log(character);
+	
     characterToId.forEach(character => {
         $("#character-filter").append(`<li><a href="#" class="filter-icon" data-filter-value="${Array.isArray(character.chara) ? character.chara.map(name => `.${name}`).join().replaceAll(",", "") : `.${character.chara}`}"><img src="root/assets/aside/tiny_${character.id}.png" alt=${Array.isArray(character.chara) ? character.chara.join("/") : character.chara} width="40" height="40" /></a></li>`)
     })
@@ -398,6 +398,7 @@
             <!-- GRID ENDS -->
             </body>
             </html>
+
 
 
 
