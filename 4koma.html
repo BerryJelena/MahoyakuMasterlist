@@ -118,36 +118,6 @@
         },
         
     ];
-    const yearToId = [
-        {
-            year: "first",
-            id:"1",
-        },
-        {
-            year: "second",
-            id:"2",
-        },
-	    
-        {
-            year: "third",
-            id:"3",
-        },
-	    
-        {
-            year: "fourth",
-            id:"4",
-        },
-	    
-        {
-            year: "fifth",
-            id:"5",
-        },
-	    
-        {
-            year: "sixth",
-            id:"6",
-        },
-	];
 	// sheetID you can find in the URL of your spreadsheet after "spreadsheet/d/"
 	const sheetId = "1SHxrt80OQj4RfjnhmkFiGI_pLr03F-f6DUlBoOlsONU";
 	// sheetName is the name of the TAB in your spreadsheet
@@ -218,7 +188,7 @@
 	  var arrayLength = sheetObjects.length;
 		for (var i = 0; i < arrayLength; i++) {;
 			var currObj=sheetObjects[i];
-			if (currObj.Event_Name==="") {
+			if (currObj.Chibi==="") {
 			    break;
 			  }
 			var currName=currObj.Chibi.replaceAll("$",",")
@@ -244,9 +214,7 @@
 				console.log(character);
 				let charID = characterToId.find(o => o.chara === character);
 				//chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="10px" height="10px" display=inline-block; />`;
-			}
-
-			let yearID = yearToId.find(y => y.id === currObj.Year.toString());      
+			}    
 			
 		//get filters
 			var flt= currObj.Country.toLowerCase() +' '+ characters.join(" ");
@@ -270,7 +238,8 @@
             $(this).addClass(character.toLowerCase());
         });
     });*/
-    
+
+	console.log(character);
     characterToId.forEach(character => {
         $("#character-filter").append(`<li><a href="#" class="filter-icon" data-filter-value="${Array.isArray(character.chara) ? character.chara.map(name => `.${name}`).join().replaceAll(",", "") : `.${character.chara}`}"><img src="root/assets/aside/tiny_${character.id}.png" alt=${Array.isArray(character.chara) ? character.chara.join("/") : character.chara} width="40" height="40" /></a></li>`)
     })
@@ -428,6 +397,7 @@
             <!-- GRID ENDS -->
             </body>
             </html>
+
 
 
 
