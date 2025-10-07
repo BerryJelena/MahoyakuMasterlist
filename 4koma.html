@@ -211,11 +211,12 @@
 			characters=characters.replace(")","");	
 			characters=characters.replace("N/A","");	
 			characters= characters.toLowerCase().split("-");
-			console.log(characters)
 			var chars=``;
 			for (const character of characters) {
-				let charID = characterToId.find(o => o.chara === character);
-				chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="10px" height="10px" display=inline-block; />`;
+				if character (!= ""){
+					let charID = characterToId.find(o => o.chara === character);
+					chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="10px" height="10px" display=inline-block; />`;
+				}
 			}    
 			
 		//get filters
@@ -399,6 +400,7 @@
             <!-- GRID ENDS -->
             </body>
             </html>
+
 
 
 
