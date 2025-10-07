@@ -230,7 +230,7 @@
 				
 			let eventName = currName.replaceAll("_", " ");
 		    // loop on google sheet's event and add an event div for each
-			$('#event-grid').append(`<div class="item ${flt}"><div class="box"><img src="root/assets/Chibis/${currObj.Image}"></div><div class="right"><h2>${eventName}</h2> <i>${currObj.JP_Title}</i> <table class="masterlist-chapters"> <tr> <td>Rarity</td>  </tr> <tr> <td> ${currObj.Rarity} </td> </tr> </table> <p><b>Characters: </b> ${currObj.Character.replaceAll("-",", ")}</p> ${linksTxt} </div> </div>` );
+			$('#comic-grid').append(`<div class="item ${flt}"><div class="box"><img src="root/assets/Chibis/${currObj.Image}"></div><div class="right"><h2>${eventName}</h2> <i>${currObj.JP_Title}</i> <table class="masterlist-chapters"> <tr> <td>Rarity</td>  </tr> <tr> <td> ${currObj.Rarity} </td> </tr> </table> <p><b>Characters: </b> ${currObj.Character.replaceAll("-",", ")}</p> ${linksTxt} </div> </div>` );
 		}
 		    // using javascript to remedy the situation
 
@@ -353,15 +353,7 @@
                 <li><a href="#" data-filter-value=".camp">Campaign</a></li>
                 </ul>-->
         
-                <ul class="filter option-set" data-filter-group="country">
-                <li><b>COUNTRY</b></li>
-                <li><a href="#" data-filter-value="" class="selected">All</a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".central"><img src="root/assets/aside/country central.png" alt="central" width="40" height="40"></a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".north"><img src="root/assets/aside/country north.png" alt="north" width="40" height="40"></a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".east"><img src="root/assets/aside/country east.png" alt="east" width="40" height="40"></a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".west"><img src="root/assets/aside/country west.png" alt="west" width="40" height="40"></a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".south"><img src="root/assets/aside/country south.png" alt="south" width="40" height="40"></a></li>
-                </ul>
+
         
             </div>
             <div class="charafilters">
@@ -378,7 +370,7 @@
     <div class="content">
       ..
         <!-- GRID STARTS -->
-        <section class="grid"  id="event-grid">
+        <section class="grid"  id="comic-grid">
 		<!--<div class="item first event west tl">
                 <div class="box"><img src="assets/banner/event_banner_1.png"></div>
                 <div class="right"><h2>Prelude of Desire and Festival</h2>
@@ -401,6 +393,7 @@
             <!-- GRID ENDS -->
             </body>
             </html>
+
 
 
 
