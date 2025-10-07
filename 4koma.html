@@ -206,10 +206,10 @@
 			}
 						       console.log('N');
 		//add characters as images
-			var characters = currObj.Character.replace(" ","");
-			characters=characters.replace("(","");
-			characters=characters.replace(")","");	
-			characters=characters.replace("N/A","");	
+			var characters = currObj.Character.replaceAll(" ","");
+			characters=characters.replaceAll("(","");
+			characters=characters.replaceAll(")","");	
+			characters=characters.replaceAll("N/A","");	
 			characters= characters.toLowerCase().split("-");
 			console.log(characters);
 			var chars=``;
@@ -402,6 +402,7 @@
             <!-- GRID ENDS -->
             </body>
             </html>
+
 
 
 
