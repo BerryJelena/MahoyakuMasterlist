@@ -124,7 +124,6 @@
 	const sheetName = encodeURIComponent("Output_(4Koma)");
 	console.log(sheetName)
 	const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
-	console.log(sheetURL)
 	
 	
 	
@@ -209,11 +208,13 @@
 		//add characters as images
 			var characters = currObj.Character.replace(" ","");
 			characters= characters.toLowerCase().split("-");
+			characters=characters.replace("(","");
+			characters=characters.replace(")","");	
+			console.log(characters);
 			var chars=``;
 			for (const character of characters) {
-				console.log(character);
 				let charID = characterToId.find(o => o.chara === character);
-				//chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="10px" height="10px" display=inline-block; />`;
+				chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="10px" height="10px" display=inline-block; />`;
 			}    
 			
 		//get filters
@@ -397,6 +398,7 @@
             <!-- GRID ENDS -->
             </body>
             </html>
+
 
 
 
