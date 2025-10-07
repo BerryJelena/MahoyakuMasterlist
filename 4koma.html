@@ -213,7 +213,7 @@
 			characters= characters.toLowerCase().split("-");
 			var chars=``;
 			for (const character of characters) {
-				if character (!= ""){
+				if (character != ""){
 					let charID = characterToId.find(o => o.chara === character);
 					chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="10px" height="10px" display=inline-block; />`;
 				}
@@ -400,6 +400,7 @@
             <!-- GRID ENDS -->
             </body>
             </html>
+
 
 
 
