@@ -211,6 +211,7 @@
 			characters=characters.replace(")","");	
 			characters=characters.replace("N/A","");	
 			characters= characters.toLowerCase().split("-");
+			console.log(characters)
 			var chars=``;
 			for (const character of characters) {
 				let charID = characterToId.find(o => o.chara === character);
@@ -398,6 +399,7 @@
             <!-- GRID ENDS -->
             </body>
             </html>
+
 
 
 
