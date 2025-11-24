@@ -14,8 +14,8 @@
     --drk-header: #2C3349;
     --drk-box: #2C3349;
     --drk-borders: #181825;
-    --drk-wiki: #857eb3
-    --drk-chapters: #b5aef04d
+    --drk-wiki: #857eb3;
+    --drk-chapters: #b5aef04d;
     }
 
     ::selection {
@@ -195,7 +195,7 @@ container .css-vwst2 {
     width: 25%;
     box-sizing: border-box;
     border: 1px solid var(--borders);
-    border-radius: 5px;
+    border-radius: 8px;
     min-width: 32%;
     max-width: 430px;
     overflow: hidden
@@ -218,8 +218,8 @@ container .css-vwst2 {
       display: block;
       text-align: center;
       background: var(--borders);
-      padding: 0.4em 0.6em;
-      margin: 1px 1px;
+      padding: 6px 8px;
+      margin: 1px auto;
       border-radius: 3px;
       border: 1px solid var(--accent);
       color: var(--bg);
@@ -228,14 +228,15 @@ container .css-vwst2 {
     
     .box {
     display: flex;
+    aspect-ratio: 630 / 154;
     }
 
-    
+ 
     .right {
     height: 101%;
     width: 90%;
     padding: 1em;
-    margin: 1;
+    margin: 0 auto;
     flex: 3 3 250px;
     }
     
@@ -245,8 +246,8 @@ container .css-vwst2 {
     flex: 1 0 100px;
     }
     
-    .item h2 {margin: 5px 0 5px; color: var(--accent);}
-    .item b {color: var(--accent);}
+    .item h2 {margin: 5px 0 5px; color: var(--drk-wiki);}
+    .item b {color: var(--drk-wiki);}
     .item i {font-size: 0.9em;}
     .item p {line-height: 1em;}
     
@@ -259,8 +260,10 @@ container .css-vwst2 {
     
     
     .item img {
-        display: inline-block;
-        height: 85px;
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
     
     
@@ -346,9 +349,7 @@ container .css-vwst2 {
     header {width: 100%;}
     .filters {width: flex; margin-right: 20px;}
     .charafilters {width: flex; margin-right: 20px;}
-    .item {width: 48%; display: inline-block;}
-    .item img {height: 80px;
-  }    
+    .item {width: 48%; display: inline-block;}  
     }
     
     @media only screen and (max-width: 700px) {
@@ -363,7 +364,6 @@ container .css-vwst2 {
     @media only screen and (max-width: 600px) {
     header {width: 100%; }
     .item {width: 100%; display: inline-block; margin: 1% 0;}
-    .item img {height: 380px}
     }
     
     
