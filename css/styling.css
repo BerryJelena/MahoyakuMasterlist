@@ -206,7 +206,7 @@ container .css-vwst2 {
     .item a {
     display: block;
     text-align: center;
-    background: #857eb3;
+    background: #665e9c;
     padding: 6px 8px;
     margin: 1px auto;
     border-radius: 3px;
@@ -217,7 +217,7 @@ container .css-vwst2 {
     .item a.second {
       display: block;
       text-align: center;
-      background: var(--borders);
+      background: #c08be0;
       padding: 6px 8px;
       margin: 1px auto;
       border-radius: 3px;
