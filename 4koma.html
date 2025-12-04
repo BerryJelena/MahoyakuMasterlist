@@ -541,12 +541,13 @@
                     const element = $(`
                         <div class="item ${filterClasses.trim()}">
                             <div class="box">
+                                <h2 class="text-xl font-bold mb-1">${eventName}</h2>
                                 <!-- Image source now uses the constructed GitHub raw URL -->
                                 <img src="${imageUrl}" alt="${eventName}" onerror="this.onerror=null; this.src='${placeholderUrl}'" class="w-full h-full object-cover">
                             </div>
                             <div class="right text-gray-800 night:text-gray-100 flex flex-col justify-between">
                                 <div>
-                                    <h2 class="text-xl font-bold mb-1">${eventName}</h2>
+                                    
                                     <i class="text-sm italic block mb-3 text-gray-500 night:text-gray-300">${jpTitle}</i>
                                     
                                     <!-- Rarity Table -->
@@ -646,7 +647,7 @@
             <!-- Navigation buttons with round styling -->
             <a href="index.html" class="p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition" title="Home"><i class="ph-arrow-u-down-left-fill text-xl"></i></a>
             <a href="https://mhykmasterlist.tumblr.com/" target="_blank" class="p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition" title="Contact"><i class="ph-envelope-fill text-xl"></i></a>
-            <a href="https://docs.google.com/spreadsheets/d/1MgcUjuoKyMkxDt715843NLYXpl6N5hbob8kAQ8-y7VY/edit?usp=sharing" target="_blank" class="p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition" title="Spreadsheet"><i class="ph-sparkle-fill text-xl"></i></a>
+            <a href="https://docs.google.com/spreadsheets/d/16mhRYIg3wpccUuciR07gGRTicqIB2HYRMdPXbw-zFpQ/edit?usp=sharing" target="_blank" class="p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition" title="Spreadsheet"><i class="ph-sparkle-fill text-xl"></i></a>
             <a href="https://buymeacoffee.com/maripe" target="_blank" class="p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition" title="Support"><i class="ph-coffee text-xl"></i></a>
             <a class="lightswitch p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition cursor-pointer" title="Toggle Dark Mode"><i class="ph-moon-fill text-xl"></i></a>
         </div>
@@ -697,7 +698,7 @@
         <!-- Loading Indicator -->
         <div id="loading-indicator">
             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary mr-4"></div>
-            Loading data from Google Sheets...
+            Loading...
         </div>
 
         <!-- GRID STARTS -->
