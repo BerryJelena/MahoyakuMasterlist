@@ -1,413 +1,677 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<!-- HTML Meta Tags -->
-<title>Event and Event Story Translation Masterlist</title>
-<meta name="description" content="A fan-made Mahoyaku masterlist that lists English translations of event and campaigns. ">
+    <title>Event and Event Story Translation Masterlist</title>
+    <meta name="description" content="A fan-made Mahoyaku masterlist that lists English translations of event and campaigns. ">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Load Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-<!-- Meta Tags Generated via https://www.opengraph.xyz -->
-
-<link rel="shortcut icon" href="{Favicon}">
-<link rel="alternate" type="application/rss+xml" href="{RSS}">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<script src="https://unpkg.com/phosphor-icons"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
-<script src="https://static.tumblr.com/p0knose/FpAp5c11c/magnusthemes.combofilters.js"></script>
-<script src="/js/hash-lightbox.js"></script>
-<link rel="stylesheet" href="css/styling.css">
-<link rel="stylesheet" href="css/hash-lightbox.css">
-
-<script>
-	    // getting character ids to use chibi heads
-    const characterToId = [
-        {
-            chara: "oz",
-            id: 1,
-        },
-        {
-            chara: "arthur",
-            id: 2,
-        },
-        {
-            chara: "cain",
-            id: 3,
-        },
-        {
-            chara: "riquet",
-            id: 4,
-        },
-        {
-            chara: "snow",
-            id: 5,
-        },
-        {
-            chara: "white",
-            id: 6,
-        },
-        {
-            chara: "mithra",
-            id: 7,
-        },
-        {
-            chara: "owen",
-            id: 8,
-        },
-        {
-            chara: "bradley",
-            id: 9,
-        },
-        {
-            chara: "faust",
-            id: 10,
-        },
-        {
-            chara: "shino",
-            id: 11,
-        },
-        {
-            chara: "heathcliff",
-            id: 12,
-        },
-        {
-            chara: "nero",
-            id: 13,
-        },
-        {
-            chara: "shylock",
-            id: 14,
-        },
-        {
-            chara: "murr",
-            id: 15,
-        },
-        {
-            chara: "chloe",
-            id: 16,
-        },
-        {
-            chara: "rustica",
-            id: 17,
-        },
-        {
-            chara: "figaro",
-            id: 18,
-        },
-        {
-            chara: "rutile",
-            id: 19,
-        },
-        {
-            chara: "lennox",
-            id: 20,
-        },
-        {
-            chara: "mitile",
-            id: 21,
-        },
-        {
-            chara: "akira",
-            id: 22,
-        },
-	{   
-            chara: "cockrobin",
-            id: 23,
-        },
-        
-    ];
-	// sheetID you can find in the URL of your spreadsheet after "spreadsheet/d/"
-	const sheetId = "1SHxrt80OQj4RfjnhmkFiGI_pLr03F-f6DUlBoOlsONU";
-	// sheetName is the name of the TAB in your spreadsheet
-	const sheetName = encodeURIComponent("Output_(4Koma)");
-	console.log(sheetName)
-	const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
-	
-	
-	
-	function csvToObjects(csv) {
-	  const csvRows = csv.split("\n");
-	  const propertyNames = csvSplit(csvRows[0]);
-	  let objects = [];
-	  for (let i = 1, max = csvRows.length; i < max; i++) {
-	    let thisObject = {};
-	    let row = csvSplit(csvRows[i]);
-	    for (let j = 0, max = row.length; j < max; j++) {
-	      thisObject[propertyNames[j]] = row[j];
-	    }
-	    objects.push(thisObject);
-	  }
-	  return objects;
-	}
-	
-	function csvSplit(row) {
-	  return row.split(",").map((val) => val.substring(1, val.length - 1));
-	}
-	
-	
-    function getComboFilterCustom(filters) {
-        var i = 0;
-        var comboFilters = [];
-        for (var prop in filters) {
-            var filterGroup = filters[prop];
-            if (!filterGroup.length) {
-                continue;
-            }
-            if (i === 0) {
-                comboFilters = filterGroup.slice(0).join().replaceAll(",","");
-            } else {
-                var filterSelectors = [];
-                var groupCombo = Array.isArray(comboFilters) ? comboFilters.slice(0).join().replaceAll(",", "") : comboFilters;
-                for (var k = 0, len3 = filterGroup.length; k < len3; k++) {
-                        filterSelectors.push(groupCombo + filterGroup[k]);
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Applying the preferred color palette (Deep Violet/Lavender)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-primary': '#6d28d9', // Deep Violet (Indigo-700)
+                        'brand-secondary': '#a78bfa', // Lavender (Violet-400)
+                        'dark-bg': '#1f2937',
+                        'dark-card': '#374151',
+                        'light-bg': '#f3f4f6',
+                        'light-card': '#ffffff',
+                    }
                 }
-                comboFilters = filterSelectors;
             }
-            i++;
         }
-        var comboFilter = Array.isArray(comboFilters) ? comboFilters.join(", ") : comboFilters;
-        return comboFilter;
-    }
-    
-
-    // isotope-combination-filtering
-    $(document).ready(function() {
-
-	    fetch(sheetURL)
-	  .then((response) => response.text())
-	  .then((csvText) => handleResponse(csvText));
-	
-
-	function handleResponse(csvText) {
-	  let sheetObjects = csvToObjects(csvText);
-	  // sheetObjects is now an Array of Objects
-
-	  var arrayLength = sheetObjects.length;
-		for (var i = 0; i < arrayLength; i++) {;
-			var currObj=sheetObjects[i];
-			if (currObj.Chibi==="") {
-			    break;
-			  }
-			var currName=currObj.Chibi.replaceAll("$",",")
-		//add links if they're there
-			var links = currObj.Links.split(" ");
-			var linksTxt=``;
-			for (var link of links) {
-				if (link != "''") {
-					var linkN = link.substr(9);
-					linkN = linkN.split('/')[0];
-					linkN= linkN.split(".", 2).join(" ");
-					link=link.replaceAll("$",",");
-					
-					linksTxt=linksTxt + `<a class="second" href=${link} target="_blank">TL: ${linkN}</a>`;
-				}
-			}
-						       console.log('N');
-		//add characters as images
-			var characters = currObj.Character.replaceAll(" ","");
-			characters=characters.replaceAll("(","");
-			characters=characters.replaceAll(")","");	
-			characters=characters.replaceAll("N/A","");	
-			characters= characters.toLowerCase().split("-");
-			console.log(characters);
-			var chars=``;
-			for (const character of characters) {
-				if (character != ""){
-					let charID = characterToId.find(o => o.chara === character);
-					//chars=chars+ `<img src="root/assets/aside/tiny_${charID.id}.png" alt=${character} width="10px" height="10px" display=inline-block; />`;
-				}
-			}    
-			
-		//get filters
-			var flt= currObj.Country.toLowerCase() +' '+ characters.join(" ");
-			if (currObj.TL==="TRUE"){
-				flt=flt+" tl "
-			}else {
-				flt=flt+" notl "
-			}
-				
-			let eventName = currName.replaceAll("_", " ");
-		    // loop on google sheet's event and add an event div for each
-			$('#comic-grid').append(`<div class="item ${flt}"><div class="box"><img src="root/assets/Chibis/${currObj.Image}"></div><div class="right"><h2>${eventName}</h2> <i>${currObj.JP_Title}</i> <table class="masterlist-chapters"> <tr> <td>Rarity</td>  </tr> <tr> <td> ${currObj.Rarity} </td> </tr> </table> <p><b>Characters: </b> ${currObj.Character.replaceAll("-",", ")}</p> ${linksTxt} </div> </div>` );
-		}
-		    // using javascript to remedy the situation
-
-    // add character names to the div class list
-  var $container = $(".grid");
-    /*$container.children().each(function() {
-        const characters = $(this).children().find("p").text().split(':')[1].replaceAll(" ", "").split(',');
-        characters.forEach(character => {
-            $(this).addClass(character.toLowerCase());
-        });
-    });*/
-
-	
-    characterToId.forEach(character => {
-        $("#character-filter").append(`<li><a href="#" class="filter-icon" data-filter-value="${Array.isArray(character.chara) ? character.chara.map(name => `.${name}`).join().replaceAll(",", "") : `.${character.chara}`}"><img src="root/assets/aside/tiny_${character.id}.png" alt=${Array.isArray(character.chara) ? character.chara.join("/") : character.chara} width="40" height="40" /></a></li>`)
-    })
-    
-     var filters = {};
-     var $grid = $container.isotope({
-       itemSelector: ".item", 
-       percentPosition: true 
-     });
-	
-    
-    
-    $(".option-set a").live('click', function(e)  {
-       var $this = $(this); 
-       var filterAttr = "data-filter-value";
-       var filterValue = $this.attr(filterAttr);
-       var $optionSet = $this.parents(".option-set");
-       var group = $optionSet.attr("data-filter-group");
-       var filterGroup = filters[group];
-       if (!filterGroup) {
-         filterGroup = filters[group] = [];
-       }
-       var $selectAll = $optionSet.find('a['+filterAttr+'=""]');
-       var activeClass = "selected",
-         exclClass = "exclusive";
-     comboFiltering($this,filters,filterAttr,filterValue,$optionSet,group,$selectAll,activeClass,exclClass);
-       var comboFilter = getComboFilterCustom(filters);
-	   console.log(comboFilter)
-       $grid.isotope({
-         filter: comboFilter
-       });
-       $this.toggleClass(activeClass);
-       e.preventDefault();
-     });
-	}
-        
-
-    });
-    // DARK MODE
-    window.addEventListener("DOMContentLoaded", function() {
-    const btn = document.querySelector(".lightswitch");
-    
-    const currentTheme = localStorage.getItem("theme");
-    if (currentTheme == "dark") {
-    document.body.classList.add("night");
-    }
-    
-    btn.addEventListener("click", function () {
-    document.body.classList.toggle("night");
-    
-    let theme = "light";
-    if (document.body.classList.contains("night")) {
-    theme = "dark";
-    }
-    localStorage.setItem("theme", theme);
-    });
-    });
-	
-
-	
     </script>
 
+    <!-- Load Phosphor Icons (for the small buttons) -->
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <!-- Load jQuery and Isotope (required for the filtering grid) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    
+    <!-- Load imagesLoaded library to wait for all images before calculating masonry layout -->
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+
+    <style>
+        /* Base styles for dark mode compatibility */
+        body {
+            transition: background-color 0.3s, color 0.3s;
+            /* UPDATED: Use Montserrat font family */
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f5f4fa; /* light-bg */
+        }
+        .night body {
+            background-color: #282450; /* dark-bg */
+        }
+
+        /* Sidebar styles - Enhanced panel look with border for separation */
+        .sidebar {
+            width: 280px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            padding: 1.5rem;
+            box-shadow: 4px 0 10px rgba(245, 210, 255, 0.15); 
+            border-right: 1px solid #b586d1;
+            background-color: #e3d6f8;
+            transition: background-color 0.3s;
+        }
+        .night .sidebar {
+            background-color: #2C3349; /* dark-card */
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.4);
+            border-right: 1px solid #093169;
+        }
+
+        /* Content area adjustments */
+        .content {
+            margin-left: 280px;
+            padding: 2.5rem; 
+            min-height: 100vh;
+        }
+
+        /* Responsive adjustments for mobile */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                padding-bottom: 1rem;
+                border-right: none;
+                border-bottom: 1px solid #e1d5ec;
+            }
+            .content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            #filters-container {
+                display: block; 
+                padding: 1rem 0 0 0;
+            }
+        }
+
+        /* Filter list styles */
+        .filter ul, .charafilter ul {
+            list-style: none;
+            padding: 0;
+        }
+        /* Button common styles (Pill-like shape and transition) */
+        .filter a, .charafilter a {
+            padding: 0.5rem 0.75rem;
+            margin: 0.25rem 0.25rem 0.25rem 0; 
+            border-radius: 9999px; /* Pill shape */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s, box-shadow 0.2s, color 0.2s, border 0.2s;
+            /* Removed the light gray border here */
+            border: 1px solid transparent; 
+        }
+
+        /* Base light mode button styling */
+        .filter a {
+            background-color: #e5e7eb; 
+            color: #1f2937; 
+        }
+        .filter a:hover {
+            background-color: #d1d5db; 
+        }
+
+        /* Base dark mode button styling */
+        .night .filter a {
+            background-color: #4b5563; 
+            color: #f3f4f6; 
+            border-color: transparent; 
+        }
+        .night .filter a:hover {
+            background-color: #6b7280; 
+        }
+
+        /* Selected filter styling (Applies to both modes) */
+        .selected {
+            background-color: #6d28d9 !important; /* brand-primary */
+            color: #ffffff !important;
+            font-weight: 600;
+            border-color: #6d28d9 !important; 
+            /* Highlighted shadow for selected state */
+            box-shadow: 0 4px 8px -1px rgba(109, 40, 217, 0.4) !important; 
+        }
+
+        /* Character/Icon Filters */
+        .filter-icon {
+            padding: 0.1rem !important; 
+            border: 2px solid transparent; 
+            border-radius: 50%; 
+        }
+        .filter-icon.selected {
+            border-color: #a78bfa !important; 
+            background-color: transparent !important;
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.5) !important;
+        }
+        .filter-icon img {
+            border-radius: 50%;
+            object-fit: cover;
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Grid Item Styles (Isotope) */
+        .grid {
+            margin: 0 auto;
+        }
+        .item {
+            /* Mobile/Default size */
+            width: 100%; 
+            margin-bottom: 1rem; 
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 5px 15px -3px rgba(109, 40, 217, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            background-color: #e9e6f4;
+            display: flex; 
+            align-items: stretch; /* Allows image box to match the height of the content */
+        }
+        .night .item {
+            background-color: #473751; /* dark-card */
+        }
+        .item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px -5px rgba(109, 40, 217, 0.2), 0 5px 5px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        .item .box {
+            width: 160px; 
+            flex-shrink: 0;
+            overflow: hidden;
+            /* height: 100% is inherited from align-items: stretch */
+        }
+        .item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .item .right {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+
+        /* --- RESPONSIVE COLUMN WIDTHS (Masonry) --- */
+        
+        /* 1. Tablet/Desktop (md: >= 768px): 2 columns */
+        @media (min-width: 768px) {
+            .grid {
+                margin-left: -1rem;
+            }
+            .item {
+                width: calc(50% - 1.5rem); 
+                margin-bottom: 1.5rem; 
+                margin-left: 1.5rem; 
+                display: flex;
+            }
+            /* Adjust the card image width for the larger layout */
+            .item .box {
+                 width: 140px; 
+            }
+        }
+        
+        /* 2. Large Desktop (lg: >= 1024px): 3 columns */
+        @media (min-width: 1024px) {
+            .item {
+                width: calc(33.333% - 1.5rem); /* 3 columns */
+            }
+            /* Shrink image slightly to fit 3 columns better */
+            .item .box {
+                 width: 120px; 
+            }
+        }
+        
+        /* 3. Extra Large Desktop (xl: >= 1280px): 4 columns */
+        @media (min-width: 1280px) {
+            .item {
+                width: calc(25% - 1.5rem); /* 4 columns */
+            }
+            /* Keep image same size */
+            .item .box {
+                 width: 120px; 
+            }
+        }
+        /* --- END RESPONSIVE COLUMN WIDTHS --- */
+        
+        .masterlist-chapters tr td:last-child {
+            text-align: right;
+        }
+
+        /* Custom text colors for dark mode */
+        .night h2, .night i, .night p, .night .masterlist-chapters {
+            color: #e5e7eb;
+        }
+        
+        /* Loading Spinner */
+        #loading-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            font-size: 1.25rem;
+            color: #6d28d9; /* brand-primary */
+        }
+        
+        /* Button style for links (for dark mode support) */
+        .night .link-section a {
+            background-color: #a78bfa; /* brand-secondary as button color in dark mode */
+            color: #1f2937 !important; /* dark text */
+            box-shadow: 0 4px 8px -1px rgba(167, 139, 250, 0.4);
+        }
+        .night .link-section a:hover {
+            background-color: #8b5cf6; /* A slightly darker purple on hover */
+        }
+
+
+    </style>
 </head>
 <body>
 
-     <!-- The sidebar -->
-<div class="sidebar">
- 
-    
-    <div class="small-button">
-        <table>
-            <tr>
-                <td> <a href="index.html"><i class="ph-arrow-u-down-left"></i></a> </td>
-                <td> <a href="https://mhykmasterlist.tumblr.com/" target="_blank"><i class="ph-envelope-fill"></i></a></td>
-                <td> <a href="https://docs.google.com/spreadsheets/d/1MgcUjuoKyMkxDt715843NLYXpl6N5hbob8kAQ8-y7VY/edit?usp=sharing" target="_blank"><i class="ph-sparkle-fill"></i></a> </td>
-                <td> <a href="https://buymeacoffee.com/maripe" target="_blank"><i class="ph ph-coffee"></i></a></td>
-		<td> <a class="lightswitch"><i class="ph-moon-fill"></i></a> </td>
-            </tr>
-        </table>
-    </div>
+    <!-- Main Content Script -->
+    <script>
+        // --- Configuration ---
+        const characterToId = [
+            // Character IDs are critical for fetching images. Assuming the paths work.
+            { chara: "oz", id: 1 }, { chara: "arthur", id: 2 }, { chara: "cain", id: 3 }, { chara: "riquet", id: 4 },
+            { chara: "snow", id: 5 }, { chara: "white", id: 6 }, { chara: "mithra", id: 7 }, { chara: "owen", id: 8 },
+            { chara: "bradley", id: 9 }, { chara: "faust", id: 10 }, { chara: "shino", id: 11 }, { chara: "heathcliff", id: 12 },
+            { chara: "nero", id: 13 }, { chara: "shylock", id: 14 }, { chara: "murr", id: 15 }, { chara: "chloe", id: 16 },
+            { chara: "rustica", id: 17 }, { chara: "figaro", id: 18 }, { chara: "rutile", id: 19 }, { chara: "lennox", id: 20 },
+            { chara: "mitile", id: 21 }, { chara: "akira", id: 22 }, { chara: "cockrobin", id: 23 },
+        ];
         
-        <div id="filters-container">
+        // Sheet configuration
+        const sheetId = "1SHxrt80OQj4RfjnhmkFiGI_pLr03F-f6DUlBoOlsONU";
+        const sheetName = encodeURIComponent("Output_(4Koma)"); // Using 4Koma sheet name as provided
+        const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
         
-            <div class="filters">
-                <ul class="filter option-set exclusive" data-filter-group="gen">
-                <li class="filter option-set exclusive"><a href="#" data-filter-value="" class="reset selected">All</a></li> <!-- IMPROTANT! make sure not to delete! -->
-                <li class="filter option-set exclusive"><a href="#" data-filter-value=".tl">TL</a></li>
-                <li class="filter option-set exclusive"><a href="#" data-filter-value=".notl">No TL</a></li>
+        // --- GitHub Raw Content Base URLs ---
+        const GITHUB_BASE_URL = "https://raw.githubusercontent.com/BerryJelena/MahoyakuMasterlist/main/";
+        const GITHUB_CHIBI_BASE_URL = GITHUB_BASE_URL + "root/assets/Chibis/";
+        const GITHUB_ASIDE_BASE_URL = GITHUB_BASE_URL + "root/assets/aside/";
+
+
+        // --- Utility Functions ---
+
+        // Simple CSV parser for Google Sheet output
+        function csvToObjects(csv) {
+            const csvRows = csv.split("\n");
+            if (csvRows.length < 2) return [];
+
+            // Simple split for header row, ignoring quotes
+            const propertyNames = csvRows[0].split(",").map(header => header.trim().replace(/"/g, ''));
+
+            let objects = [];
+            for (let i = 1; i < csvRows.length; i++) {
+                // Regex to handle quoted strings containing commas
+                const row = csvRows[i].match(/(".*?"|[^",\s]+)(?=\s*\,|\s*$)/g) || [];
+                if (row.length === 0) continue; // Skip empty rows
+
+                let thisObject = {};
+                for (let j = 0; j < propertyNames.length; j++) {
+                    // Remove surrounding quotes and trim
+                    const value = (row[j] || '').trim().replace(/^"|"$/g, '');
+                    thisObject[propertyNames[j]] = value;
+                }
+                // Only push valid rows (e.g., if Chibi column is the first valid check)
+                if (thisObject[propertyNames[0]]) {
+                     objects.push(thisObject);
+                }
+            }
+            return objects;
+        }
+
+        // --- Filtering Logic (Simplified for Isotope) ---
+        // Filters object stores the currently active filters for each group
+        let filters = {};
+
+        function getComboFilter() {
+            let comboFilter = [];
+            // Iterate over all filter groups (e.g., 'gen', 'country', 'character')
+            for (let group in filters) {
+                const groupFilters = filters[group];
+                if (groupFilters && groupFilters.length) {
+                    comboFilter.push(groupFilters.join(''));
+                }
+            }
+            // Join filters for a multi-group match (e.g., '.tl.central.oz')
+            return comboFilter.join('');
+        }
+        
+        function handleFilterClick(e) {
+            e.preventDefault();
+            const $this = $(this);
+            const filterValue = $this.data('filter-value');
+            const group = $this.parent().parent().data('filter-group');
+            // Check for the exclusive class in the parent container
+            const isExclusive = $this.parent().parent().hasClass('exclusive'); 
+            const activeClass = "selected";
+
+            // If a group doesn't exist, create it
+            if (!filters[group]) {
+                filters[group] = [];
+            }
+            let filterGroup = filters[group];
+
+            if (isExclusive) {
+                // Exclusive group: only one selected at a time
+                $this.parent().parent().find('.' + activeClass).removeClass(activeClass);
+                filterGroup.length = 0; // Clear the array
+                if (filterValue !== '') {
+                    filterGroup.push(filterValue);
+                }
+                $this.addClass(activeClass);
+
+            } else {
+                // Non-exclusive group (like Characters or Countries)
+                const index = filterGroup.indexOf(filterValue);
+                if (filterValue === '') {
+                    // 'All' button clicked for non-exclusive group
+                    $this.parent().parent().find('.' + activeClass).removeClass(activeClass);
+                    $this.addClass(activeClass);
+                    filterGroup.length = 0; // Clear all filters in this group
+                } else if (index >= 0) {
+                    // Remove existing filter
+                    filterGroup.splice(index, 1);
+                    $this.removeClass(activeClass);
+                    // If all are deselected, ensure 'All' is selected
+                    if (filterGroup.length === 0) {
+                        $this.parent().parent().find('a[data-filter-value=""]').addClass(activeClass);
+                    }
+                } else {
+                    // Add new filter
+                    filterGroup.push(filterValue);
+                    $this.addClass(activeClass);
+                    // Deselect 'All' if a specific filter is selected
+                    $this.parent().parent().find('a[data-filter-value=""]').removeClass(activeClass);
+                }
+            }
+
+            // Apply the combined filter
+            const comboFilter = getComboFilter();
+            $('.grid').isotope({ filter: comboFilter || '*' }); // Use '*' if no filters are selected
+        }
+
+        // --- Main Data Handling & DOM Setup ---
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const $grid = $('#comic-grid');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            let iso; // Declare iso globally accessible in this scope
+
+            // 1. Initial Isotope Setup (before data is loaded)
+            iso = $grid.isotope({
+                itemSelector: ".item",
+                // Use 'masonry' for a proper multi-column layout on desktop
+                layoutMode: 'masonry', 
+                percentPosition: true,
+                masonry: {
+                    columnWidth: '.item' // Calculates column width based on item width
+                }
+            });
+
+            // 2. Load Data from Google Sheet
+            fetch(sheetURL)
+                .then((response) => response.text())
+                .then((csvText) => handleResponse(csvText))
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    loadingIndicator.innerHTML = '<p class="text-red-500">Error loading data. Check console for details.</p>';
+                });
+
+            function handleResponse(csvText) {
+                let sheetObjects = csvToObjects(csvText);
+                
+                // Remove loading indicator
+                loadingIndicator.style.display = 'none';
+
+                let elements = [];
+                for (const currObj of sheetObjects) {
+                    if (!currObj.Image) continue; // Skip rows without an image
+
+                    // --- Build Links (MODIFIED for button style) ---
+                    let linksTxt = ``;
+                    // The Links column might contain space-separated URLs
+                    const links = currObj.Links.split(/\s+/).filter(l => l.length > 0 && l !== "''");
+                    
+                    for (const link of links) {
+                        // Clean up the link source text for display
+                        let linkN = link.replace(/https?:\/\//, '').split('/')[0];
+                        linkN = linkN.split(".").slice(-2).join("."); // Get main domain parts
+                        const cleanLink = link.replaceAll("$",",");
+                        
+                        // Button styling classes for full-width look
+                        linksTxt += `
+                            <a class="
+                                block w-full text-center py-2 px-3 mt-2 
+                                bg-brand-primary text-white font-semibold rounded-lg 
+                                shadow-lg hover:bg-opacity-90 transition duration-150 transform hover:scale-[1.01]
+                                flex items-center justify-center space-x-2
+                            " href="${cleanLink}" target="_blank" rel="noopener noreferrer">
+                                <span>TL: ${linkN}</span>
+                                <i class="ph-arrow-square-out text-lg"></i>
+                            </a>
+                        `;
+                    }
+                    
+                    // --- Build Filters ---
+                    let filterClasses = '';
+                    
+                    // Country filter (lowercase and no spaces)
+                    filterClasses += (currObj.Country || '').toLowerCase().trim().replace(/\s/g, '');
+                    
+                    // TL Status
+                    if (currObj.TL && currObj.TL.toUpperCase() === "TRUE") {
+                        filterClasses += " tl ";
+                    } else {
+                        filterClasses += " notl ";
+                    }
+                    
+                    // Characters
+                    const characters = (currObj.Character || '')
+                        .toLowerCase()
+                        .split(/[\s\-\,]+/) // Split by space, dash, or comma
+                        .filter(c => c.length > 0);
+                        
+                    filterClasses += characters.join(" ");
+
+                    // Clean up event names
+                    const eventName = currObj.Chibi.replaceAll("_", " ").replaceAll("$",",");
+                    const jpTitle = currObj.JP_Title.replaceAll("$",",");
+                    const charaList = currObj.Character.replaceAll("-",", ");
+                    
+                    // Placeholder image URL generation using the image size set in CSS
+                    const placeholderUrl = `https://placehold.co/${window.innerWidth >= 768 ? '140x200' : '160x220'}/6d28d9/ffffff?text=No+Image`;
+                    
+                    // --- Construct GitHub Image URL ---
+                    // Assuming currObj.Image contains the filename (e.g., 'event_name.png')
+                    const imageUrl = GITHUB_CHIBI_BASE_URL + currObj.Image;
+
+
+                    // --- Create HTML Element ---
+                    const element = $(`
+                        <div class="item ${filterClasses.trim()}">
+                            <div class="box">
+                                <!-- Image source now uses the constructed GitHub raw URL -->
+                                <img src="${imageUrl}" alt="${eventName}" onerror="this.onerror=null; this.src='${placeholderUrl}'" class="w-full h-full object-cover">
+                            </div>
+                            <div class="right text-gray-800 night:text-gray-100 flex flex-col justify-between">
+                                <div>
+                                    <h2 class="text-xl font-bold mb-1">${eventName}</h2>
+                                    <i class="text-sm italic block mb-3 text-gray-500 night:text-gray-300">${jpTitle}</i>
+                                    
+                                    <!-- Rarity Table -->
+                                    <table class="masterlist-chapters w-full text-sm text-left mb-3">
+                                        <tr class="text-xs uppercase font-semibold text-gray-500 night:text-gray-400">
+                                            <td class="w-1/4 pb-1">Rarity</td>
+                                            <td class="w-3/4 text-right pb-1">Country</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-bold pt-1">${currObj.Rarity}</td>
+                                            <td class="text-right capitalize pt-1">${currObj.Country.toLowerCase()}</td>
+                                        </tr>
+                                    </table>
+                                    
+                                    <p class="text-sm mt-2 mb-3">
+                                        <b class="font-semibold">Characters: </b> ${charaList}
+                                    </p>
+                                </div>
+                                <div class="link-section space-y-2">
+                                    ${linksTxt}
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    elements.push(element[0]); // Push the raw DOM element
+                }
+
+                // 3. Append elements to the grid
+                $grid.append(elements);
+                
+                // 4. Crucial: Wait for all images to load before calling Isotope's layout
+                $grid.imagesLoaded(function() {
+                    // Append and layout now that image dimensions are correct
+                    $grid.isotope('appended', elements);
+                    $grid.isotope('layout');
+                });
+            }
+
+            // 4. Setup Character Filters from hardcoded list
+            const $characterFilterList = $("#character-filter");
+            characterToId.forEach(character => {
+                const charaName = character.chara;
+                const charaId = character.id;
+                
+                // --- Construct GitHub Asset URL for filter icons ---
+                const charaIconUrl = GITHUB_ASIDE_BASE_URL + `tiny_${charaId}.png`;
+
+                // Add the character filter
+                $characterFilterList.append(`
+                    <li class="inline-block">
+                        <a href="#" class="filter-icon" data-filter-value=".${charaName}">
+                            <img src="${charaIconUrl}" alt="${charaName}" 
+                                class="w-10 h-10 object-cover rounded-full"
+                                onerror="this.onerror=null;this.src='https://placehold.co/40x40/d1d5db/374151?text=${charaName.charAt(0).toUpperCase()}'"/>
+                        </a>
+                    </li>
+                `);
+            });
+            // Ensure initial "All" state is selected for the character group
+            $characterFilterList.find('a[data-filter-value=""]').addClass('selected');
+            
+            // 5. Attach Filter Event Handlers
+            $(".option-set a").on('click', handleFilterClick);
+            
+            // 6. Dark Mode Logic
+            const btn = document.querySelector(".lightswitch");
+            const currentTheme = localStorage.getItem("theme");
+            if (currentTheme == "dark") {
+                document.body.classList.add("night");
+            }
+            
+            btn.addEventListener("click", function () {
+                document.body.classList.toggle("night");
+                let theme = "light";
+                if (document.body.classList.contains("night")) {
+                    theme = "dark";
+                }
+                localStorage.setItem("theme", theme);
+            });
+            
+            // Re-layout Isotope on window resize
+            $(window).on('resize', function() {
+                // Ensure Isotope instance exists before calling layout
+                if (iso) {
+                    iso.layout();
+                }
+            });
+        });
+    </script>
+
+
+    <!-- The sidebar -->
+    <div class="sidebar text-gray-700 night:text-gray-300">
+        
+        <div class="flex justify-around mb-8 border-b pb-4 border-gray-200 night:border-gray-600">
+            <!-- Navigation buttons with round styling -->
+            <a href="index.html" class="p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition" title="Home"><i class="ph-arrow-u-down-left-fill text-xl"></i></a>
+            <a href="https://mhykmasterlist.tumblr.com/" target="_blank" class="p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition" title="Contact"><i class="ph-envelope-fill text-xl"></i></a>
+            <a href="https://docs.google.com/spreadsheets/d/1MgcUjuoKyMkxDt715843NLYXpl6N5hbob8kAQ8-y7VY/edit?usp=sharing" target="_blank" class="p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition" title="Spreadsheet"><i class="ph-sparkle-fill text-xl"></i></a>
+            <a href="https://buymeacoffee.com/maripe" target="_blank" class="p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition" title="Support"><i class="ph-coffee text-xl"></i></a>
+            <a class="lightswitch p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition cursor-pointer" title="Toggle Dark Mode"><i class="ph-moon-fill text-xl"></i></a>
+        </div>
+        
+        <div id="filters-container" class="space-y-6">
+            
+            <!-- TL Status Filter (Exclusive) -->
+            <div class="filters pb-4 border-b border-gray-200 night:border-gray-600">
+                <h3 class="text-sm uppercase font-extrabold mb-1 text-gray-500 night:text-gray-400">Translation Status</h3>
+                <ul class="filter option-set flex flex-wrap gap-2 exclusive" data-filter-group="gen">
+                    <li class="inline-block"><a href="#" data-filter-value="" class="reset selected text-sm">All</a></li>
+                    <li class="inline-block"><a href="#" data-filter-value=".tl" class="text-sm">Translated (TL)</a></li>
+                    <li class="inline-block"><a href="#" data-filter-value=".notl" class="text-sm">No Translation (No TL)</a></li>
                 </ul>
-        
-				<ul class="filter option-set" data-filter-group="country">
-                <li><b>COUNTRY</b></li>
-                <li><a href="#" data-filter-value="" class="selected">All</a></li>
+            </div>
+            
+            <!-- Country Filter (Non-Exclusive) -->
+            <div class="filters pb-4 border-b border-gray-200 night:border-gray-600">
+                <h3 class="text-sm uppercase font-extrabold mb-1 text-gray-500 night:text-gray-400">Country</h3>
+                <ul class="filter option-set flex flex-wrap gap-1" data-filter-group="country">
+                    <li class="inline-block"><a href="#" data-filter-value="" class="selected">All</a></li>
                 <li><a href="#" class="filter-icon" data-filter-value=".central"><img src="root/assets/aside/country central.png" alt="central" width="40" height="40"></a></li>
                 <li><a href="#" class="filter-icon" data-filter-value=".north"><img src="root/assets/aside/country north.png" alt="north" width="40" height="40"></a></li>
                 <li><a href="#" class="filter-icon" data-filter-value=".east"><img src="root/assets/aside/country east.png" alt="east" width="40" height="40"></a></li>
                 <li><a href="#" class="filter-icon" data-filter-value=".west"><img src="root/assets/aside/country west.png" alt="west" width="40" height="40"></a></li>
                 <li><a href="#" class="filter-icon" data-filter-value=".south"><img src="root/assets/aside/country south.png" alt="south" width="40" height="40"></a></li>
                 </ul>
-        
-                  <!-- <ul class="filter option-set exclusive" data-filter-group="type">
-                <li><b>STORY</b></li>
-                <li><a href="#" data-filter-value="" class="selected">All</a></li>
-                <li><a href="#" data-filter-value=".main">Main</a></li>
-                <li><a href="#" data-filter-value=".event">Events</a></li>
-                <li><a href="#" data-filter-value=".camp">Campaign</a></li>
-                </ul>-->
-        
-
-        
             </div>
+            
+            <!-- Character Filter (Non-Exclusive) -->
             <div class="charafilters">
-                <ul class="charafilter option-set" id="character-filter" data-filter-group="character">
-                    <li><b>CHARACTER</b></li>
-                    <li><a href="#" data-filter-value="" class="selected">All</a></li>
+                <h3 class="text-sm uppercase font-extrabold mb-1 text-gray-500 night:text-gray-400">Character</h3>
+                <ul class="charafilter option-set flex flex-wrap gap-1" id="character-filter" data-filter-group="character">
+                    <li class="inline-block"><a href="#" data-filter-value="" class="selected">All</a></li>
+                    <!-- Character icons populated by JavaScript -->
                 </ul>
             </div>
         </div>
-        <!-- HEADER ENDS -->
     </div>
-  
+    
     <!-- Page content -->
     <div class="content">
-      ..
+        <header class="mb-8">
+            <h1 class="text-4xl font-extrabold text-brand-primary night:text-brand-secondary">4 Koma Masterlist</h1>
+            <p class="text-lg text-gray-500 night:text-gray-400">Thanks to wonderful @sellei for the help!.</p>
+        </header>
+
+        <!-- Loading Indicator -->
+        <div id="loading-indicator">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary mr-4"></div>
+            Loading data from Google Sheets...
+        </div>
+
         <!-- GRID STARTS -->
-        <section class="grid"  id="comic-grid">
-		<!--<div class="item first event west tl">
-                <div class="box"><img src="assets/banner/event_banner_1.png"></div>
-                <div class="right"><h2>Prelude of Desire and Festival</h2>
-                <i>Tsushimi Bunta</i>
-                <table class="masterlist-chapters" style="width:100%;">
-                    <tr>
-                      <td> '''Chapters''' </td>
-                      <td right> '''Release''' </td>
-                    </tr>
-                    <tr>
-                      <td> 13 </td>
-                      <td right> December 10, 2019 </td>
-                    </tr>          </table>
-                <p><b>Characters: </b>Oz, Snow, White, Faust, Shino, Heathcliff, Nero, Shylock, Murr, Chloe, Rustica, Figaro, Cock Robin
-                </p>
-                <a class="second" href="https://mahoyaku.fandom.com/wiki/Prelude_of_Desire_and_Festival" target="_blank">Wiki</a></div>
-                </div>-->
-            </div> 
+        <section class="grid" id="comic-grid">
+            <!-- Data will be populated here by JavaScript -->
         </section>
-            <!-- GRID ENDS -->
-            </body>
-            </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <!-- GRID ENDS -->
+    </div>
+</body>
+</html>
