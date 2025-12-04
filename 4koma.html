@@ -433,7 +433,7 @@
                 .then((csvText) => handleResponse(csvText))
                 .catch(error => {
                     console.error('Error fetching data:', error);
-                    loadingIndicator.innerHTML = '<p class="text-red-500">Error loading data. Check console for details.</p>';
+                    loadingIndicator.innerHTML = '<p class="text-red-500">Error loading data.</p>';
                 });
 
             function handleResponse(csvText) {
@@ -521,10 +521,10 @@
                                     <table class="masterlist-chapters w-full text-sm text-left mb-3">
                                         <tr class="text-xs uppercase font-semibold text-gray-500 night:text-gray-400">
                                             <td class="w-1/4 pb-1">Rarity</td>
-                                            <td class="w-3/4 text-right pb-1">Country</td>
+                                            <td class="w-3/4 text-right pb-1">${currObj.Rarity}</td>
                                         </tr>
                                         <tr>
-                                            <td class="font-bold pt-1">${currObj.Rarity}</td>
+                                            <td class="font-bold pt-1">Country </td>
                                             <td class="text-right capitalize pt-1">${currObj.Country.toLowerCase()}</td>
                                         </tr>
                                     </table>
@@ -534,7 +534,7 @@
                                     </p>
                                 </div>
                                 <div class="link-section space-y-2">
-                                    ${linksTxt}
+                                    <a href="${currObj.Wiki_Link.replaceAll("$",",")}" target="_blank">Wiki</a> ${linksTxt} 
                                 </div>
                             </div>
                         </div>
