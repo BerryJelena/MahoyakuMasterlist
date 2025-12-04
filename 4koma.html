@@ -541,13 +541,12 @@
                     const element = $(`
                         <div class="item ${filterClasses.trim()}">
                             <div class="box">
-                                <h2 class="text-xl font-bold mb-1">${eventName}</h2>
                                 <!-- Image source now uses the constructed GitHub raw URL -->
                                 <img src="${imageUrl}" alt="${eventName}" onerror="this.onerror=null; this.src='${placeholderUrl}'" class="w-full h-full object-cover">
                             </div>
                             <div class="right text-gray-800 night:text-gray-100 flex flex-col justify-between">
                                 <div>
-                                    
+                                    <h2 class="text-xl font-bold mb-1">${eventName}</h2>
                                     <i class="text-sm italic block mb-3 text-gray-500 night:text-gray-300">${jpTitle}</i>
                                     
                                     <!-- Rarity Table -->
