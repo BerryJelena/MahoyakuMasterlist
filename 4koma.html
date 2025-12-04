@@ -67,6 +67,8 @@
             border-right: 1px solid #b586d1;
             background-color: #e3d6f8;
             transition: background-color 0.3s;
+            z-index: 50;
+            overflow-y: auto; /* Allow scrolling in sidebar if content is too long */
         }
         .night .sidebar {
             background-color: #2C3349; /* dark-card */
@@ -91,6 +93,7 @@
                 padding-bottom: 1rem;
                 border-right: none;
                 border-bottom: 1px solid #e1d5ec;
+                overflow-y: visible;
             }
             .content {
                 margin-left: 0;
@@ -202,7 +205,13 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
         }
+        /* Subtle zoom on hover for the image */
+        .item:hover img {
+            transform: scale(1.05);
+        }
+
         .item .right {
             padding: 1.5rem;
             flex-grow: 1;
@@ -446,12 +455,16 @@
                 for (const currObj of sheetObjects) {
                     if (!currObj.Image) continue; // Skip rows without an image
 
-                    // --- Build Links (MODIFIED for button style) ---
+                    // --- Build Links (Safe & Styled) ---
                     let linksTxt = ``;
-                    // The Links column might contain space-separated URLs
-                    const links = currObj.Links.split(/\s+/).filter(l => l.length > 0 && l !== "''");
+                    // Safely access Links column
+                    const linksRaw = currObj.Links || "";
+                    const links = linksRaw.split(/\s+/).filter(l => l.length > 0 && l !== "''");
                     
-                    for (const link of links) {
+                    for (const rawLink of links) {
+                        // FIX: Remove any leading/trailing single or double quotes
+                        const link = rawLink.replace(/^['"]+|['"]+$/g, '').trim();
+                        
                         // Clean up the link source text for display
                         let linkN = link.replace(/https?:\/\//, '').split('/')[0];
                         linkN = linkN.split(".").slice(-2).join("."); // Get main domain parts
@@ -467,6 +480,25 @@
                             " href="${cleanLink}" target="_blank" rel="noopener noreferrer">
                                 <span>TL: ${linkN}</span>
                                 <i class="ph-arrow-square-out text-lg"></i>
+                            </a>
+                        `;
+                    }
+                    
+                    // --- Build Wiki Link (Safe & Styled) ---
+                    // Fixes: Error: can't access property "replaceAll", currObj.Wiki_Link is undefined
+                    let wikiHtml = "";
+                    const rawWiki = currObj.Wiki_Link || ""; // safely default to empty string
+                    if (rawWiki) {
+                        // Styled to match the aesthetic but distinct (Gray button)
+                        wikiHtml = `
+                            <a href="${rawWiki.replaceAll("$",",")}" target="_blank" class="
+                                block w-full text-center py-2 px-3 
+                                bg-gray-200 text-gray-800 font-semibold rounded-lg 
+                                hover:bg-gray-300 transition duration-150
+                                flex items-center justify-center space-x-2
+                            ">
+                                <span>Wiki</span>
+                                <i class="ph-book-bookmark text-lg"></i>
                             </a>
                         `;
                     }
@@ -492,10 +524,10 @@
                         
                     filterClasses += characters.join(" ");
 
-                    // Clean up event names
-                    const eventName = currObj.Chibi.replaceAll("_", " ").replaceAll("$",",");
-                    const jpTitle = currObj.JP_Title.replaceAll("$",",");
-                    const charaList = currObj.Character.replaceAll("-",", ");
+                    // Clean up event names (Safe access)
+                    const eventName = (currObj.Chibi || "").replaceAll("_", " ").replaceAll("$",",");
+                    const jpTitle = (currObj.JP_Title || "").replaceAll("$",",");
+                    const charaList = (currObj.Character || "").replaceAll("-",", ");
                     
                     // Placeholder image URL generation using the image size set in CSS
                     const placeholderUrl = `https://placehold.co/${window.innerWidth >= 768 ? '140x200' : '160x220'}/6d28d9/ffffff?text=No+Image`;
@@ -521,11 +553,11 @@
                                     <table class="masterlist-chapters w-full text-sm text-left mb-3">
                                         <tr class="text-xs uppercase font-semibold text-gray-500 night:text-gray-400">
                                             <td class="w-1/4 pb-1">Rarity</td>
-                                            <td class="w-3/4 text-right pb-1">${currObj.Rarity}</td>
+                                            <td class="w-3/4 text-right pb-1">${currObj.Rarity || '-'}</td>
                                         </tr>
                                         <tr>
                                             <td class="font-bold pt-1">Country </td>
-                                            <td class="text-right capitalize pt-1">${currObj.Country.toLowerCase()}</td>
+                                            <td class="text-right capitalize pt-1">${(currObj.Country || '').toLowerCase()}</td>
                                         </tr>
                                     </table>
                                     
@@ -534,7 +566,8 @@
                                     </p>
                                 </div>
                                 <div class="link-section space-y-2">
-                                    <a href="${currObj.Wiki_Link.replaceAll("$",",")}" target="_blank">Wiki</a> ${linksTxt} 
+                                    ${wikiHtml}
+                                    ${linksTxt} 
                                 </div>
                             </div>
                         </div>
