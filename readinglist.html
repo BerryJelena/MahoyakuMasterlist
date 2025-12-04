@@ -16,14 +16,27 @@
         /* Configure Tailwind to use Inter font and apply base styling */
         body {
             font-family: "Montserrat", sans-serif;
-            background-color: #f5f4fa;
-            color: #481c58;
+            background-color: #f5f4fa; /* light mode default */
+            color: #222222; /* light mode default */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Dark Mode overrides for body (applies when <html> has class 'dark') */
+        .dark body {
+            background-color: #282450; /* gray-900 */
+            color: #f0f0f0; /* gray-200 */
         }
 
         /* The new top header/menu styling */
         .header {
-            /* Using Tailwind classes for sticky, shadow, and background */
-            border-bottom: 1px solid #e1d8e6;
+            background-color: #e1def5; /* light mode default */
+            border-bottom: 1px solid #c6c2e4;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        /* Dark mode header */
+        .dark .header {
+            background-color: #2C3349; /* gray-800 */
+            border-bottom-color: rgb(27, 36, 51); /* gray-700 */
         }
 
         /* Event Grid Item Styling */
@@ -32,11 +45,16 @@
             margin: 0.75rem; 
             margin-bottom: 1.5rem; /* Keep existing bottom margin for vertical spacing */
             border-radius: 0.75rem;
-            background-color: #e1def5;
+            background-color: #e1def5; /* Light mode default */
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
             transition: all 0.3s ease;
             cursor: pointer;
             border: 2px solid transparent; /* Base state border */
+        }
+        
+        .dark .item {
+            background-color: #374151; /* gray-700 */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
         
         .item:hover {
@@ -46,10 +64,24 @@
 
         /* Collected State (Added for tracking) */
         .collected-item {
-            border-color: #a9c447; /* Emerald border for collected item */
-            background-color: #d0e4a9; /* Light green background */
+            border-color: #b3dd70; /* Emerald border for collected item (light) */
+            background-color: #d7ecbb; /* Light green background (light) */
+        }
+        
+        /* Dark mode Collected State */
+        .dark .collected-item {
+            border-color: #348bd3; /* Emerald 400 (dark) */
+            background-color: #06134e; /* Green 900 (dark) */
         }
 
+        /* Text colors inside .item for dark mode */
+        .dark .item h2 { color: #f3f4f6; }
+        .dark .item i { color: #9ca3af; }
+        .dark .item table { color: #d1d5db; }
+        .dark .item .text-gray-600 { color: #9ca3af; } /* Table headers */
+        .dark .item .text-gray-800 { color: #e5e7eb; } /* Table data */
+        .dark .item .border-t { border-color: #4b5563; } /* Internal divider */
+        
         .box img {
             width: 100%;
             height: auto;
@@ -71,6 +103,11 @@
             background-color: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(2px);
         }
+
+        /* Dark mode modal overrides */
+        .dark .modal-overlay {
+            background-color: rgba(17, 24, 39, 0.8); /* Darker overlay */
+        }
     </style>
 </head>
 <body>
@@ -78,33 +115,40 @@
     <!-- ====================================================================
          HEADER (New Sticky Top Menu)
          ==================================================================== -->
-    <header id="topHeader" class="header bg-white p-4 sticky top-0 z-40 shadow-md">
+    <header id="topHeader" class="header p-4 sticky top-0 z-40 shadow-md">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-start lg:items-center">
             
             <!-- Logo & Links Group -->
             <div class="flex flex-col lg:flex-row lg:space-x-8 w-full lg:w-auto mb-4 lg:mb-0">
-                <h1 class="text-2xl font-bold mb-2 lg:mb-0">Masterlist Tracker</h1>
-            </div>
-
-            <!-- Progress Tracker & Reset Group (Horizontal on desktop, stacked on mobile) -->
-            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 w-full lg:w-auto">
+                <h1 class="text-2xl font-bold mb-2 lg:mb-0 text-gray-900 dark:text-gray-100">Masterlist Tracker</h1>
+                
                 <!-- Links -->
-                <div class="flex space-x-4 text-gray-600 mb-2 lg:mb-0 items-center">
+                <div class="flex space-x-4 text-gray-600 dark:text-gray-400 mb-2 lg:mb-0 items-center">
                     <a href="4koma.html" class="hover:text-blue-500" title="4Koma"><i class="ph-arrow-u-down-left text-xl"></i></a>
                     <a href="https://mhykmasterlist.tumblr.com/" target="_blank" class="hover:text-blue-500" title="Contact"><i class="ph-envelope-fill text-xl"></i></a>
                     <a href="https://docs.google.com/spreadsheets/d/1MgcUjuoKyMkxDt715843NLYXpl6N5hbob8kAQ8-y7VY/edit?usp=sharing" target="_blank" class="hover:text-blue-500" title="Spreadsheet"><i class="ph-sparkle-fill text-xl"></i></a>
                     <a href="https://buymeacoffee.com/maripe" target="_blank" class="hover:text-blue-500" title="Support"><i class="ph ph-coffee text-xl"></i></a>
                 </div>
+            </div>
+
+            <!-- Progress Tracker & Reset Group (Horizontal on desktop, stacked on mobile) -->
+            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 w-full lg:w-auto">
+
+                <!-- Mode Toggle Button (New) -->
+                <button id="modeToggle" class="w-full sm:w-auto p-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg shadow-md hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-150 flex-shrink-0 flex items-center justify-center" title="Toggle Dark Mode">
+                    <i id="modeIcon" class="ph-fill text-xl"></i>
+                </button>
+                
                 <!-- Progress Tracker Section -->
-                <div class="p-3 bg-gray-50 rounded-lg shadow-inner flex-grow">
-                    <h3 class="text-xs font-semibold text-gray-500 mb-1">My Reading Progress</h3>
+                <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-inner flex-grow">
+                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">My Reading Progress</h3>
                     <div class="flex justify-between items-center">
-                        <span class="text-sm font-bold text-gray-700">
+                        <span class="text-sm font-bold text-gray-700 dark:text-gray-200">
                             <span id="collectedCount">0</span> / <span id="totalCount">0</span> Read
                         </span>
                         <span class="text-sm font-bold text-emerald-600 ml-4" id="progressPercentage">0%</span>
                     </div>
-                    <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1.5 mt-1">
                         <div id="progressBar" class="bg-emerald-500 h-1.5 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
                     </div>
                 </div>
@@ -139,15 +183,15 @@
 
     <!-- Custom Reset Confirmation Modal -->
     <div id="resetModal" class="hidden fixed inset-0 flex items-center justify-center modal-overlay z-50">
-        <div class="bg-white rounded-xl shadow-2xl p-6 w-11/12 max-w-sm transform scale-95 transition-transform duration-300">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-11/12 max-w-sm transform scale-95 transition-transform duration-300">
             <h3 class="text-xl font-bold text-red-600 mb-3 flex items-center">
                 <i class="ph-fill ph-warning-circle text-2xl mr-2"></i> Confirm Reset
             </h3>
-            <p class="text-gray-700 mb-6">
+            <p class="text-gray-700 dark:text-gray-300 mb-6">
                 Are you absolutely sure you want to reset all reading progress? This action cannot be undone and will clear the saved status for all events.
             </p>
             <div class="flex justify-end space-x-3">
-                <button id="cancelReset" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg font-semibold hover:bg-gray-300 transition">
+                <button id="cancelReset" class="px-4 py-2 text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition">
                     Cancel
                 </button>
                 <button id="confirmResetButton" class="px-4 py-2 text-white bg-red-500 rounded-lg font-semibold hover:bg-red-600 transition">
@@ -165,6 +209,9 @@
         
         // --- 1. SETUP & CONFIGURATION ---
         
+        // Dark Mode Key
+        const DARK_MODE_KEY = 'mahoyakuDarkMode';
+
         // Data for mapping character names to IDs (No longer used for filters, but kept for data integrity/potential future use)
         const characterToId = [
             { chara: "oz", id: 1 }, { chara: "arthur", id: 2 }, { chara: "cain", id: 3 },
@@ -211,6 +258,10 @@
         const resetModal = document.getElementById('resetModal');
         const confirmResetButton = document.getElementById('confirmResetButton');
         const cancelReset = document.getElementById('cancelReset');
+
+        // Dark Mode references
+        const modeToggle = document.getElementById('modeToggle');
+        const modeIcon = document.getElementById('modeIcon');
         
         // SVG Icons for visual status (Checkmark and Blank Box)
         const CHECKMARK_SVG = `<i class="ph-fill ph-check-circle text-emerald-600 text-3xl"></i>`;
@@ -263,6 +314,43 @@
             } catch (error) {
                 console.error("Could not save collection status to localStorage:", error);
             }
+        }
+
+        // --- Dark Mode Functions ---
+        
+        function loadDarkModePreference() {
+            const savedMode = localStorage.getItem(DARK_MODE_KEY);
+            // Default to system preference if no explicit setting is saved
+            if (savedMode === null) {
+                return window.matchMedia('(prefers-color-scheme: dark)').matches;
+            }
+            return savedMode === 'true';
+        }
+
+        function saveDarkModePreference(isDark) {
+            localStorage.setItem(DARK_MODE_KEY, isDark ? 'true' : 'false');
+        }
+
+        function applyDarkMode(isDark) {
+            const htmlElement = document.documentElement;
+            if (isDark) {
+                htmlElement.classList.add('dark');
+                modeIcon.classList.remove('ph-moon');
+                modeIcon.classList.add('ph-sun');
+                modeIcon.title = "Switch to Light Mode";
+            } else {
+                htmlElement.classList.remove('dark');
+                modeIcon.classList.remove('ph-sun');
+                modeIcon.classList.add('ph-moon');
+                modeIcon.title = "Switch to Dark Mode";
+            }
+        }
+
+        function toggleDarkMode() {
+            const isCurrentlyDark = document.documentElement.classList.contains('dark');
+            const newIsDark = !isCurrentlyDark;
+            applyDarkMode(newIsDark);
+            saveDarkModePreference(newIsDark);
         }
 
         // --- 4. PROGRESS TRACKER & MESSAGING ---
@@ -364,32 +452,34 @@
                     
                     <!-- Image Box (Now full width) -->
                     <div class="box w-full">
-                         <!-- Using a unique placeholder color based on ID to simulate different banners -->
-                         <img src="root/assets/banner/${itemId * 10 % 100}4444?text=Event+${itemId}" 
+                         <!-- UPDATED: Now uses item.Image from the spreadsheet data. 
+                              The Image column in the sheet must contain the file name (e.g., 'banner-01.png'). -->
+                         <img src="https://raw.githubusercontent.com/BerryJelena/MahoyakuMasterlist/main/root/assets/banner/${item.Image}" 
                               alt="${eventName} Banner" 
-                              class="w-full h-auto object-cover">
+                              class="w-full h-auto object-cover"
+                              onerror="this.onerror=null; this.src='https://placehold.co/400x150/9ca3af/ffffff?text=Image+Missing';">
                     </div>
                     
                     <!-- Content Section -->
                     <div class="content-text p-4">
                         <!-- break-words CLASS ensures long titles wrap cleanly -->
-                        <h2 class="text-xl font-extrabold text-gray-900 mb-1 break-words">${eventName}</h2>
-                        <i class="text-sm text-gray-500 block mb-2">Written by ${writer}</i>
+                        <h2 class="text-xl font-extrabold mb-1 break-words text-gray-900 dark:text-gray-100">${eventName}</h2>
+                        <i class="text-sm text-gray-500 dark:text-gray-400 block mb-2">Written by ${writer}</i>
                         
                         <table class="table-auto text-sm mb-2 w-full">
-                            <tr class="text-gray-600 font-semibold border-b">
+                            <tr class="text-gray-600 dark:text-gray-400 font-semibold border-b border-gray-100 dark:border-gray-600">
                                 <td>Chapters</td>
                                 <td class="text-right">Release</td>
                             </tr>
-                            <tr class="text-gray-800">
+                            <tr class="text-gray-800 dark:text-gray-200">
                                 <td>${item.Chapters || '-'}</td>
                                 <td class="text-right">${item.Release || '-'}</td>
                             </tr>
                         </table>
                         
                         <!-- Status Icon moved up -->
-                        <div class="flex justify-between items-center pt-2 mt-2 border-t border-gray-100">
-                            <p class="text-sm text-gray-700">
+                        <div class="flex justify-between items-center pt-2 mt-2 border-t border-gray-100 dark:border-gray-600">
+                            <p class="text-sm text-gray-700 dark:text-gray-300">
                                 <b class="font-bold">Characters:</b> ${characters}
                             </p>
                             <div class="status-icon">${isCollected ? CHECKMARK_SVG : BLANK_BOX_SVG}</div>
@@ -487,6 +577,14 @@
         // --- 7. INITIALIZATION ---
         
         function initializeApp() {
+            // 0. Initialize Dark Mode
+            const initialMode = loadDarkModePreference();
+            // Since the button exists in the HTML, we can apply the initial mode immediately.
+            applyDarkMode(initialMode);
+            
+            // Bind the toggle button
+            modeToggle.addEventListener('click', toggleDarkMode);
+            
             // Bind the button to show the modal
             resetButton.addEventListener('click', showResetModal);
             
