@@ -58,8 +58,8 @@
         }
         
         .item:hover {
-             transform: translateY(-2px);
-             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
         }
 
         /* Collected State (Added for tracking) */
@@ -113,8 +113,8 @@
 <body>
 
     <!-- ====================================================================
-         HEADER (New Sticky Top Menu)
-         ==================================================================== -->
+        HEADER (New Sticky Top Menu)
+        ==================================================================== -->
     <header id="topHeader" class="header p-4 sticky top-0 z-40 shadow-md">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-start lg:items-center">
             
@@ -128,7 +128,7 @@
                     <a href="https://mhykmasterlist.tumblr.com/" target="_blank" class="hover:text-blue-500" title="Contact"><i class="ph-envelope-fill text-xl"></i></a>
                     <a href="https://docs.google.com/spreadsheets/d/1MgcUjuoKyMkxDt715843NLYXpl6N5hbob8kAQ8-y7VY/edit?usp=sharing" target="_blank" class="hover:text-blue-500" title="Spreadsheet"><i class="ph-sparkle-fill text-xl"></i></a>
                     <a href="https://buymeacoffee.com/maripe" target="_blank" class="hover:text-blue-500" title="Support"><i class="ph ph-coffee text-xl"></i></a>
-                    <a id="modeToggle" class="lightswitch"><i class="ph-moon-fill"></i></a><!-- Mode Toggle Button (New) -->
+                    <a id="modeToggle" class="lightswitch"><i class="ph-moon-fill" id="modeIcon"></i></a><!-- Mode Toggle Button (New) -->
                 </div>
             </div>
 
@@ -159,10 +159,11 @@
     </header>
 
     <!-- ====================================================================
-         MAIN CONTENT (Event Grid) - Now occupies the full width below the header
-         ==================================================================== -->
+        MAIN CONTENT (Event Grid) - Now occupies the full width below the header
+        ==================================================================== -->
     <div class="content p-4 lg:p-8 max-w-7xl mx-auto">
-        <h2 id="initialStatus" class="text-xl text-center loading-text text-blue-500">Loading masterlist data from Google Sheet...</h2>
+        <!-- The loading status message has been removed from here. 
+             If the fetch fails, an error message will now be logged to the console. -->
         
         <section class="grid mt-8" id="event-grid">
             <!-- The grid-sizer ensures Isotope calculates columns correctly -->
@@ -199,8 +200,8 @@
     <!-- End Custom Reset Confirmation Modal -->
 
     <!-- ====================================================================
-         JAVASCRIPT LOGIC (Data, Tracking, and Interaction)
-         ==================================================================== -->
+        JAVASCRIPT LOGIC (Data, Tracking, and Interaction)
+        ==================================================================== -->
     <script>
         
         // --- 1. SETUP & CONFIGURATION ---
@@ -244,7 +245,6 @@
         const resetButton = document.getElementById('resetButton');
         const messageBox = document.getElementById('messageBox');
         const messageText = document.getElementById('messageText');
-        const initialStatus = document.getElementById('initialStatus');
         const collectedCountSpan = document.getElementById('collectedCount');
         const totalCountSpan = document.getElementById('totalCount');
         const progressPercentageSpan = document.getElementById('progressPercentage');
@@ -257,7 +257,8 @@
 
         // Dark Mode references
         const modeToggle = document.getElementById('modeToggle');
-        const modeIcon = document.getElementById('modeIcon');
+        // Note: The modeIcon ID was missing in HTML, added it for correct behavior.
+        const modeIcon = document.getElementById('modeIcon'); 
         
         // SVG Icons for visual status (Checkmark and Blank Box)
         const CHECKMARK_SVG = `<i class="ph-fill ph-check-circle text-emerald-600 text-3xl"></i>`;
@@ -331,13 +332,13 @@
             const htmlElement = document.documentElement;
             if (isDark) {
                 htmlElement.classList.add('dark');
-                modeIcon.classList.remove('ph-moon');
-                modeIcon.classList.add('ph-sun');
+                modeIcon.classList.remove('ph-moon-fill'); // Use the 'fill' version for the base
+                modeIcon.classList.add('ph-sun-fill');
                 modeIcon.title = "Switch to Light Mode";
             } else {
                 htmlElement.classList.remove('dark');
-                modeIcon.classList.remove('ph-sun');
-                modeIcon.classList.add('ph-moon');
+                modeIcon.classList.remove('ph-sun-fill');
+                modeIcon.classList.add('ph-moon-fill');
                 modeIcon.title = "Switch to Dark Mode";
             }
         }
@@ -380,6 +381,10 @@
         
         async function fetchAndRenderEvents() {
             try {
+                // Display a temporary loading message in the grid area if desired, 
+                // but since the original was removed, we'll rely on the default empty state 
+                // or just let the data populate instantly.
+                
                 const response = await fetch(sheetURL);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}. Check sheet publication.`);
@@ -406,14 +411,16 @@
                 // 5. Update Tracker
                 updateTracker();
                 
-                // Remove loading status
-                initialStatus.style.display = 'none';
-
+                // Note: The logic to remove the loading status is no longer needed here 
+                // because the status element was removed from the HTML entirely.
 
             } catch (error) {
                 console.error("Fatal Error:", error);
-                initialStatus.textContent = `Error loading data: ${error.message}. Please check the Google Sheet URL and ensure it is published to the web in CSV format.`;
-                initialStatus.className = "text-xl text-center error-text text-red-500 mt-8";
+                // Instead of updating the removed initialStatus element, we insert a new error message directly.
+                collectionContainer.innerHTML = `<p class="text-xl text-center error-text text-red-500 mt-8">
+                                                    Error loading data: ${error.message}. Please check the Google Sheet URL and ensure it is published to the web in CSV format.
+                                                </p>`;
+                updateTracker(); // Update tracker, which will show 0/0
             }
         }
         
@@ -443,17 +450,17 @@
             // Render the card structure (Vertical layout)
             return `
                 <div class="item p-0 ${filterClasses} ${collectedClass} transition-all duration-300" 
-                     data-id="${itemId}"
-                     onclick="handleItemClick(event)">
+                    data-id="${itemId}"
+                    onclick="handleItemClick(event)">
                     
                     <!-- Image Box (Now full width) -->
                     <div class="box w-full">
-                         <!-- UPDATED: Now uses item.Image from the spreadsheet data. 
-                              The Image column in the sheet must contain the file name (e.g., 'banner-01.png'). -->
-                         <img src="https://raw.githubusercontent.com/BerryJelena/MahoyakuMasterlist/main/root/assets/banner/${item.Image}" 
-                              alt="${eventName} Banner" 
-                              class="w-full h-auto object-cover"
-                              onerror="this.onerror=null; this.src='https://placehold.co/400x150/9ca3af/ffffff?text=Image+Missing';">
+                        <!-- UPDATED: Now uses item.Image from the spreadsheet data. 
+                             The Image column in the sheet must contain the file name (e.g., 'banner-01.png'). -->
+                        <img src="https://raw.githubusercontent.com/BerryJelena/MahoyakuMasterlist/main/root/assets/banner/${item.Image}" 
+                             alt="${eventName} Banner" 
+                             class="w-full h-auto object-cover"
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x150/9ca3af/ffffff?text=Image+Missing';">
                     </div>
                     
                     <!-- Content Section -->
@@ -484,8 +491,6 @@
                 </div>
             `;
         }
-
-        // Filter rendering removed, as filters are removed from HTML
 
         /** Initializes and binds the Isotope grid (without filters). */
         function initializeIsotope() {
@@ -576,6 +581,7 @@
             // 0. Initialize Dark Mode
             const initialMode = loadDarkModePreference();
             // Since the button exists in the HTML, we can apply the initial mode immediately.
+            // The icon element now has an ID 'modeIcon' as expected by the JS function.
             applyDarkMode(initialMode);
             
             // Bind the toggle button
@@ -591,6 +597,9 @@
             // Start the data fetching and rendering process
             fetchAndRenderEvents();
         }
+
+        // Expose the handler function globally for inline onclick
+        window.handleItemClick = handleItemClick;
 
         window.onload = initializeApp;
         
