@@ -84,7 +84,7 @@
 
     <!-- Mobile Header -->
     <div class="lg:hidden sticky top-0 z-50 bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md border-b border-rose-100 dark:border-brand-dark p-4 flex justify-between items-center">
-        <h1 class="font-black text-brand-primary dark:text-brand-light tracking-tighter uppercase italic">MASTERLIST</h1>
+        <h1 class="font-black text-brand-primary dark:text-brand-light tracking-tighter uppercase italic">Masterlist</h1>
         <button id="mobile-menu-toggle" class="p-2 bg-rose-100 dark:bg-brand-dark rounded-lg">
             <i class="ph-list-bold text-2xl"></i>
         </button>
@@ -94,7 +94,7 @@
         <!-- Sidebar -->
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-dark-card border-r border-rose-100 dark:border-brand-dark transform -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-y-auto p-6 sidebar">
             <div class="flex justify-between items-center mb-8">
-                <h2 class="text-xl font-black text-brand-primary dark:text-brand-light tracking-tighter uppercase italic">Filters</h2>
+                <h2 class="text-xl font-black text-brand-primary dark:text-brand-light tracking-tighter uppercase italic">Masterlist</h2>
                 <button id="close-sidebar" class="lg:hidden text-2xl text-brand-primary"><i class="ph-x-bold"></i></button>
             </div>
 
@@ -154,6 +154,7 @@
         </aside>
 
         <!-- Main Content -->
+        <main class="flex-1 lg:ml-72 p-4 lg:p-10">
             <div id="loading" class="flex flex-col items-center justify-center py-20">
                 <div class="w-12 h-12 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mb-4"></div>
                 <p class="font-bold text-brand-primary/50 uppercase tracking-widest text-[10px]">Syncing Archive...</p>
@@ -196,7 +197,6 @@
         function csvToObjects(csv) {
             const csvRows = csv.split("\n").filter(row => row.trim() !== '');
             if (csvRows.length === 0) return [];
-            // Cleanup property names to remove unexpected characters or whitespace
             const propertyNames = csvSplit(csvRows[0]).map(p => p.trim()); 
             let objects = [];
             for (let i = 1, max = csvRows.length; i < max; i++) {
@@ -242,31 +242,24 @@
             const yearClass = yearVal ? `year-${yearVal}` : '';
             const characterClasses = (item.Character || "").toLowerCase().split('-').map(c => c.trim()).join(' ');
 
-            // Clean data from possible leading/trailing quotes
             const wikiLink = (item.Wiki_Link || "").trim().replace(/['"]+$/g, '').replace(/^['"]+/g, '');
             const rawLinks = (item.Links || "").trim();
-            
-            // Refined Regex: Match URLs but ensure they don't capture trailing quotes (common in CSV issues)
             const translationLinks = rawLinks.match(/https?:\/\/[^\s,"'>]+/g) || [];
 
             let linksHtml = "";
             
-            // Add Wiki button if link looks valid
             if (wikiLink.toLowerCase().startsWith('http')) {
                 linksHtml += `<a href="${wikiLink}" target="_blank" rel="noopener noreferrer" class="w-full border border-brand-primary text-brand-primary py-2 rounded-lg text-center text-[10px] font-bold hover:bg-brand-primary hover:text-white transition-all uppercase tracking-widest">Wiki Link</a>`;
             }
 
-            // Add Translation buttons
             if (translationLinks.length > 0) {
                 translationLinks.forEach((link) => {
-                    // Safety trim: Remove any stray quotes that might have survived the regex
                     const cleanLink = link.replace(/['"]+$/g, '');
                     const label = getLinkTitle(cleanLink);
                     linksHtml += `<a href="${cleanLink}" target="_blank" rel="noopener noreferrer" class="w-full bg-brand-primary text-white py-2 rounded-lg text-center text-[10px] font-bold hover:bg-brand-dark transition-all uppercase tracking-widest">${label}</a>`;
                 });
             }
 
-            // Fallback if no links exist
             if (!linksHtml) {
                 linksHtml = '<div class="w-full bg-slate-100 dark:bg-white/5 text-slate-400 py-2 rounded-lg text-center text-[10px] font-bold uppercase tracking-widest">No Links Available</div>';
             }
