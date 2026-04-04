@@ -1,710 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Event and Event Story Translation Masterlist</title>
-    <meta name="description" content="A fan-made Mahoyaku masterlist that lists English translations of event and campaigns. ">
+    <title>4-Koma Translation Masterlist</title>
+    <meta name="description" content="A fan-made Mahoyaku masterlist listing English translations of 4-Koma comics.">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Load Google Fonts: Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+    <script src="https://unpkg.com/phosphor-icons"></script>
+
     <script>
-        // Applying the preferred color palette (Deep Violet/Lavender)
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Montserrat', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
                     colors: {
-                        'brand-primary': '#6d28d9', // Deep Violet (Indigo-700)
-                        'brand-secondary': '#a78bfa', // Lavender (Violet-400)
-                        'dark-bg': '#1f2937',
-                        'dark-card': '#374151',
-                        'light-bg': '#f3f4f6',
-                        'light-card': '#ffffff',
+                        'brand-primary': '#9F2B68',
+                        'brand-light':   '#c24e8a',
+                        'brand-dark':    '#7a1f4f',
+                        'dark-bg':       '#2d0a1d',
+                        'dark-card':     '#3d1229',
                     }
                 }
             }
         }
     </script>
-
-    <!-- Load Phosphor Icons (for the small buttons) -->
-    <script src="https://unpkg.com/phosphor-icons"></script>
-    <!-- Load jQuery and Isotope (required for the filtering grid) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
-    
-    <!-- Load imagesLoaded library to wait for all images before calculating masonry layout -->
-    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 
     <style>
-        /* Base styles for dark mode compatibility */
-        body {
-            transition: background-color 0.3s, color 0.3s;
-            /* UPDATED: Use Montserrat font family */
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f5f4fa; /* light-bg */
-        }
-        .night body {
-            background-color: #282450; /* dark-bg */
-        }
+        body { transition: background-color 0.3s, color 0.3s; }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: #9F2B68; border-radius: 10px; }
+        .active-filter { background-color: #9F2B68 !important; color: white !important; }
 
-        /* Sidebar styles - Enhanced panel look with border for separation */
-        .sidebar {
-            width: 280px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            padding: 1.5rem;
-            box-shadow: 4px 0 10px rgba(245, 210, 255, 0.15); 
-            border-right: 1px solid #b586d1;
-            background-color: #e3d6f8;
-            transition: background-color 0.3s;
-            z-index: 50;
-            overflow-y: auto; /* Allow scrolling in sidebar if content is too long */
-        }
-        .night .sidebar {
-            background-color: #2C3349; /* dark-card */
-            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.4);
-            border-right: 1px solid #093169;
-        }
-
-        /* Content area adjustments */
-        .content {
-            margin-left: 280px;
-            padding: 2.5rem; 
-            min-height: 100vh;
-        }
-
-        /* Responsive adjustments for mobile */
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                padding-bottom: 1rem;
-                border-right: none;
-                border-bottom: 1px solid #e1d5ec;
-                overflow-y: visible;
-            }
-            .content {
-                margin-left: 0;
-                padding: 1rem;
-            }
-            #filters-container {
-                display: block; 
-                padding: 1rem 0 0 0;
-            }
-        }
-
-        /* Filter list styles */
-        .filter ul, .charafilter ul {
-            list-style: none;
-            padding: 0;
-        }
-        /* Button common styles (Pill-like shape and transition) */
-        .filter a, .charafilter a {
-            padding: 0.5rem 0.75rem;
-            margin: 0.25rem 0.25rem 0.25rem 0; 
-            border-radius: 9999px; /* Pill shape */
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+        .chara-icon {
+            width: 40px; height: 40px;
+            transition: all 0.2s;
+            border-radius: 8px;
+            filter: grayscale(100%);
+            opacity: 0.5;
+            object-fit: cover;
             cursor: pointer;
-            transition: background-color 0.2s, box-shadow 0.2s, color 0.2s, border 0.2s;
-            /* Removed the light gray border here */
-            border: 1px solid transparent; 
+        }
+        .chara-icon.selected {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.1);
+            outline: 3px solid #9F2B68;
         }
 
-        /* Base light mode button styling */
-        .filter a {
-            background-color: #e5e7eb; 
-            color: #1f2937; 
-        }
-        .filter a:hover {
-            background-color: #d1d5db; 
-        }
+        #grid { width: 100%; min-height: 400px; }
+        .item { width: 100%; margin-bottom: 1.5rem; }
+        @media (min-width: 640px) { .item { width: calc(50% - 0.75rem); } }
+        @media (min-width: 1024px) { .item { width: calc(33.333% - 1rem); } }
+        @media (min-width: 1536px) { .item { width: calc(25% - 1.125rem); } }
 
-        /* Base dark mode button styling */
-        .night .filter a {
-            background-color: #4b5563; 
-            color: #f3f4f6; 
-            border-color: transparent; 
+        .koma-card {
+            display: flex; flex-direction: column; background: #fff; border-radius: 14px; overflow: hidden;
+            border: 1px solid rgba(159,43,104,0.12); box-shadow: 0 2px 8px -2px rgba(159,43,104,0.08);
+            transition: transform 0.25s ease; height: 100%;
         }
-        .night .filter a:hover {
-            background-color: #6b7280; 
-        }
+        .dark .koma-card { background: #3d1229; border-color: rgba(159,43,104,0.3); }
+        .item:hover .koma-card { transform: translateY(-3px); box-shadow: 0 8px 20px -4px rgba(159,43,104,0.18); }
 
-        /* Selected filter styling (Applies to both modes) */
-        .selected {
-            background-color: #6d28d9 !important; /* brand-primary */
-            color: #ffffff !important;
-            font-weight: 600;
-            border-color: #6d28d9 !important; 
-            /* Highlighted shadow for selected state */
-            box-shadow: 0 4px 8px -1px rgba(109, 40, 217, 0.4) !important; 
-        }
+        .koma-top { display: flex; flex-direction: row; flex: 1; }
+        .koma-img-wrap { width: 110px; flex-shrink: 0; background: #fce7f3; overflow: hidden; }
+        .dark .koma-img-wrap { background: #2d0a1d; }
+        .koma-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Character/Icon Filters */
-        .filter-icon {
-            padding: 0.1rem !important; 
-            border: 2px solid transparent; 
-            border-radius: 50%; 
-        }
-        .filter-icon.selected {
-            border-color: #a78bfa !important; 
-            background-color: transparent !important;
-            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.5) !important;
-        }
-        .filter-icon img {
-            border-radius: 50%;
-            object-fit: cover;
-            width: 40px;
-            height: 40px;
-        }
+        .koma-info { flex: 1; padding: 0.75rem 0.85rem; display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+        .koma-title { font-size: 0.85rem; font-weight: 800; line-height: 1.25; color: #1e293b; }
+        .dark .koma-title { color: #fce7f3; }
+        .koma-num { font-size: 0.65rem; font-weight: 700; color: #9F2B68; background: #fce7f3; border-radius: 999px; padding: 0.1rem 0.45rem; }
 
-        /* Grid Item Styles (Isotope) */
-        .grid {
-            margin: 0 auto;
-        }
-        .item {
-            /* Mobile/Default size */
-            width: 100%; 
-            margin-bottom: 1rem; 
-            border-radius: 1rem;
-            overflow: hidden;
-            box-shadow: 0 5px 15px -3px rgba(109, 40, 217, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-            background-color: #e9e6f4;
-            display: flex; 
-            align-items: stretch; /* Allows image box to match the height of the content */
-        }
-        .night .item {
-            background-color: #473751; /* dark-card */
-        }
-        .item:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 20px -5px rgba(109, 40, 217, 0.2), 0 5px 5px -5px rgba(0, 0, 0, 0.08);
-        }
+        .koma-meta-label { font-weight: 700; color: #9F2B68; font-size: 0.68rem; }
+        .koma-chars { padding: 0.45rem 0.85rem; border-top: 1px solid rgba(159,43,104,0.1); font-size: 0.68rem; color: #475569; }
+        .dark .koma-chars { color: #cbd5e1; border-color: rgba(159,43,104,0.3); }
 
-        .item .box {
-            width: 160px; 
-            flex-shrink: 0;
-            overflow: hidden;
-            /* height: 100% is inherited from align-items: stretch */
-        }
-        .item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        /* Subtle zoom on hover for the image */
-        .item:hover img {
-            transform: scale(1.05);
-        }
+        .koma-links { padding: 0.5rem 0.7rem; background: rgba(252,231,243,0.45); border-top: 1px solid rgba(159,43,104,0.1); display: flex; flex-direction: column; gap: 0.35rem; }
+        .dark .koma-links { background: rgba(45,10,29,0.5); border-color: rgba(159,43,104,0.3); }
 
-        .item .right {
-            padding: 1.5rem;
-            flex-grow: 1;
-        }
+        .link-btn { display: flex; align-items: center; justify-content: center; gap: 0.35rem; width: 100%; padding: 0.4rem; border-radius: 8px; font-size: 0.69rem; font-weight: 700; text-decoration: none; text-align: center; }
+        .link-btn-tl { background: #9F2B68; color: #fff; }
+        .link-btn-wiki { background: #fce7f3; color: #9F2B68; }
+        .dark .link-btn-wiki { background: #7a1f4f; color: #fce7f3; }
 
-        /* --- RESPONSIVE COLUMN WIDTHS (Masonry) --- */
-        
-        /* 1. Tablet/Desktop (md: >= 768px): 2 columns */
-        @media (min-width: 768px) {
-            .grid {
-                margin-left: -1rem;
-            }
-            .item {
-                width: calc(50% - 1.5rem); 
-                margin-bottom: 1.5rem; 
-                margin-left: 1.5rem; 
-                display: flex;
-            }
-            /* Adjust the card image width for the larger layout */
-            .item .box {
-                 width: 140px; 
-            }
-        }
-        
-        /* 2. Large Desktop (lg: >= 1024px): 3 columns */
-        @media (min-width: 1024px) {
-            .item {
-                width: calc(33.333% - 1.5rem); /* 3 columns */
-            }
-            /* Shrink image slightly to fit 3 columns better */
-            .item .box {
-                 width: 120px; 
-            }
-        }
-        
-        /* 3. Extra Large Desktop (xl: >= 1280px): 4 columns */
-        @media (min-width: 1280px) {
-            .item {
-                width: calc(25% - 1.5rem); /* 4 columns */
-            }
-            /* Keep image same size */
-            .item .box {
-                 width: 120px; 
-            }
-        }
-        /* --- END RESPONSIVE COLUMN WIDTHS --- */
-        
-        .masterlist-chapters tr td:last-child {
-            text-align: right;
-        }
-
-        /* Custom text colors for dark mode */
-        .night h2, .night i, .night p, .night .masterlist-chapters {
-            color: #e5e7eb;
-        }
-        
-        /* Loading Spinner */
-        #loading-indicator {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-            font-size: 1.25rem;
-            color: #6d28d9; /* brand-primary */
-        }
-        
-        /* Button style for links (for dark mode support) */
-        .night .link-section a {
-            background-color: #a78bfa; /* brand-secondary as button color in dark mode */
-            color: #1f2937 !important; /* dark text */
-            box-shadow: 0 4px 8px -1px rgba(167, 139, 250, 0.4);
-        }
-        .night .link-section a:hover {
-            background-color: #8b5cf6; /* A slightly darker purple on hover */
-        }
-
-
+        #empty-state { display: none; }
     </style>
 </head>
-<body>
+<body class="bg-rose-50/30 text-slate-900 dark:bg-dark-bg dark:text-rose-50 min-h-screen">
 
-    <!-- Main Content Script -->
+    <div class="lg:hidden sticky top-0 z-50 bg-white/90 dark:bg-dark-bg/90 p-4 flex justify-between items-center border-b border-rose-100 dark:border-brand-dark">
+        <h1 class="font-black text-brand-primary uppercase italic leading-none">4-Koma</h1>
+        <button id="mobile-menu-toggle" class="p-2 bg-rose-100 dark:bg-brand-dark rounded-lg"><i class="ph-funnel-bold text-2xl"></i></button>
+    </div>
+
+    <div class="flex flex-col lg:flex-row">
+        <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-dark-card border-r border-rose-100 dark:border-brand-dark transform -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-y-auto p-6">
+            <div class="flex justify-between items-start mb-6">
+                <h2 class="text-xl font-black text-brand-primary uppercase italic">4-Koma</h2>
+                <button id="close-sidebar" class="lg:hidden text-2xl"><i class="ph-x-bold"></i></button>
+            </div>
+
+            <!-- Search -->
+            <div class="mb-6">
+                <input type="text" id="quicksearch" placeholder="Search title..." class="w-full px-4 py-2 bg-rose-50 dark:bg-brand-dark/50 rounded-xl outline-none text-sm dark:text-white">
+            </div>
+
+            <!-- TL Status -->
+            <div class="mb-6">
+                <h3 class="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-3">Translation Status</h3>
+                <div class="flex flex-col gap-2 filter-group" data-filter-group="tlStatus">
+                    <button data-filter-value="*" class="active-filter text-left px-4 py-2 text-xs font-bold bg-rose-50 dark:bg-brand-dark/30 rounded-xl">All</button>
+                    <button data-filter-value=".tl" class="text-left px-4 py-2 text-xs font-bold bg-rose-50 dark:bg-brand-dark/30 rounded-xl">Translated</button>
+                    <button data-filter-value=".notl" class="text-left px-4 py-2 text-xs font-bold bg-rose-50 dark:bg-brand-dark/30 rounded-xl">Untranslated</button>
+                </div>
+            </div>
+
+            <!-- Characters -->
+            <div class="mb-6 pb-5 border-b border-rose-100 dark:border-brand-dark">
+                <h3 class="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-3">Owner Wizard</h3>
+                <div id="character-filters" class="grid grid-cols-4 gap-3 filter-group" data-filter-group="wizard">
+                    <!-- JS populated -->
+                </div>
+            </div>
+
+            <div class="mt-auto">
+                <p class="text-[10px] font-bold opacity-50 mb-4 text-slate-500 dark:text-rose-200">Showing <span id="result-count">0</span> entries</p>
+                <button id="dark-mode-toggle" class="w-full p-3 rounded-xl bg-brand-primary text-white font-bold text-xs hover:bg-brand-dark transition-colors">Toggle Night Mode</button>
+            </div>
+        </aside>
+
+        <main class="flex-1 lg:ml-72 p-4 lg:p-10">
+            <header class="mb-8">
+                <h1 class="text-3xl lg:text-4xl font-black text-brand-primary uppercase italic">4-Koma Masterlist</h1>
+                <p class="text-sm text-slate-500 dark:text-rose-200 mt-1">
+                    Fan-made comic translation archive — thanks to 
+                    <span class="font-semibold text-brand-primary dark:text-brand-light">@sellei</span> for the help!
+                </p>
+            </header>
+
+            <div id="loading" class="flex flex-col items-center justify-center py-20">
+                <div class="w-12 h-12 border-4 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+
+            <div id="empty-state" class="text-center py-20">
+                <p class="font-bold opacity-50">No entries match your filters</p>
+                <button id="clear-filters-btn" class="mt-4 px-4 py-2 bg-brand-primary text-white rounded-xl text-xs">Clear Filters</button>
+            </div>
+
+            <div id="grid" class="opacity-0 transition-opacity duration-500"></div>
+        </main>
+    </div>
+
     <script>
-        // --- Configuration ---
-        const characterToId = [
-            // Character IDs are critical for fetching images. Assuming the paths work.
-            { chara: "oz", id: 1 }, { chara: "arthur", id: 2 }, { chara: "cain", id: 3 }, { chara: "riquet", id: 4 },
-            { chara: "snow", id: 5 }, { chara: "white", id: 6 }, { chara: "mithra", id: 7 }, { chara: "owen", id: 8 },
-            { chara: "bradley", id: 9 }, { chara: "faust", id: 10 }, { chara: "shino", id: 11 }, { chara: "heathcliff", id: 12 },
-            { chara: "nero", id: 13 }, { chara: "shylock", id: 14 }, { chara: "murr", id: 15 }, { chara: "chloe", id: 16 },
-            { chara: "rustica", id: 17 }, { chara: "figaro", id: 18 }, { chara: "rutile", id: 19 }, { chara: "lennox", id: 20 },
-            { chara: "mitile", id: 21 }, { chara: "akira", id: 22 }, { chara: "cockrobin", id: 23 },
+        const characterData = [
+            { name: "oz", id: 1 }, { name: "arthur", id: 2 }, { name: "cain", id: 3 }, { name: "riquet", id: 4 },
+            { name: "snow", id: 5 }, { name: "white", id: 6 }, { name: "mithra", id: 7 }, { name: "owen", id: 8 },
+            { name: "bradley", id: 9 }, { name: "faust", id: 10 }, { name: "shino", id: 11 }, { name: "heathcliff", id: 12 },
+            { name: "nero", id: 13 }, { name: "shylock", id: 14 }, { name: "murr", id: 15 }, { name: "chloe", id: 16 },
+            { name: "rustica", id: 17 }, { name: "figaro", id: 18 }, { name: "rutile", id: 19 }, { name: "lennox", id: 20 },
+            { name: "mitile", id: 21 }, { name: "akira", id: 22 }, { name: "cockrobin", id: 23 }
         ];
-        
-        // Sheet configuration
+
         const sheetId = "1SHxrt80OQj4RfjnhmkFiGI_pLr03F-f6DUlBoOlsONU";
-        const sheetName = encodeURIComponent("Output_(4Koma)"); // Using 4Koma sheet name as provided
-        const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
-        
-        // --- GitHub Raw Content Base URLs ---
-        const GITHUB_BASE_URL = "https://raw.githubusercontent.com/BerryJelena/MahoyakuMasterlist/main/";
-        const GITHUB_CHIBI_BASE_URL = GITHUB_BASE_URL + "root/assets/Chibis/";
-        const GITHUB_ASIDE_BASE_URL = GITHUB_BASE_URL + "root/assets/aside/";
+        const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=Output_(4Koma)`;
+        const GITHUB_CHIBI_BASE = "https://raw.githubusercontent.com/BerryJelena/MahoyakuMasterlist/main/root/assets/Chibis/";
+        const CHIBI_HEADS_BASE = "https://raw.githubusercontent.com/mhyk-archive/mhyk-assets/main/chibi_heads/";
 
+        let $isoGrid = null;
+        let activeFilters = { tlStatus: ['*'], wizard: [] };
 
-        // --- Utility Functions ---
+        const sanitize = (str) => (str || '').toString().toLowerCase().trim().replace(/[^a-z0-9]/g, '');
+        const clean = (val) => (val || '').replaceAll('_', ' ').replaceAll('$', ',').trim();
 
-        // Simple CSV parser for Google Sheet output
-        function csvToObjects(csv) {
-            const csvRows = csv.split("\n");
-            if (csvRows.length < 2) return [];
-
-            // Simple split for header row, ignoring quotes
-            const propertyNames = csvRows[0].split(",").map(header => header.trim().replace(/"/g, ''));
-
-            let objects = [];
-            for (let i = 1; i < csvRows.length; i++) {
-                // Regex to handle quoted strings containing commas
-                const row = csvRows[i].match(/(".*?"|[^",\s]+)(?=\s*\,|\s*$)/g) || [];
-                if (row.length === 0) continue; // Skip empty rows
-
-                let thisObject = {};
-                for (let j = 0; j < propertyNames.length; j++) {
-                    // Remove surrounding quotes and trim
-                    const value = (row[j] || '').trim().replace(/^"|"$/g, '');
-                    thisObject[propertyNames[j]] = value;
+        /**
+         * Parses a URL to return a user-friendly label (e.g., Twitter: @user)
+         */
+        function getLinkLabel(url) {
+            if (!url) return "Translation";
+            try {
+                const uri = new URL(url);
+                const path = uri.pathname.split('/').filter(p => p);
+                
+                if (uri.hostname.includes('twitter.com') || uri.hostname.includes('x.com')) {
+                    return path[0] ? `Twitter: @${path[0]}` : "Twitter";
                 }
-                // Only push valid rows (e.g., if Chibi column is the first valid check)
-                if (thisObject[propertyNames[0]]) {
-                     objects.push(thisObject);
+                if (uri.hostname.includes('bsky.app')) {
+                    return path[1] ? `BlueSky: @${path[1]}` : "BlueSky";
                 }
+                if (uri.hostname.includes('drive.google.com')) return "Google Drive";
+                if (uri.hostname.includes('imgur.com')) return "Imgur";
+                if (uri.hostname.includes('tumblr.com')) {
+                    const sub = uri.hostname.split('.')[0];
+                    return `Tumblr: ${sub}`;
+                }
+                return uri.hostname.replace('www.', '').split('.')[0];
+            } catch (e) {
+                return "Link";
             }
-            return objects;
         }
 
-        // --- Filtering Logic (Simplified for Isotope) ---
-        // Filters object stores the currently active filters for each group
-        let filters = {};
+        function buildCard(obj, i) {
+            const wizardOwner = sanitize(obj.Wizard || obj.Country);
+            const country = sanitize(obj.Country);
+            
+            const rawWiki = clean(obj.Wiki_Link);
+            const rawLinks = (obj.Links || '').split(/\s+/).filter(l => l && l.length > 5);
+            const hasLinks = rawWiki.length > 0 || rawLinks.length > 0;
+            const statusClass = hasLinks ? 'tl' : 'notl';
 
-        function getComboFilter() {
-            let comboFilter = [];
-            // Iterate over all filter groups (e.g., 'gen', 'country', 'character')
-            for (let group in filters) {
-                const groupFilters = filters[group];
-                if (groupFilters && groupFilters.length) {
-                    comboFilter.push(groupFilters.join(''));
-                }
-            }
-            // Join filters for a multi-group match (e.g., '.tl.central.oz')
-            return comboFilter.join('');
-        }
-        
-        function handleFilterClick(e) {
-            e.preventDefault();
-            const $this = $(this);
-            const filterValue = $this.data('filter-value');
-            const group = $this.parent().parent().data('filter-group');
-            // Check for the exclusive class in the parent container
-            const isExclusive = $this.parent().parent().hasClass('exclusive'); 
-            const activeClass = "selected";
+            const imageUrl = GITHUB_CHIBI_BASE + (obj.Image || obj.Chibi);
 
-            // If a group doesn't exist, create it
-            if (!filters[group]) {
-                filters[group] = [];
-            }
-            let filterGroup = filters[group];
-
-            if (isExclusive) {
-                // Exclusive group: only one selected at a time
-                $this.parent().parent().find('.' + activeClass).removeClass(activeClass);
-                filterGroup.length = 0; // Clear the array
-                if (filterValue !== '') {
-                    filterGroup.push(filterValue);
-                }
-                $this.addClass(activeClass);
-
-            } else {
-                // Non-exclusive group (like Characters or Countries)
-                const index = filterGroup.indexOf(filterValue);
-                if (filterValue === '') {
-                    // 'All' button clicked for non-exclusive group
-                    $this.parent().parent().find('.' + activeClass).removeClass(activeClass);
-                    $this.addClass(activeClass);
-                    filterGroup.length = 0; // Clear all filters in this group
-                } else if (index >= 0) {
-                    // Remove existing filter
-                    filterGroup.splice(index, 1);
-                    $this.removeClass(activeClass);
-                    // If all are deselected, ensure 'All' is selected
-                    if (filterGroup.length === 0) {
-                        $this.parent().parent().find('a[data-filter-value=""]').addClass(activeClass);
-                    }
-                } else {
-                    // Add new filter
-                    filterGroup.push(filterValue);
-                    $this.addClass(activeClass);
-                    // Deselect 'All' if a specific filter is selected
-                    $this.parent().parent().find('a[data-filter-value=""]').removeClass(activeClass);
-                }
-            }
-
-            // Apply the combined filter
-            const comboFilter = getComboFilter();
-            $('.grid').isotope({ filter: comboFilter || '*' }); // Use '*' if no filters are selected
-        }
-
-        // --- Main Data Handling & DOM Setup ---
-        
-        document.addEventListener("DOMContentLoaded", function() {
-            const $grid = $('#comic-grid');
-            const loadingIndicator = document.getElementById('loading-indicator');
-            let iso; // Declare iso globally accessible in this scope
-
-            // 1. Initial Isotope Setup (before data is loaded)
-            iso = $grid.isotope({
-                itemSelector: ".item",
-                // Use 'masonry' for a proper multi-column layout on desktop
-                layoutMode: 'masonry', 
-                percentPosition: true,
-                masonry: {
-                    columnWidth: '.item' // Calculates column width based on item width
-                }
+            let linksHtml = '';
+            if (rawWiki) linksHtml += `<a class="link-btn link-btn-wiki" href="${rawWiki}" target="_blank">Wiki</a>`;
+            rawLinks.forEach(l => {
+                const link = l.replace(/^['"]+|['"]+$/g, '').replaceAll('$', ',');
+                linksHtml += `<a class="link-btn link-btn-tl" href="${link}" target="_blank">${getLinkLabel(link)}</a>`;
             });
 
-            // 2. Load Data from Google Sheet
-            fetch(sheetURL)
-                .then((response) => response.text())
-                .then((csvText) => handleResponse(csvText))
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    loadingIndicator.innerHTML = '<p class="text-red-500">Error loading data.</p>';
-                });
-
-            function handleResponse(csvText) {
-                let sheetObjects = csvToObjects(csvText);
-                
-                // Remove loading indicator
-                loadingIndicator.style.display = 'none';
-
-                let elements = [];
-                for (const currObj of sheetObjects) {
-                    if (!currObj.Image) continue; // Skip rows without an image
-
-                    // --- Build Links (Safe & Styled) ---
-                    let linksTxt = ``;
-                    // Safely access Links column
-                    const linksRaw = currObj.Links || "";
-                    const links = linksRaw.split(/\s+/).filter(l => l.length > 0 && l !== "''");
-                    
-                    for (const rawLink of links) {
-                        // FIX: Remove any leading/trailing single or double quotes
-                        const link = rawLink.replace(/^['"]+|['"]+$/g, '').trim();
-                        
-                        // Clean up the link source text for display
-                        let linkN = link.replace(/https?:\/\//, '').split('/')[0];
-                        linkN = linkN.split(".").slice(-2).join("."); // Get main domain parts
-                        const cleanLink = link.replaceAll("$",",");
-                        
-                        // Button styling classes for full-width look
-                        linksTxt += `
-                            <a class="
-                                block w-full text-center py-2 px-3 mt-2 
-                                bg-brand-primary text-white font-semibold rounded-lg 
-                                shadow-lg hover:bg-opacity-90 transition duration-150 transform hover:scale-[1.01]
-                                flex items-center justify-center space-x-2
-                            " href="${cleanLink}" target="_blank" rel="noopener noreferrer">
-                                <span>TL: ${linkN}</span>
-                                <i class="ph-arrow-square-out text-lg"></i>
-                            </a>
-                        `;
-                    }
-                    
-                    // --- Build Wiki Link (Safe & Styled) ---
-                    // Fixes: Error: can't access property "replaceAll", currObj.Wiki_Link is undefined
-                    let wikiHtml = "";
-                    const rawWiki = currObj.Wiki_Link || ""; // safely default to empty string
-                    if (rawWiki) {
-                        // Styled to match the aesthetic but distinct (Gray button)
-                        wikiHtml = `
-                            <a href="${rawWiki.replaceAll("$",",")}" target="_blank" class="
-                                block w-full text-center py-2 px-3 
-                                bg-gray-200 text-gray-800 font-semibold rounded-lg 
-                                hover:bg-gray-300 transition duration-150
-                                flex items-center justify-center space-x-2
-                            ">
-                                <span>Wiki</span>
-                                <i class="ph-book-bookmark text-lg"></i>
-                            </a>
-                        `;
-                    }
-                    
-                    // --- Build Filters ---
-                    let filterClasses = '';
-                    
-                    // Country filter (lowercase and no spaces)
-                    filterClasses += (currObj.Country || '').toLowerCase().trim().replace(/\s/g, '');
-                    
-                    // TL Status
-                    if (currObj.TL && currObj.TL.toUpperCase() === "TRUE") {
-                        filterClasses += " tl ";
-                    } else {
-                        filterClasses += " notl ";
-                    }
-                    
-                    // Characters
-                    const characters = (currObj.Character || '')
-                        .toLowerCase()
-                        .split(/[\s\-\,]+/) // Split by space, dash, or comma
-                        .filter(c => c.length > 0);
-                        
-                    filterClasses += characters.join(" ");
-
-                    // Clean up event names (Safe access)
-                    const eventName = (currObj.Chibi || "").replaceAll("_", " ").replaceAll("$",",");
-                    const jpTitle = (currObj.JP_Title || "").replaceAll("$",",");
-                    const charaList = (currObj.Character || "").replaceAll("-",", ");
-                    
-                    // Placeholder image URL generation using the image size set in CSS
-                    const placeholderUrl = `https://placehold.co/${window.innerWidth >= 768 ? '140x200' : '160x220'}/6d28d9/ffffff?text=No+Image`;
-                    
-                    // --- Construct GitHub Image URL ---
-                    // Assuming currObj.Image contains the filename (e.g., 'event_name.png')
-                    const imageUrl = GITHUB_CHIBI_BASE_URL + currObj.Image;
-
-
-                    // --- Create HTML Element ---
-                    const element = $(`
-                        <div class="item ${filterClasses.trim()}">
-                            <div class="box">
-                                <!-- Image source now uses the constructed GitHub raw URL -->
-                                <img src="${imageUrl}" alt="${eventName}" onerror="this.onerror=null; this.src='${placeholderUrl}'" class="w-full h-full object-cover">
-                            </div>
-                            <div class="right text-gray-800 night:text-gray-100 flex flex-col justify-between">
-                                <div>
-                                    <h2 class="text-xl font-bold mb-1">${eventName}</h2>
-                                    <i class="text-sm italic block mb-3 text-gray-500 night:text-gray-300">${jpTitle}</i>
-                                    
-                                    <!-- Rarity Table -->
-                                    <table class="masterlist-chapters w-full text-sm text-left mb-3">
-                                        <tr class="text-xs uppercase font-semibold text-gray-500 night:text-gray-400">
-                                            <td class="w-1/4 pb-1">Rarity</td>
-                                            <td class="w-3/4 text-right pb-1">${currObj.Rarity || '-'}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="font-bold pt-1">Country </td>
-                                            <td class="text-right capitalize pt-1">${(currObj.Country || '').toLowerCase()}</td>
-                                        </tr>
-                                    </table>
-                                    
-                                    <p class="text-sm mt-2 mb-3">
-                                        <b class="font-semibold">Characters: </b> ${charaList}
-                                    </p>
-                                </div>
-                                <div class="link-section space-y-2">
-                                    ${wikiHtml}
-                                    ${linksTxt} 
-                                </div>
+            return `
+                <div class="item ${country} ${statusClass} owner-${wizardOwner}">
+                    <div class="koma-card">
+                        <div class="koma-top">
+                            <div class="koma-img-wrap"><img src="${imageUrl}" onerror="this.src='https://placehold.co/110x150?text=?'"></div>
+                            <div class="koma-info">
+                                <div class="flex justify-between"><h2 class="koma-title">${clean(obj.Title || obj.Chibi)}</h2><span class="koma-num">#${obj.Number || i+1}</span></div>
+                                <p class="text-[10px] italic opacity-50">${clean(obj.JP_Title)}</p>
+                                <div class="mt-2"><span class="koma-meta-label">Wizard:</span> <span class="text-xs capitalize">${clean(obj.Wizard || obj.Country)}</span></div>
                             </div>
                         </div>
-                    `);
-                    elements.push(element[0]); // Push the raw DOM element
-                }
+                        <div class="koma-chars"><span class="font-bold text-brand-primary">Characters:</span> ${clean(obj.Character).replaceAll('-', ', ')}</div>
+                        <div class="koma-links">${linksHtml || '<div class="h-2"></div>'}</div>
+                    </div>
+                </div>`;
+        }
 
-                // 3. Append elements to the grid
-                $grid.append(elements);
+        function applyFilters() {
+            if (!$isoGrid) return;
+            $isoGrid.isotope({
+                filter: function() {
+                    const $el = $(this);
+                    const search = $('#quicksearch').val().toLowerCase();
+                    const matchSearch = search ? $el.text().toLowerCase().includes(search) : true;
+
+                    const sFilter = activeFilters.tlStatus[0];
+                    const matchStatus = sFilter === '*' ? true : $el.hasClass(sFilter.replace('.', ''));
+
+                    let matchWizard = true;
+                    if (activeFilters.wizard.length > 0) {
+                        matchWizard = activeFilters.wizard.some(w => $el.hasClass('owner-' + w.replace('.', '')));
+                    }
+
+                    return matchSearch && matchStatus && matchWizard;
+                }
+            });
+            setTimeout(() => { 
+                const count = $isoGrid.isotope('getFilteredItemElements').length;
+                $('#result-count').text(count); 
+                $('#empty-state').toggle(count === 0);
+            }, 200);
+        }
+
+        async function init() {
+            try {
+                const res = await fetch(sheetURL);
+                const csv = await res.text();
+                const rows = csv.split('\n');
+                const headers = rows[0].split(',').map(h => h.trim().replace(/"/g, ''));
+                const data = rows.slice(1).map(row => {
+                    const cols = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
+                    const obj = {};
+                    headers.forEach((h, j) => { obj[h] = (cols[j] || '').trim().replace(/^"|"$/g, ''); });
+                    return obj;
+                }).filter(o => o.Image || o.Chibi);
+
+                $('#grid').html(data.map((d, i) => buildCard(d, i)).join(''));
                 
-                // 4. Crucial: Wait for all images to load before calling Isotope's layout
-                $grid.imagesLoaded(function() {
-                    // Append and layout now that image dimensions are correct
-                    $grid.isotope('appended', elements);
-                    $grid.isotope('layout');
+                $isoGrid = $('#grid').imagesLoaded(() => {
+                    $('#loading').hide();
+                    $('#grid').removeClass('opacity-0').isotope({ 
+                        itemSelector: '.item', 
+                        layoutMode: 'masonry',
+                        masonry: { gutter: 16 } 
+                    });
+                    applyFilters();
                 });
-            }
+            } catch (e) { console.error(e); }
+        }
 
-            // 4. Setup Character Filters from hardcoded list
-            const $characterFilterList = $("#character-filter");
-            characterToId.forEach(character => {
-                const charaName = character.chara;
-                const charaId = character.id;
-                
-                // --- Construct GitHub Asset URL for filter icons ---
-                const charaIconUrl = GITHUB_ASIDE_BASE_URL + `tiny_${charaId}.png`;
+        $(document).ready(() => {
+            characterData.forEach(c => {
+                $('#character-filters').append(`<button data-filter-value=".${c.name}" class="flex justify-center"><img src="${CHIBI_HEADS_BASE}chara_${c.id}.png" class="chara-icon" title="${c.name}"></button>`);
+            });
 
-                // Add the character filter
-                $characterFilterList.append(`
-                    <li class="inline-block">
-                        <a href="#" class="filter-icon" data-filter-value=".${charaName}">
-                            <img src="${charaIconUrl}" alt="${charaName}" 
-                                class="w-10 h-10 object-cover rounded-full"
-                                onerror="this.onerror=null;this.src='https://placehold.co/40x40/d1d5db/374151?text=${charaName.charAt(0).toUpperCase()}'"/>
-                        </a>
-                    </li>
-                `);
-            });
-            // Ensure initial "All" state is selected for the character group
-            $characterFilterList.find('a[data-filter-value=""]').addClass('selected');
-            
-            // 5. Attach Filter Event Handlers
-            $(".option-set a").on('click', handleFilterClick);
-            
-            // 6. Dark Mode Logic
-            const btn = document.querySelector(".lightswitch");
-            const currentTheme = localStorage.getItem("theme");
-            if (currentTheme == "dark") {
-                document.body.classList.add("night");
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                $('html').addClass('dark');
             }
-            
-            btn.addEventListener("click", function () {
-                document.body.classList.toggle("night");
-                let theme = "light";
-                if (document.body.classList.contains("night")) {
-                    theme = "dark";
-                }
-                localStorage.setItem("theme", theme);
+            $('#dark-mode-toggle').on('click', function() {
+                $('html').toggleClass('dark');
+                localStorage.theme = $('html').hasClass('dark') ? 'dark' : 'light';
             });
-            
-            // Re-layout Isotope on window resize
-            $(window).on('resize', function() {
-                // Ensure Isotope instance exists before calling layout
-                if (iso) {
-                    iso.layout();
+
+            $('.filter-group').on('click', 'button', function() {
+                const $btn = $(this);
+                const group = $btn.closest('.filter-group').data('filter-group');
+                const val = $btn.data('filter-value');
+
+                if (group === 'wizard') {
+                    $btn.find('img').toggleClass('selected');
+                    activeFilters.wizard = $btn.closest('.filter-group').find('img.selected').map(function() { 
+                        return $(this).parent().data('filter-value'); 
+                    }).get();
+                } else {
+                    $btn.siblings().removeClass('active-filter');
+                    $btn.addClass('active-filter');
+                    activeFilters[group] = [val];
                 }
+                applyFilters();
             });
+
+            $('#quicksearch').on('keyup', applyFilters);
+            $('#clear-filters-btn').on('click', () => { location.reload(); });
+            $('#mobile-menu-toggle, #close-sidebar').on('click', () => { $('#sidebar').toggleClass('-translate-x-full'); });
+            
+            init();
         });
     </script>
-
-
-    <!-- The sidebar -->
-    <div class="sidebar text-gray-700 night:text-gray-300">
-        
-        <div class="flex justify-around mb-8 border-b pb-4 border-gray-200 night:border-gray-600">
-            <!-- Navigation buttons with round styling -->
-            <a href="index.html" class="p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition" title="Home"><i class="ph-arrow-u-down-left-fill text-xl"></i></a>
-            <a href="https://mhykmasterlist.tumblr.com/" target="_blank" class="p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition" title="Contact"><i class="ph-envelope-fill text-xl"></i></a>
-            <a href="https://docs.google.com/spreadsheets/d/16mhRYIg3wpccUuciR07gGRTicqIB2HYRMdPXbw-zFpQ/edit?usp=sharing" target="_blank" class="p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition" title="Spreadsheet"><i class="ph-sparkle-fill text-xl"></i></a>
-            <a href="https://buymeacoffee.com/maripe" target="_blank" class="p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition" title="Support"><i class="ph-coffee text-xl"></i></a>
-            <a class="lightswitch p-2 rounded-full hover:bg-gray-100 night:hover:bg-gray-700 transition cursor-pointer" title="Toggle Dark Mode"><i class="ph-moon-fill text-xl"></i></a>
-        </div>
-        
-        <div id="filters-container" class="space-y-6">
-            
-            <!-- TL Status Filter (Exclusive) -->
-            <div class="filters pb-4 border-b border-gray-200 night:border-gray-600">
-                <h3 class="text-sm uppercase font-extrabold mb-1 text-gray-500 night:text-gray-400">Translation Status</h3>
-                <ul class="filter option-set flex flex-wrap gap-2 exclusive" data-filter-group="gen">
-                    <li class="inline-block"><a href="#" data-filter-value="" class="reset selected text-sm">All</a></li>
-                    <li class="inline-block"><a href="#" data-filter-value=".tl" class="text-sm">Translated (TL)</a></li>
-                    <li class="inline-block"><a href="#" data-filter-value=".notl" class="text-sm">No Translation (No TL)</a></li>
-                </ul>
-            </div>
-            
-            <!-- Country Filter (Non-Exclusive) -->
-            <div class="filters pb-4 border-b border-gray-200 night:border-gray-600">
-                <h3 class="text-sm uppercase font-extrabold mb-1 text-gray-500 night:text-gray-400">Country</h3>
-                <ul class="filter option-set flex flex-wrap gap-1" data-filter-group="country">
-                    <li class="inline-block"><a href="#" data-filter-value="" class="selected">All</a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".central"><img src="root/assets/aside/country central.png" alt="central" width="40" height="40"></a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".north"><img src="root/assets/aside/country north.png" alt="north" width="40" height="40"></a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".east"><img src="root/assets/aside/country east.png" alt="east" width="40" height="40"></a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".west"><img src="root/assets/aside/country west.png" alt="west" width="40" height="40"></a></li>
-                <li><a href="#" class="filter-icon" data-filter-value=".south"><img src="root/assets/aside/country south.png" alt="south" width="40" height="40"></a></li>
-                </ul>
-            </div>
-            
-            <!-- Character Filter (Non-Exclusive) -->
-            <div class="charafilters">
-                <h3 class="text-sm uppercase font-extrabold mb-1 text-gray-500 night:text-gray-400">Character</h3>
-                <ul class="charafilter option-set flex flex-wrap gap-1" id="character-filter" data-filter-group="character">
-                    <li class="inline-block"><a href="#" data-filter-value="" class="selected">All</a></li>
-                    <!-- Character icons populated by JavaScript -->
-                </ul>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Page content -->
-    <div class="content">
-        <header class="mb-8">
-            <h1 class="text-4xl font-extrabold text-brand-primary night:text-brand-secondary">4 Koma Masterlist</h1>
-            <p class="text-lg text-gray-500 night:text-gray-400">Thanks to wonderful @sellei for the help!.</p>
-        </header>
-
-        <!-- Loading Indicator -->
-        <div id="loading-indicator">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary mr-4"></div>
-            Loading...
-        </div>
-
-        <!-- GRID STARTS -->
-        <section class="grid" id="comic-grid">
-            <!-- Data will be populated here by JavaScript -->
-        </section>
-        <!-- GRID ENDS -->
-    </div>
 </body>
 </html>
+
