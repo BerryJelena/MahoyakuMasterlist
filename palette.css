@@ -60,7 +60,9 @@ body {
 
 /* Height-adaptive Speech Bubble */
 .speech-bubble {
-  background-color: var(--bubble-bg, #e2e8f0);
+  /* Bubble color faded 30% toward the page background for readability.
+     Avatars are untouched — this only affects the text bubble itself. */
+  background-color: color-mix(in srgb, var(--bubble-bg, #e2e8f0) 70%, transparent);
   color: var(--bubble-text, #2d3748);
   padding: 14px 18px;
   border-radius: 10px;
