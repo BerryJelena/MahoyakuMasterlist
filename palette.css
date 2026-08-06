@@ -1,0 +1,153 @@
+/* Core Layout & Retro Aesthetics */
+:root {
+  --bg-color: #f4f5f7;
+  --text-dark: #2d3748;
+  --font-body: 'Work Sans', sans-serif;
+  --font-heading: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  font-family: var(--font-body);
+  color: var(--text-dark);
+}
+
+/* Dialogue Layout */
+.dialogue-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.dialogue-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.speaker-name {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #5a6578;
+}
+
+/* Height-adaptive Speech Bubble */
+.speech-bubble {
+  background-color: var(--bubble-bg, #e2e8f0);
+  color: var(--bubble-text, #2d3748);
+  padding: 14px 18px;
+  border-radius: 16px;
+  font-size: 1rem;
+  line-height: 1.5;
+  height: auto; /* Adapts dynamically to text size */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+/* --------------------------------------------------
+   Character Palette Tokens (True Tones)
+-------------------------------------------------- */
+.character-oz {
+  --bubble-bg: #D55B5B; 
+}
+
+.character-arthur {
+  --bubble-bg: #4BA3FF; 
+}
+
+.character-cain {
+  --bubble-bg: #FFA531; 
+}
+
+.character-riquet {
+  --bubble-bg: #BA97FE; 
+}
+
+.character-snow {
+  --bubble-bg: #A797C7; 
+}
+
+.character-white {
+  --bubble-bg: #B8B8DA; 
+}
+
+.character-mithra {
+  --bubble-bg: #9B57CB; 
+}
+
+.character-owen {
+  --bubble-bg: #DB518D; 
+}
+
+.character-bradley {
+  --bubble-bg: #55BCA3; 
+}
+
+.character-faust {
+  --bubble-bg: #7070E3; 
+}
+
+.character-shino {
+  --bubble-bg: #42A6CB; 
+}
+
+.character-heathcliff {
+  --bubble-bg: #84DAE6; 
+}
+
+.character-nero {
+  --bubble-bg: #5C73B9; 
+}
+
+.character-shylock {
+  --bubble-bg: #BF576E; 
+}
+
+.character-murr {
+  --bubble-bg: #CF61CF; 
+}
+
+.character-chloe {
+  --bubble-bg: #F069A2; 
+}
+
+.character-rustica {
+  --bubble-bg: #D6AB6A; 
+}
+
+.character-figaro {
+  --bubble-bg: #57ADBC; 
+}
+
+.character-rutile {
+  --bubble-bg: #D2CA53; 
+}
+
+.character-lennox {
+  --bubble-bg: #819756; 
+}
+
+.character-mitile {
+  --bubble-bg: #B3D480; 
+}
+
+.character-akira {
+  --bubble-bg: #FF9700; 
+}
+
+.character-default {
+  --bubble-bg: #D2C9F2; 
+}

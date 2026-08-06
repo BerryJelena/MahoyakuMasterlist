@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Translation Reader</title>
+  
+  <!-- Custom Palette & Styling -->
+  <link rel="stylesheet" href="palette.css">
+
+  <style>
+    /* Base styles & layout fallback */
+    :root {
+      --bg-color: #f4f5f7;
+      --text-dark: #2d3748;
+      --font-body: 'Work Sans', system-ui, sans-serif;
+      --font-heading: 'Montserrat', system-ui, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      font-family: var(--font-body);
+      color: var(--text-dark);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    #dialogue-container {
+      width: 100%;
+      max-width: 760px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .dialogue-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .dialogue-body {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 85%;
+    }
+
+    .speaker-name {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #64748b;
+    }
+
+    .speech-bubble {
+      background-color: var(--bubble-bg, #e2e8f0);
+      color: var(--bubble-text, #2d3748);
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      height: auto; /* Dynamic height adjustment */
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    /* Narrator Specific Styling */
+    .character-narrator {
+      justify-content: center;
+      margin: 12px 0;
+    }
+
+    .character-narrator .dialogue-body {
+      max-width: 90%;
+      align-items: center;
+    }
+
+    .character-narrator .speech-bubble {
+      background-color: var(--bubble-bg, #e9ecef);
+      font-style: italic;
+      color: #495057;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <main id="dialogue-container">
+    <div style="text-align: center; color: #888;">Loading translation...</div>
+  </main>
+
+  <script>
+    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-1rs3P5A45vuZgRm5FwHWtYb4cJCkiaJpOBPYi5vxJWL3Jua-fVdmAi6RHgrf1aQoiteS_kq9JZqd/pub?gid=0&single=true&output=csv';
+
+    // Parse CSV rows considering quotes and multi-line values
+    function parseCSV(text) {
+      const lines = text.trim().split(/\r?\n/);
+      if (lines.length === 0) return [];
+      
+      const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+      
+      return lines.slice(1).map(line => {
+        // Splitting by comma while ignoring commas inside double quotes
+        const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.trim().replace(/^"|"$/g, ''));
+        let rowObj = {};
+        headers.forEach((header, index) => {
+          rowObj[header] = values[index] || '';
+        });
+        return rowObj;
+      });
+    }
+
+    async function loadDialogue() {
+      try {
+        const response = await fetch(SHEET_CSV_URL);
+        const csvData = await response.text();
+        const rows = parseCSV(csvData);
+
+        const container = document.getElementById('dialogue-container');
+        container.innerHTML = ''; 
+
+        rows.forEach(row => {
+          // Detect headers dynamically (handles "Character" / "Name" or "Text" / "Dialogue")
+          const rawCharacter = (row.Character || row.Name || row.character || '').trim();
+          const dialogueText = (row.Text || row.Dialogue || row.text || '').trim();
+
+          if (!dialogueText) return; 
+
+          const isNarrator = rawCharacter === '';
+          const characterName = isNarrator ? 'Narrator' : rawCharacter;
+          const characterKey = characterName.toLowerCase().replace(/\s+/g, '-');
+          const characterClass = `character-${characterKey}`;
+
+          const rowEl = document.createElement('div');
+          rowEl.className = `dialogue-row ${characterClass}`;
+
+          if (isNarrator) {
+            rowEl.innerHTML = `
+              <div class="dialogue-body">
+                <div class="speech-bubble">${dialogueText}</div>
+              </div>
+            `;
+          } else {
+            // Automatically builds image path based on character name: /avatars/charactername.png
+            const avatarUrl = `./avatars/${characterKey}.png`;
+
+            rowEl.innerHTML = `
+              <img src="${avatarUrl}" alt="${characterName}" class="avatar" onerror="this.onerror=null; this.src='./avatars/default.png';">
+              <div class="dialogue-body">
+                <span class="speaker-name">${characterName}</span>
+                <div class="speech-bubble">${dialogueText}</div>
+              </div>
+            `;
+          }
+
+          container.appendChild(rowEl);
+        });
+      } catch (error) {
+        console.error('Error fetching dialogue:', error);
+        document.getElementById('dialogue-container').innerHTML = `<div style="color:red; text-align:center;">Failed to load translation content.</div>`;
+      }
+    }
+
+    loadDialogue();
+  </script>
+</body>
+</html>
