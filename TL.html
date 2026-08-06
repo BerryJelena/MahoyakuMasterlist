@@ -9,15 +9,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
 
-  <!-- Custom Palette & Styling -->
+  <!-- Custom Styling -->
   <link rel="stylesheet" href="palette.css">
 
-  <!-- Robust CSV parsing (dialogue text can contain commas/quotes/newlines) -->
+  <!-- CSV parsing (dialogue text can contain commas/quotes/newlines) -->
   <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 
   <style>
     /* ============================================================
-       CONFIG — edit these two lines for your spreadsheet
+       CONFIG — edit these two lines for the spreadsheet
        ============================================================ */
 
     * { box-sizing: border-box; }
@@ -97,9 +97,9 @@
       color: var(--accent);
     }
 
-    /* ---------------- Customize name ---------------- */
+    /* ---------------- Name Customization ---------------- */
     #customize-name-btn {
-      display: none; /* shown via JS only when the story contains the name */
+      display: none; /* shown via JS only when the story contains the name only applicable to Akira's name*/
       align-items: center;
       gap: 6px;
       font-family: var(--font-ui);
@@ -310,8 +310,7 @@
       flex-shrink: 0;
     }
 
-    /* Consecutive lines from the same speaker: avatar/name shown once,
-       extra bubbles stack directly beneath within the same dialogue-body */
+    /* This is for the consecutive lines from the same speaker,, so bubbles stack */
     .dialogue-body .speech-bubble + .speech-bubble {
       margin-top: 6px;
     }
@@ -353,7 +352,7 @@
       <button id="modal-close" class="modal-close" type="button" aria-label="Close">&times;</button>
       <h2 class="modal-title">Customize character name</h2>
       <p class="modal-desc">
-        Replace every instance of "<span id="modal-original-name"></span>" — in dialogue and speaker labels — with a name of your choosing. Saved on this device.
+        Replace every instance of "<span id="modal-original-name"></span>" — in dialogue and speaker labels — with a name of your choosing. Local only.
       </p>
       <label class="modal-label" for="custom-name-input">Name</label>
       <input id="custom-name-input" class="modal-input" type="text" maxlength="30" autocomplete="off">
@@ -375,32 +374,26 @@
           "Anyone with the link — Viewer". Then copy the URL, which
           looks like:
             https://docs.google.com/spreadsheets/d/1AbCdEfGhIjKlMnOp.../edit
-          The part between /d/ and /edit is what goes below.
-          https://docs.google.com/spreadsheets/d/1zDubus8G08u9BMxvCpepCU8Kiq0bTJNarsO0q5oLvDc/edit?usp=sharing
-
-          (A "Publish to web" link — the kind starting with
-          .../d/e/2PACX-.../pub... — will NOT work here. That format
-          only supports the single sheet/gid it was published from,
-          and can't be queried by tab name.)
+          
+          ^ The part between /d/ and /edit is what goes below.
+          [mine] https://docs.google.com/spreadsheets/d/1zDubus8G08u9BMxvCpepCU8Kiq0bTJNarsO0q5oLvDc/edit?usp=sharing
 
        2. Each story lives on its own TAB. The tab name is passed in
           the URL as ?story=Tab%20Name (spaces/punctuation auto-encoded
-          if you build the link from home.html, so you don't need to
-          hand-encode it yourself).
+          if you build the link from home.html).
+          
        3. Within a tab, chapters are column-pairs named:
-            Chapter 1  -> Character   | Text
+            Chapter 1  -> Character     | Text
             Chapter 2  -> Character II  | Text II
             Chapter 3  -> Character III | Text III
             ...
             Chapter 20 -> Character XX  | Text XX
           A blank Character cell (with Text filled in) renders as a
-          narrator line. Leave unused columns/rows blank.
+          narrator line. Leave unused columns/rows blank. [Can handle up to 30 chapters]
        ============================================================ */
     const SPREADSHEET_ID = "1zDubus8G08u9BMxvCpepCU8Kiq0bTJNarsO0q5oLvDc";
 
-    // The name that readers can swap out for their own via the
-    // "Customize name" button. Change this if a story's default
-    // protagonist name isn't "Akira". Matched as a whole word.
+    // "Customize name" button.
     const ORIGINAL_NAME = "Akira";
     const CUSTOM_NAME_STORAGE_KEY = "mhyk_custom_name";
 
@@ -408,7 +401,6 @@
       return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetTabName)}`;
     }
 
-    // Roman numerals for chapter 2 through 30 (chapter 1 has no suffix)
     function toRoman(num) {
       const map = [[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
       let n = num, result = '';
@@ -438,9 +430,6 @@
     }
 
     /* ---------------- Name customization ---------------- */
-    // Separate regex objects for replace (needs the 'g' flag) vs test
-    // (must NOT be reused with 'g', since .test() advances lastIndex and
-    // would silently skip matches across repeated calls).
     const nameReplaceRegex = new RegExp(`\\b${ORIGINAL_NAME}\\b`, 'g');
     const nameTestRegex = new RegExp(`\\b${ORIGINAL_NAME}\\b`);
 
@@ -457,15 +446,12 @@
       }
     }
 
-    // Swap every whole-word instance of ORIGINAL_NAME for the reader's
-    // chosen name. Safe to call on text that doesn't contain the name.
+    // Swap every instance of ORIGINAL_NAME for the reader's
     function applyCustomName(text, customName) {
       if (!text) return text;
       return text.replace(nameReplaceRegex, customName);
     }
 
-    // Does this story's data actually mention ORIGINAL_NAME anywhere?
-    // Used to decide whether to show the "Customize name" button at all.
     function storyContainsOriginalName(rows, chapterDefs) {
       return chapterDefs.some(def =>
         rows.some(row =>
@@ -478,14 +464,6 @@
     const LOCATION_PIN_SVG = `<svg class="location-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
 
     // Turns one CSV row into a plain description of what to render:
-    //   { kind: 'location', text }
-    //   { kind: 'narrator' | 'character', characterKey, characterName, text }
-    // Returns null for rows with no dialogue text (skipped entirely).
-    //
-    // A row counts as a location tag when either:
-    //   - the Character cell is literally "Location" (any case), or
-    //   - the Character cell is blank (narrator) AND the whole Text cell
-    //     is wrapped in square brackets, e.g. "[Outside - Courtyard]"
     function classifyRow(row, def, customName) {
       const dialogueText = (row[def.textKey] || '').trim();
       if (!dialogueText) return null;
@@ -500,8 +478,7 @@
         return { kind: 'location', text: applyCustomName(locationText, customName) };
       }
 
-      // Avatar image & CSS class always key off the ORIGINAL name, so
-      // renaming doesn't break styling/avatars for that character.
+      // Avatar image 
       const characterKey = (isNarrator ? 'narrator' : rawCharacter).toLowerCase().replace(/\s+/g, '-');
       const characterName = isNarrator ? 'Narrator' : applyCustomName(rawCharacter, customName);
       const text = applyCustomName(dialogueText, customName);
@@ -509,9 +486,7 @@
       return { kind: isNarrator ? 'narrator' : 'character', characterKey, characterName, text };
     }
 
-    // Collapses consecutive entries from the same speaker into one group,
-    // so the UI can show the avatar/name once and stack the bubbles below
-    // it. Location tags never merge with anything, including each other.
+    // How bubbles stack
     function groupEntries(entries) {
       const groups = [];
       entries.forEach(entry => {
@@ -602,7 +577,7 @@
       });
     }
 
-    /* ---------------- Name modal wiring ---------------- */
+    /* ---------------- Modal ---------------- */
     // Kept so Save/Reset can immediately re-render the chapter on screen.
     let currentRows = null;
     let currentDef = null;
@@ -704,8 +679,7 @@
           list.appendChild(li);
         });
 
-        // Only show the "Customize name" button if this story actually
-        // uses ORIGINAL_NAME somewhere — no point offering it otherwise.
+        // Only show the "Customize name" 
         document.getElementById('customize-name-btn').style.display =
           storyContainsOriginalName(rows, chaptersWithContent) ? 'inline-flex' : 'none';
 
