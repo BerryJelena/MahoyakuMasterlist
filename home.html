@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mahoyaku Translations</title>
+  <meta name="description" content="A fan-made Mahoyaku masterlist of English translations, in one journal.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Lora:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="palette.css">
+  <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0 20px 100px;
+    }
+
+    header#masthead {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 64px 0 40px;
+      text-align: center;
+      border-bottom: 1px solid var(--line-color);
+    }
+
+    #masthead h1 {
+      font-family: var(--font-heading);
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      color: var(--text-dark);
+    }
+
+    #masthead p {
+      font-family: var(--font-ui);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    #feed {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+      padding-top: 48px;
+    }
+
+    .post-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .post-cover-wrap {
+      position: relative;
+      background-color: var(--bg-panel);
+      padding: 10px 10px 22px;
+      box-shadow: 0 3px 10px rgba(58, 50, 41, 0.10);
+      transform: rotate(var(--tilt, -0.6deg));
+      margin-bottom: 22px;
+    }
+
+    /* alternate the tilt direction per card for a scattered-photo feel */
+    .post-card:nth-child(even) .post-cover-wrap { --tilt: 0.6deg; }
+
+    .post-cover {
+      width: 100%;
+      display: block;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background-color: #e8ddc4;
+    }
+
+    .post-meta {
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0 0 8px 0;
+    }
+
+    .post-title {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 600;
+      line-height: 1.3;
+      margin: 0 0 12px 0;
+      color: var(--text-dark);
+    }
+
+    .post-card:hover .post-title { color: var(--accent); }
+
+    .post-excerpt {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-dark);
+      margin: 0 0 12px 0;
+    }
+
+    .read-more {
+      font-family: var(--font-ui);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .status-msg {
+      text-align: center;
+      color: var(--text-muted);
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      padding: 60px 0;
+    }
+    .status-msg.error { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <header id="masthead">
+    <h1>Mahoyaku Translations</h1>
+    <p>A fan-run archive of event &amp; scout story translations</p>
+  </header>
+
+  <main id="feed">
+    <div class="status-msg">Loading stories&hellip;</div>
+  </main>
+
+  <script>
+    /* ============================================================
+       CONFIG
+       ============================================================
+       1. Same SPREADSHEET_ID as TL.html.
+       2. Add one tab named exactly as INDEX_SHEET_NAME below. Give it
+          these columns (any extra columns are ignored):
+
+            Title     - story title shown on the card
+            Cover     - filename in your assets folder, or a full URL
+            Excerpt   - 1-2 sentence teaser
+            Sheet     - the exact tab name TL.html should load
+                        (this becomes the ?story= link)
+            Chapters  - optional, e.g. "12 / 12" — shown as a meta line
+
+          One row per story. Leave "Sheet" blank to hide a row (e.g.
+          a story you're still adding).
+       ============================================================ */
+    const SPREADSHEET_ID = "e/2PACX-1vR-1rs3P5A45vuZgRm5FwHWtYb4cJCkiaJpOBPYi5vxJWL3Jua-fVdmAi6RHgrf1aQoiteS_kq9JZqd";
+    const INDEX_SHEET_NAME = "Home";
+    const COVER_IMAGE_BASE = "./assets/covers/"; // used when Cover is just a filename
+
+    function buildSheetCsvUrl(sheetTabName) {
+      return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetTabName)}`;
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function resolveCoverUrl(cover) {
+      if (!cover) return 'https://placehold.co/800x450/e8ddc4/8a7c68?text=Cover+coming+soon';
+      return /^https?:\/\//i.test(cover) ? cover : COVER_IMAGE_BASE + cover;
+    }
+
+    function createCard(item) {
+      const title = (item.Title || 'Untitled').trim();
+      const excerpt = (item.Excerpt || '').trim();
+      const sheet = (item.Sheet || '').trim();
+      const chapters = (item.Chapters || '').trim();
+      const coverUrl = resolveCoverUrl((item.Cover || '').trim());
+
+      const a = document.createElement('a');
+      a.className = 'post-card';
+      a.href = `./TL.html?story=${encodeURIComponent(sheet)}`;
+
+      a.innerHTML = `
+        <div class="post-cover-wrap">
+          <img class="post-cover" src="${coverUrl}" alt="${escapeHtml(title)} cover"
+               onerror="this.onerror=null; this.src='https://placehold.co/800x450/e8ddc4/8a7c68?text=Cover+coming+soon';">
+        </div>
+        ${chapters ? `<p class="post-meta">${escapeHtml(chapters)}</p>` : ''}
+        <h2 class="post-title">${escapeHtml(title)}</h2>
+        ${excerpt ? `<p class="post-excerpt">${escapeHtml(excerpt)}</p>` : ''}
+        <span class="read-more">Read the translation &rarr;</span>
+      `;
+      return a;
+    }
+
+    async function loadFeed() {
+      const feed = document.getElementById('feed');
+      try {
+        const response = await fetch(buildSheetCsvUrl(INDEX_SHEET_NAME));
+        if (!response.ok) throw new Error('Could not reach the spreadsheet.');
+        const csvText = await response.text();
+
+        const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+        const items = parsed.data.filter(row => (row.Sheet || '').trim() !== '');
+
+        if (items.length === 0) {
+          feed.innerHTML = `<div class="status-msg">No stories published yet — check back soon.</div>`;
+          return;
+        }
+
+        feed.innerHTML = '';
+        items.forEach(item => feed.appendChild(createCard(item)));
+
+      } catch (error) {
+        console.error('Error loading feed:', error);
+        feed.innerHTML = `<div class="status-msg error">Failed to load the story list. ${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    loadFeed();
+  </script>
+</body>
+</html>
