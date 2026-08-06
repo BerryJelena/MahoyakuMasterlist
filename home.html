@@ -152,7 +152,9 @@
           these columns (any extra columns are ignored):
 
             Title     - story title shown on the card
-            Cover     - filename in your assets folder, or a full URL
+            Cover     - a plain number (e.g. "1") to auto-build the banner
+                        + icon filenames from the templates below, OR an
+                        explicit filename, OR a full URL
             Excerpt   - 1-2 sentence teaser
             Sheet     - the exact tab name TL.html should load
                         (this becomes the ?story= link)
@@ -163,7 +165,15 @@
        ============================================================ */
     const SPREADSHEET_ID = "1zDubus8G08u9BMxvCpepCU8Kiq0bTJNarsO0q5oLvDc";
     const INDEX_SHEET_NAME = "index";
-    const COVER_IMAGE_BASE = "./main/root/assets/banner/"; // used when Cover is just a filename
+    // Cover images can live in either folder, but the two folders use
+    // different naming schemes (e.g. banner/event_banner_1.png vs
+    // icons/card_icon_1.png). So "Cover" in the spreadsheet should just be
+    // the shared number (e.g. "1") — we build both filenames from it.
+    // "{n}" is replaced with whatever's in the Cover column.
+    const COVER_IMAGE_BASE = "./root/assets/banner/";
+    const COVER_FILENAME_TEMPLATE = "event_banner_{n}.png";
+    const COVER_IMAGE_FALLBACK_BASE = "./root/assets/icons/";
+    const COVER_FALLBACK_FILENAME_TEMPLATE = "card_icon_{n}.png";
 
     function buildSheetCsvUrl(sheetTabName) {
       return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetTabName)}`;
@@ -175,9 +185,42 @@
       return div.innerHTML;
     }
 
-    function resolveCoverUrl(cover) {
-      if (!cover) return 'https://placehold.co/800x450/e8ddc4/8a7c68?text=Cover+coming+soon';
-      return /^https?:\/\//i.test(cover) ? cover : COVER_IMAGE_BASE + cover;
+    const PLACEHOLDER_COVER = 'https://placehold.co/800x450/e8ddc4/8a7c68?text=Cover+coming+soon';
+
+    // Returns { primary, fallback } — fallback is null when Cover is a full
+    // URL (nothing sensible to fall back to) or empty.
+    //
+    // Cover column can be:
+    //   - a plain number, e.g. "1"          -> uses the filename templates
+    //   - an explicit filename, e.g. "x.png" -> used as-is in both folders
+    //   - a full http(s) URL                 -> used as-is, no fallback
+    function resolveCoverUrls(cover) {
+      if (!cover) return { primary: PLACEHOLDER_COVER, fallback: null };
+      if (/^https?:\/\//i.test(cover)) return { primary: cover, fallback: null };
+
+      if (/^\d+$/.test(cover)) {
+        // Plain number: build filenames from the per-folder templates.
+        return {
+          primary: COVER_IMAGE_BASE + COVER_FILENAME_TEMPLATE.replace('{n}', cover),
+          fallback: COVER_IMAGE_FALLBACK_BASE + COVER_FALLBACK_FILENAME_TEMPLATE.replace('{n}', cover),
+        };
+      }
+
+      // Explicit filename given: use it as-is in both folders.
+      return { primary: COVER_IMAGE_BASE + cover, fallback: COVER_IMAGE_FALLBACK_BASE + cover };
+    }
+
+    // Called when a cover <img> fails to load. Step 1: try the icons-folder
+    // fallback (if one was set). Step 2: give up and show the placeholder.
+    function handleCoverError(img) {
+      const fallback = img.dataset.fallback;
+      if (fallback) {
+        img.dataset.fallback = ''; // don't loop if the fallback also 404s
+        img.src = fallback;
+      } else {
+        img.onerror = null;
+        img.src = PLACEHOLDER_COVER;
+      }
     }
 
     function createCard(item) {
@@ -185,7 +228,7 @@
       const excerpt = (item.Excerpt || '').trim();
       const sheet = (item.Sheet || '').trim();
       const chapters = (item.Chapters || '').trim();
-      const coverUrl = resolveCoverUrl((item.Cover || '').trim());
+      const { primary: coverUrl, fallback: coverFallbackUrl } = resolveCoverUrls((item.Cover || '').trim());
 
       const a = document.createElement('a');
       a.className = 'post-card';
@@ -194,7 +237,8 @@
       a.innerHTML = `
         <div class="post-cover-wrap">
           <img class="post-cover" src="${coverUrl}" alt="${escapeHtml(title)} cover"
-               onerror="this.onerror=null; this.src='https://placehold.co/800x450/e8ddc4/8a7c68?text=Cover+coming+soon';">
+               data-fallback="${coverFallbackUrl ? escapeHtml(coverFallbackUrl) : ''}"
+               onerror="handleCoverError(this)">
         </div>
         ${chapters ? `<p class="post-meta">${escapeHtml(chapters)}</p>` : ''}
         <h2 class="post-title">${escapeHtml(title)}</h2>
