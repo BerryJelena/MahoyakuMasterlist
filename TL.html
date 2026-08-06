@@ -97,6 +97,135 @@
       color: var(--accent);
     }
 
+    /* ---------------- Customize name ---------------- */
+    #customize-name-btn {
+      display: none; /* shown via JS only when the story contains the name */
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: none;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin: -8px 0 22px 0;
+      cursor: pointer;
+    }
+    #customize-name-btn:hover { background-color: rgba(123, 75, 65, 0.08); }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 25, 20, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal-box {
+      position: relative;
+      width: 100%;
+      max-width: 380px;
+      background-color: var(--bg-panel, #fff);
+      border-radius: 12px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      padding: 28px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      line-height: 1;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+    }
+    .modal-close:hover { color: var(--accent); }
+
+    .modal-title {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0 0 10px 0;
+      color: var(--text-dark);
+    }
+
+    .modal-desc {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+      margin: 0 0 20px 0;
+    }
+
+    .modal-label {
+      display: block;
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .modal-input {
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      padding: 10px 12px;
+      border: 1px solid var(--line-color);
+      border-radius: 6px;
+      color: var(--text-dark);
+      background-color: #fff;
+      margin-bottom: 22px;
+    }
+    .modal-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .modal-btn {
+      font-family: var(--font-ui);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-radius: 6px;
+      padding: 10px 16px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .modal-btn-secondary {
+      background: none;
+      color: var(--text-muted);
+    }
+    .modal-btn-secondary:hover { color: var(--accent); }
+
+    .modal-btn-primary {
+      background-color: var(--accent);
+      color: #fff;
+    }
+    .modal-btn-primary:hover { opacity: 0.9; }
+
     /* ---------------- Reading pane ---------------- */
     #reading-pane {
       flex: 1;
@@ -151,6 +280,42 @@
       padding: 4px 10px;
     }
 
+    /* Location tags, e.g. "[Outside - Courtyard]" or Character = "Location" */
+    .location-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 36px 0;
+    }
+    .location-row::before,
+    .location-row::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: var(--line-color);
+    }
+    .location-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .location-pin {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* Consecutive lines from the same speaker: avatar/name shown once,
+       extra bubbles stack directly beneath within the same dialogue-body */
+    .dialogue-body .speech-bubble + .speech-bubble {
+      margin-top: 6px;
+    }
+
     /* Mobile */
     @media (max-width: 760px) {
       body { flex-direction: column; }
@@ -173,6 +338,7 @@
   <aside id="chapter-sidebar">
     <a class="back-link" href="./home.html">&larr; Back to Home</a>
     <h1 id="story-title">Loading&hellip;</h1>
+    <button id="customize-name-btn" type="button">&#9998; Customize name</button>
     <ul id="chapter-list"></ul>
   </aside>
 
@@ -181,6 +347,22 @@
       <div class="status-msg">Loading translation&hellip;</div>
     </div>
   </main>
+
+  <div id="name-modal-overlay" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+      <button id="modal-close" class="modal-close" type="button" aria-label="Close">&times;</button>
+      <h2 class="modal-title">Customize character name</h2>
+      <p class="modal-desc">
+        Replace every instance of "<span id="modal-original-name"></span>" — in dialogue and speaker labels — with a name of your choosing. Saved on this device.
+      </p>
+      <label class="modal-label" for="custom-name-input">Name</label>
+      <input id="custom-name-input" class="modal-input" type="text" maxlength="30" autocomplete="off">
+      <div class="modal-actions">
+        <button id="modal-reset" class="modal-btn modal-btn-secondary" type="button">Reset to default</button>
+        <button id="modal-save" class="modal-btn modal-btn-primary" type="button">Save</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     /* ============================================================
@@ -216,6 +398,12 @@
        ============================================================ */
     const SPREADSHEET_ID = "1zDubus8G08u9BMxvCpepCU8Kiq0bTJNarsO0q5oLvDc";
 
+    // The name that readers can swap out for their own via the
+    // "Customize name" button. Change this if a story's default
+    // protagonist name isn't "Akira". Matched as a whole word.
+    const ORIGINAL_NAME = "Akira";
+    const CUSTOM_NAME_STORAGE_KEY = "mhyk_custom_name";
+
     function buildSheetCsvUrl(sheetTabName) {
       return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetTabName)}`;
     }
@@ -249,6 +437,131 @@
       return div.innerHTML;
     }
 
+    /* ---------------- Name customization ---------------- */
+    // Separate regex objects for replace (needs the 'g' flag) vs test
+    // (must NOT be reused with 'g', since .test() advances lastIndex and
+    // would silently skip matches across repeated calls).
+    const nameReplaceRegex = new RegExp(`\\b${ORIGINAL_NAME}\\b`, 'g');
+    const nameTestRegex = new RegExp(`\\b${ORIGINAL_NAME}\\b`);
+
+    function getCustomName() {
+      return localStorage.getItem(CUSTOM_NAME_STORAGE_KEY) || ORIGINAL_NAME;
+    }
+
+    function setCustomName(name) {
+      const trimmed = (name || '').trim();
+      if (!trimmed || trimmed === ORIGINAL_NAME) {
+        localStorage.removeItem(CUSTOM_NAME_STORAGE_KEY);
+      } else {
+        localStorage.setItem(CUSTOM_NAME_STORAGE_KEY, trimmed);
+      }
+    }
+
+    // Swap every whole-word instance of ORIGINAL_NAME for the reader's
+    // chosen name. Safe to call on text that doesn't contain the name.
+    function applyCustomName(text, customName) {
+      if (!text) return text;
+      return text.replace(nameReplaceRegex, customName);
+    }
+
+    // Does this story's data actually mention ORIGINAL_NAME anywhere?
+    // Used to decide whether to show the "Customize name" button at all.
+    function storyContainsOriginalName(rows, chapterDefs) {
+      return chapterDefs.some(def =>
+        rows.some(row =>
+          nameTestRegex.test(row[def.charKey] || '') ||
+          nameTestRegex.test(row[def.textKey] || '')
+        )
+      );
+    }
+
+    const LOCATION_PIN_SVG = `<svg class="location-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
+
+    // Turns one CSV row into a plain description of what to render:
+    //   { kind: 'location', text }
+    //   { kind: 'narrator' | 'character', characterKey, characterName, text }
+    // Returns null for rows with no dialogue text (skipped entirely).
+    //
+    // A row counts as a location tag when either:
+    //   - the Character cell is literally "Location" (any case), or
+    //   - the Character cell is blank (narrator) AND the whole Text cell
+    //     is wrapped in square brackets, e.g. "[Outside - Courtyard]"
+    function classifyRow(row, def, customName) {
+      const dialogueText = (row[def.textKey] || '').trim();
+      if (!dialogueText) return null;
+
+      const rawCharacter = (row[def.charKey] || '').trim();
+      const isNarrator = rawCharacter === '';
+      const isExplicitLocation = !isNarrator && rawCharacter.toLowerCase() === 'location';
+      const isBracketedLocation = isNarrator && /^\[.*\]$/.test(dialogueText);
+
+      if (isExplicitLocation || isBracketedLocation) {
+        const locationText = dialogueText.replace(/^\[\s*|\s*\]$/g, '');
+        return { kind: 'location', text: applyCustomName(locationText, customName) };
+      }
+
+      // Avatar image & CSS class always key off the ORIGINAL name, so
+      // renaming doesn't break styling/avatars for that character.
+      const characterKey = (isNarrator ? 'narrator' : rawCharacter).toLowerCase().replace(/\s+/g, '-');
+      const characterName = isNarrator ? 'Narrator' : applyCustomName(rawCharacter, customName);
+      const text = applyCustomName(dialogueText, customName);
+
+      return { kind: isNarrator ? 'narrator' : 'character', characterKey, characterName, text };
+    }
+
+    // Collapses consecutive entries from the same speaker into one group,
+    // so the UI can show the avatar/name once and stack the bubbles below
+    // it. Location tags never merge with anything, including each other.
+    function groupEntries(entries) {
+      const groups = [];
+      entries.forEach(entry => {
+        const last = groups[groups.length - 1];
+        const canMerge = last
+          && entry.kind !== 'location'
+          && last.kind === entry.kind
+          && last.characterKey === entry.characterKey;
+
+        if (canMerge) {
+          last.texts.push(entry.text);
+        } else {
+          groups.push({ ...entry, texts: [entry.text] });
+        }
+      });
+      return groups;
+    }
+
+    function buildLocationRow(group) {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'location-row';
+      const safeText = escapeHtml(group.texts[0]);
+      rowEl.innerHTML = `<span class="location-tag">${LOCATION_PIN_SVG}<span>${safeText}</span></span>`;
+      return rowEl;
+    }
+
+    function buildDialogueRow(group) {
+      const characterClass = `character-${group.characterKey}`;
+      const rowEl = document.createElement('div');
+      rowEl.className = `dialogue-row ${characterClass}`;
+
+      const bubblesHtml = group.texts
+        .map(text => `<div class="speech-bubble">${escapeHtml(text).replace(/\n/g, '<br>')}</div>`)
+        .join('');
+
+      if (group.kind === 'narrator') {
+        rowEl.innerHTML = `<div class="dialogue-body">${bubblesHtml}</div>`;
+      } else {
+        const avatarUrl = `./avatar/${group.characterKey}.png`;
+        rowEl.innerHTML = `
+          <img src="${avatarUrl}" alt="${escapeHtml(group.characterName)}" class="avatar" onerror="this.onerror=null; this.src='./avatar/default.png';">
+          <div class="dialogue-body">
+            <span class="speaker-name">${escapeHtml(group.characterName)}</span>
+            ${bubblesHtml}
+          </div>
+        `;
+      }
+      return rowEl;
+    }
+
     function renderChapter(rows, def) {
       const container = document.getElementById('dialogue-container');
       container.innerHTML = '';
@@ -258,43 +571,20 @@
       heading.textContent = `Chapter ${def.n}`;
       container.appendChild(heading);
 
-      let rendered = 0;
+      const customName = getCustomName();
 
-      rows.forEach(row => {
-        const dialogueText = (row[def.textKey] || '').trim();
-        if (!dialogueText) return;
+      const entries = rows
+        .map(row => classifyRow(row, def, customName))
+        .filter(Boolean);
 
-        const rawCharacter = (row[def.charKey] || '').trim();
-        const isNarrator = rawCharacter === '';
-        const characterName = isNarrator ? 'Narrator' : rawCharacter;
-        const characterKey = characterName.toLowerCase().replace(/\s+/g, '-');
-        const characterClass = `character-${characterKey}`;
+      const groups = groupEntries(entries);
 
-        const rowEl = document.createElement('div');
-        rowEl.className = `dialogue-row ${characterClass}`;
-
-        const safeText = escapeHtml(dialogueText).replace(/\n/g, '<br>');
-
-        if (isNarrator) {
-          rowEl.innerHTML = `
-            <div class="dialogue-body">
-              <div class="speech-bubble">${safeText}</div>
-            </div>
-          `;
-        } else {
-          const avatarUrl = `./avatar/${characterKey}.png`;
-          rowEl.innerHTML = `
-            <img src="${avatarUrl}" alt="${escapeHtml(characterName)}" class="avatar" onerror="this.onerror=null; this.src='./avatar/default.png';">
-            <div class="dialogue-body">
-              <span class="speaker-name">${escapeHtml(characterName)}</span>
-              <div class="speech-bubble">${safeText}</div>
-            </div>
-          `;
-        }
-
+      groups.forEach(group => {
+        const rowEl = group.kind === 'location' ? buildLocationRow(group) : buildDialogueRow(group);
         container.appendChild(rowEl);
-        rendered++;
       });
+
+      const rendered = groups.length;
 
       if (rendered === 0) {
         const empty = document.createElement('div');
@@ -309,6 +599,55 @@
     function setActiveChapterLink(n) {
       document.querySelectorAll('#chapter-list a').forEach(a => {
         a.classList.toggle('active', a.dataset.chapter === String(n));
+      });
+    }
+
+    /* ---------------- Name modal wiring ---------------- */
+    // Kept so Save/Reset can immediately re-render the chapter on screen.
+    let currentRows = null;
+    let currentDef = null;
+
+    function openNameModal() {
+      const current = getCustomName();
+      document.getElementById('modal-original-name').textContent = ORIGINAL_NAME;
+      const input = document.getElementById('custom-name-input');
+      input.value = current === ORIGINAL_NAME ? '' : current;
+      input.placeholder = ORIGINAL_NAME;
+      document.getElementById('name-modal-overlay').style.display = 'flex';
+      input.focus();
+    }
+
+    function closeNameModal() {
+      document.getElementById('name-modal-overlay').style.display = 'none';
+    }
+
+    function rerenderCurrentChapter() {
+      if (currentRows && currentDef) renderChapter(currentRows, currentDef);
+    }
+
+    function saveNameModal() {
+      setCustomName(document.getElementById('custom-name-input').value);
+      closeNameModal();
+      rerenderCurrentChapter();
+    }
+
+    function resetNameModal() {
+      setCustomName('');
+      closeNameModal();
+      rerenderCurrentChapter();
+    }
+
+    function setupNameModal() {
+      document.getElementById('customize-name-btn').addEventListener('click', openNameModal);
+      document.getElementById('modal-close').addEventListener('click', closeNameModal);
+      document.getElementById('modal-save').addEventListener('click', saveNameModal);
+      document.getElementById('modal-reset').addEventListener('click', resetNameModal);
+      document.getElementById('name-modal-overlay').addEventListener('click', (e) => {
+        if (e.target.id === 'name-modal-overlay') closeNameModal();
+      });
+      document.getElementById('custom-name-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') saveNameModal();
+        if (e.key === 'Escape') closeNameModal();
       });
     }
 
@@ -357,6 +696,7 @@
           a.textContent = `Chapter ${def.n}`;
           a.dataset.chapter = String(def.n);
           a.addEventListener('click', () => {
+            currentDef = def;
             renderChapter(rows, def);
             setActiveChapterLink(def.n);
           });
@@ -364,11 +704,18 @@
           list.appendChild(li);
         });
 
+        // Only show the "Customize name" button if this story actually
+        // uses ORIGINAL_NAME somewhere — no point offering it otherwise.
+        document.getElementById('customize-name-btn').style.display =
+          storyContainsOriginalName(rows, chaptersWithContent) ? 'inline-flex' : 'none';
+
         // Pick chapter from URL hash if valid, else the first available
         const hashMatch = window.location.hash.match(/^#ch(\d+)$/);
         const requested = hashMatch ? parseInt(hashMatch[1], 10) : null;
         const initialDef = chaptersWithContent.find(d => d.n === requested) || chaptersWithContent[0];
 
+        currentRows = rows;
+        currentDef = initialDef;
         renderChapter(rows, initialDef);
         setActiveChapterLink(initialDef.n);
 
@@ -379,6 +726,7 @@
       }
     }
 
+    setupNameModal();
     loadStory();
   </script>
 </body>
