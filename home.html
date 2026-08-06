@@ -46,13 +46,37 @@
       margin: 0;
     }
 
-    #feed {
-      max-width: 720px;
+    #feed-columns {
+      max-width: 1180px;
       margin: 0 auto;
+      padding-top: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+    }
+
+    @media (max-width: 820px) {
+      #feed-columns {
+        grid-template-columns: 1fr;
+        gap: 56px;
+      }
+    }
+
+    .feed-column-heading {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--text-dark);
+      margin: 0 0 28px 0;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line-color);
+    }
+
+    .feed-column {
       display: flex;
       flex-direction: column;
       gap: 56px;
-      padding-top: 48px;
     }
 
     .post-card {
@@ -76,8 +100,7 @@
     .post-cover {
       width: 100%;
       display: block;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
+      height: auto;
       background-color: #e8ddc4;
     }
 
@@ -136,9 +159,18 @@
     <p>A fan-run archive of event &amp; and maybe card story translations</p>
   </header>
 
-  <main id="feed">
-    <div class="status-msg">Loading stories&hellip;</div>
-  </main>
+  <div id="feed-status" class="status-msg">Loading stories&hellip;</div>
+
+  <div id="feed-columns" style="display:none;">
+    <section>
+      <h2 class="feed-column-heading">Event Translations</h2>
+      <div id="feed-events" class="feed-column"></div>
+    </section>
+    <section>
+      <h2 class="feed-column-heading">Card Translations</h2>
+      <div id="feed-cards" class="feed-column"></div>
+    </section>
+  </div>
 
   <script>
     /* ============================================================
@@ -149,12 +181,18 @@
           Viewer), NOT a "Publish to web" link. See TL.html's config
           comment for exactly where to find it.
        2. Add one tab named exactly as INDEX_SHEET_NAME below. Give it
-          these columns (any extra columns are ignored):
+          these columns, in this exact order (any extra columns after
+          Chapters are ignored):
 
             Title     - story title shown on the card
-            Cover     - a plain number (e.g. "1") to auto-build the banner
-                        + icon filenames from the templates below, OR an
-                        explicit filename, OR a full URL
+            Type      - "Event" or "Card" (case-insensitive). Controls
+                        which column the story appears in AND which
+                        folder/template its Cover number defaults to
+                        (Event -> banner/, Card -> icons/). Anything
+                        else is treated as "Event".
+            Cover     - a plain number (e.g. "1") to auto-build the
+                        filename from the template for this row's Type,
+                        OR an explicit filename, OR a full URL
             Excerpt   - 1-2 sentence teaser
             Sheet     - the exact tab name TL.html should load
                         (this becomes the ?story= link)
@@ -168,8 +206,8 @@
     // Cover images can live in either folder, but the two folders use
     // different naming schemes (e.g. banner/event_banner_1.png vs
     // icons/card_icon_1.png). So "Cover" in the spreadsheet should just be
-    // the shared number (e.g. "1") — we build both filenames from it.
-    // "{n}" is replaced with whatever's in the Cover column.
+    // the number (e.g. "1") — we build the filename from the template that
+    // matches this row's Type. "{n}" is replaced with the Cover value.
     const COVER_IMAGE_BASE = "./root/assets/banner/";
     const COVER_FILENAME_TEMPLATE = "event_banner_{n}.png";
     const COVER_IMAGE_FALLBACK_BASE = "./root/assets/icons/";
@@ -191,23 +229,33 @@
     // URL (nothing sensible to fall back to) or empty.
     //
     // Cover column can be:
-    //   - a plain number, e.g. "1"          -> uses the filename templates
+    //   - a plain number, e.g. "1"          -> uses the filename template
+    //                                           for this row's Type
     //   - an explicit filename, e.g. "x.png" -> used as-is in both folders
     //   - a full http(s) URL                 -> used as-is, no fallback
-    function resolveCoverUrls(cover) {
+    //
+    // `type` is "event" or "card" (already lowercased). Event rows try the
+    // banner folder first and fall back to icons; card rows do the reverse.
+    function resolveCoverUrls(cover, type) {
       if (!cover) return { primary: PLACEHOLDER_COVER, fallback: null };
       if (/^https?:\/\//i.test(cover)) return { primary: cover, fallback: null };
+
+      const isCard = type === 'card';
+      const primaryBase = isCard ? COVER_IMAGE_FALLBACK_BASE : COVER_IMAGE_BASE;
+      const fallbackBase = isCard ? COVER_IMAGE_BASE : COVER_IMAGE_FALLBACK_BASE;
+      const primaryTemplate = isCard ? COVER_FALLBACK_FILENAME_TEMPLATE : COVER_FILENAME_TEMPLATE;
+      const fallbackTemplate = isCard ? COVER_FILENAME_TEMPLATE : COVER_FALLBACK_FILENAME_TEMPLATE;
 
       if (/^\d+$/.test(cover)) {
         // Plain number: build filenames from the per-folder templates.
         return {
-          primary: COVER_IMAGE_BASE + COVER_FILENAME_TEMPLATE.replace('{n}', cover),
-          fallback: COVER_IMAGE_FALLBACK_BASE + COVER_FALLBACK_FILENAME_TEMPLATE.replace('{n}', cover),
+          primary: primaryBase + primaryTemplate.replace('{n}', cover),
+          fallback: fallbackBase + fallbackTemplate.replace('{n}', cover),
         };
       }
 
       // Explicit filename given: use it as-is in both folders.
-      return { primary: COVER_IMAGE_BASE + cover, fallback: COVER_IMAGE_FALLBACK_BASE + cover };
+      return { primary: primaryBase + cover, fallback: fallbackBase + cover };
     }
 
     // Called when a cover <img> fails to load. Step 1: try the icons-folder
@@ -228,7 +276,7 @@
       const excerpt = (item.Excerpt || '').trim();
       const sheet = (item.Sheet || '').trim();
       const chapters = (item.Chapters || '').trim();
-      const { primary: coverUrl, fallback: coverFallbackUrl } = resolveCoverUrls((item.Cover || '').trim());
+      const { primary: coverUrl, fallback: coverFallbackUrl } = resolveCoverUrls((item.Cover || '').trim(), item.Type);
 
       const a = document.createElement('a');
       a.className = 'post-card';
@@ -249,7 +297,11 @@
     }
 
     async function loadFeed() {
-      const feed = document.getElementById('feed');
+      const statusEl = document.getElementById('feed-status');
+      const columnsEl = document.getElementById('feed-columns');
+      const eventsEl = document.getElementById('feed-events');
+      const cardsEl = document.getElementById('feed-cards');
+
       try {
         const url = buildSheetCsvUrl(INDEX_SHEET_NAME);
         console.log('[DEBUG] Fetching:', url);
@@ -266,8 +318,8 @@
 
         // Parse WITHOUT relying on header names — some trailing empty
         // columns in this sheet are corrupting Papa's header row. We only
-        // need the first 5 columns (Title, Cover, Excerpt, Sheet, Chapters)
-        // by fixed position, which sidesteps that entirely.
+        // need the first 6 columns (Title, Type, Cover, Excerpt, Sheet,
+        // Chapters) by fixed position, which sidesteps that entirely.
         const parsed = Papa.parse(csvText, { header: false, skipEmptyLines: true });
         console.log('[DEBUG] Parse errors:', parsed.errors);
         console.log('[DEBUG] Raw rows:', parsed.data);
@@ -276,25 +328,39 @@
         const items = dataRows
           .map(cols => ({
             Title: (cols[0] || '').trim(),
-            Cover: (cols[1] || '').trim(),
-            Excerpt: (cols[2] || '').trim(),
-            Sheet: (cols[3] || '').trim(),
-            Chapters: (cols[4] || '').trim(),
+            Type: (cols[1] || '').trim().toLowerCase(), // "event" or "card"
+            Cover: (cols[2] || '').trim(),
+            Excerpt: (cols[3] || '').trim(),
+            Sheet: (cols[4] || '').trim(),
+            Chapters: (cols[5] || '').trim(),
           }))
           .filter(row => row.Sheet !== '');
         console.log('[DEBUG] Items after filter:', items);
 
         if (items.length === 0) {
-          feed.innerHTML = `<div class="status-msg">No stories published yet — check back soon.</div>`;
+          statusEl.textContent = 'No stories published yet — check back soon.';
+          statusEl.classList.remove('error');
           return;
         }
 
-        feed.innerHTML = '';
-        items.forEach(item => feed.appendChild(createCard(item)));
+        const eventItems = items.filter(item => item.Type !== 'card');
+        const cardItems = items.filter(item => item.Type === 'card');
+
+        eventsEl.innerHTML = '';
+        cardsEl.innerHTML = '';
+        eventItems.forEach(item => eventsEl.appendChild(createCard(item)));
+        cardItems.forEach(item => cardsEl.appendChild(createCard(item)));
+
+        eventsEl.closest('section').style.display = eventItems.length ? '' : 'none';
+        cardsEl.closest('section').style.display = cardItems.length ? '' : 'none';
+
+        statusEl.style.display = 'none';
+        columnsEl.style.display = 'grid';
 
       } catch (error) {
         console.error('Error loading feed:', error);
-        feed.innerHTML = `<div class="status-msg error">Failed to load the story list. ${escapeHtml(error.message)}</div>`;
+        statusEl.textContent = `Failed to load the story list. ${error.message}`;
+        statusEl.classList.add('error');
       }
     }
 
