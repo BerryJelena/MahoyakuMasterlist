@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Translations</title>
-  <meta name="description" content="AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH">
+  <title>Mahoyaku Translations</title>
+  <meta name="description" content="A fan-made Mahoyaku masterlist of English translations, in one journal.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -133,7 +133,7 @@
 
   <header id="masthead">
     <h1>Mahoyaku Translations</h1>
-    <p>A fan-run archive of event &amp; card story translations</p>
+    <p>A fan-run archive of event &amp; scout story translations</p>
   </header>
 
   <main id="feed">
@@ -157,13 +157,13 @@
             Sheet     - the exact tab name TL.html should load
                         (this becomes the ?story= link)
             Chapters  - optional, e.g. "12 / 12" — shown as a meta line
-https://docs.google.com/spreadsheets/d/1zDubus8G08u9BMxvCpepCU8Kiq0bTJNarsO0q5oLvDc/edit?usp=sharing
+
           One row per story. Leave "Sheet" blank to hide a row (e.g.
           a story you're still adding).
        ============================================================ */
     const SPREADSHEET_ID = "1zDubus8G08u9BMxvCpepCU8Kiq0bTJNarsO0q5oLvDc";
-    const INDEX_SHEET_NAME = "Index";
-    const COVER_IMAGE_BASE = "./root/assets/banner/"; // used when Cover is just a filename
+    const INDEX_SHEET_NAME = "index";
+    const COVER_IMAGE_BASE = "./assets/covers/"; // used when Cover is just a filename
 
     function buildSheetCsvUrl(sheetTabName) {
       return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetTabName)}`;
