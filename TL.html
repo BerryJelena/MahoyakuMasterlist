@@ -154,11 +154,11 @@
               </div>
             `;
           } else {
-            // Automatically builds image path based on character name: /avatars/charactername.png
-            const avatarUrl = `./avatars/${characterKey}.png`;
+            // Automatically builds image path based on character name: /avatar/charactername.png
+            const avatarUrl = `./avatar/${characterKey}.png`;
 
             rowEl.innerHTML = `
-              <img src="${avatarUrl}" alt="${characterName}" class="avatar" onerror="this.onerror=null; this.src='./avatars/default.png';">
+              <img src="${avatarUrl}" alt="${characterName}" class="avatar" onerror="this.onerror=null; this.src='./avatar/default.png';">
               <div class="dialogue-body">
                 <span class="speaker-name">${characterName}</span>
                 <div class="speech-bubble">${dialogueText}</div>
