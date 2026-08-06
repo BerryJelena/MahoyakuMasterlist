@@ -19,8 +19,6 @@
     /* ============================================================
        CONFIG — edit these two lines for your spreadsheet
        ============================================================ */
-    /* SPREADSHEET_ID and story-tab lookups happen in the script below.
-       See the comment above SPREADSHEET_ID for setup instructions. */
 
     * { box-sizing: border-box; }
 
@@ -41,7 +39,7 @@
       top: 0;
       height: 100vh;
       overflow-y: auto;
-      background-image: none; /* solid panel, no ruled lines */
+      background-image: none; 
     }
 
     .back-link {
@@ -284,9 +282,9 @@
             </div>
           `;
         } else {
-          const avatarUrl = `./avatars/${characterKey}.png`;
+          const avatarUrl = `./avatar/${characterKey}.png`;
           rowEl.innerHTML = `
-            <img src="${avatarUrl}" alt="${escapeHtml(characterName)}" class="avatar" onerror="this.onerror=null; this.src='./avatars/default.png';">
+            <img src="${avatarUrl}" alt="${escapeHtml(characterName)}" class="avatar" onerror="this.onerror=null; this.src='./avatar/default.png';">
             <div class="dialogue-body">
               <span class="speaker-name">${escapeHtml(characterName)}</span>
               <div class="speech-bubble">${safeText}</div>
