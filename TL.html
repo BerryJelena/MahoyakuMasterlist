@@ -3,178 +3,373 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Translation Reader</title>
-  
+  <title>Translation</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+
   <!-- Custom Palette & Styling -->
   <link rel="stylesheet" href="palette.css">
 
+  <!-- Robust CSV parsing (dialogue text can contain commas/quotes/newlines) -->
+  <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
   <style>
-    /* Base styles & layout fallback */
-    :root {
-      --bg-color: #f4f5f7;
-      --text-dark: #2d3748;
-      --font-body: 'Work Sans', system-ui, sans-serif;
-      --font-heading: 'Montserrat', system-ui, sans-serif;
-    }
+    /* ============================================================
+       CONFIG — edit these two lines for your spreadsheet
+       ============================================================ */
+    /* SPREADSHEET_ID and story-tab lookups happen in the script below.
+       See the comment above SPREADSHEET_ID for setup instructions. */
+
+    * { box-sizing: border-box; }
 
     body {
-      background-color: var(--bg-color);
-      font-family: var(--font-body);
-      color: var(--text-dark);
       margin: 0;
-      padding: 40px 20px;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ---------------- Sidebar ---------------- */
+    #chapter-sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background-color: var(--bg-panel);
+      border-right: 1px solid var(--line-color);
+      padding: 32px 20px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background-image: none; /* solid panel, no ruled lines */
+    }
+
+    .back-link {
+      display: inline-block;
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 22px;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    #story-title {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 600;
+      line-height: 1.25;
+      margin: 0 0 22px 0;
+      color: var(--text-dark);
+    }
+
+    #chapter-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    #chapter-list li a {
+      display: block;
+      font-family: var(--font-ui);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 6px;
+      border-left: 3px solid transparent;
+    }
+
+    #chapter-list li a:hover {
+      background-color: rgba(123, 75, 65, 0.06);
+      color: var(--text-dark);
+    }
+
+    #chapter-list li a.active {
+      background-color: rgba(123, 75, 65, 0.09);
+      border-left: 3px solid var(--accent);
+      color: var(--accent);
+    }
+
+    /* ---------------- Reading pane ---------------- */
+    #reading-pane {
+      flex: 1;
       display: flex;
       justify-content: center;
+      padding: 56px 24px 100px;
     }
 
     #dialogue-container {
       width: 100%;
-      max-width: 760px;
+      max-width: 720px;
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
 
-    .dialogue-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      width: 100%;
-    }
-
-    .avatar {
-      width: 52px;
-      height: 52px;
-      border-radius: 12px;
-      object-fit: cover;
-      flex-shrink: 0;
-    }
-
-    .dialogue-body {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      max-width: 85%;
-    }
-
-    .speaker-name {
+    #chapter-heading {
       font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 0.8rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: #64748b;
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin: 0 0 28px 0;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line-color);
+      color: var(--text-dark);
     }
 
-    .speech-bubble {
-      background-color: var(--bubble-bg, #e2e8f0);
-      color: var(--bubble-text, #2d3748);
-      padding: 12px 18px;
-      border-radius: 14px;
-      font-size: 0.95rem;
-      line-height: 1.5;
-      height: auto; /* Dynamic height adjustment */
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    .status-msg {
+      text-align: center;
+      color: var(--text-muted);
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      padding: 60px 0;
     }
+    .status-msg.error { color: var(--accent); }
 
-    /* Narrator Specific Styling */
+    /* Narrator lines */
     .character-narrator {
       justify-content: center;
-      margin: 12px 0;
+      margin: 10px 0;
     }
-
     .character-narrator .dialogue-body {
-      max-width: 90%;
+      max-width: 92%;
       align-items: center;
+      margin: 0 auto;
+    }
+    .character-narrator .speech-bubble {
+      background-color: transparent;
+      box-shadow: none;
+      font-style: italic;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 4px 10px;
     }
 
-    .character-narrator .speech-bubble {
-      background-color: var(--bubble-bg, #e9ecef);
-      font-style: italic;
-      color: #495057;
-      text-align: center;
+    /* Mobile */
+    @media (max-width: 760px) {
+      body { flex-direction: column; }
+      #chapter-sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--line-color);
+        padding: 20px;
+      }
+      #chapter-list { flex-direction: row; flex-wrap: wrap; }
+      #chapter-list li a { padding: 6px 10px; }
+      #reading-pane { padding: 32px 16px 80px; }
     }
   </style>
 </head>
 <body>
 
-  <main id="dialogue-container">
-    <div style="text-align: center; color: #888;">Loading translation...</div>
+  <aside id="chapter-sidebar">
+    <a class="back-link" href="./index.html">&larr; Back to Masterlist</a>
+    <h1 id="story-title">Loading&hellip;</h1>
+    <ul id="chapter-list"></ul>
+  </aside>
+
+  <main id="reading-pane">
+    <div id="dialogue-container">
+      <div class="status-msg">Loading translation&hellip;</div>
+    </div>
   </main>
 
   <script>
-    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-1rs3P5A45vuZgRm5FwHWtYb4cJCkiaJpOBPYi5vxJWL3Jua-fVdmAi6RHgrf1aQoiteS_kq9JZqd/pub?gid=0&single=true&output=csv';
+    /* ============================================================
+       CONFIG
+       ============================================================
+       1. SPREADSHEET_ID: the long ID in your sheet's URL, e.g.
+          https://docs.google.com/spreadsheets/d/*THIS_PART edit
+       2. The sheet must be shared as "Anyone with the link — Viewer".
+       3. Each story lives on its own TAB. The tab name is passed in
+          the URL as ?story=Tab%20Name (spaces/punctuation auto-encoded
+          if you build the link from index.html, so you don't need to
+          hand-encode it yourself).
+       4. Within a tab, chapters are column-pairs named:
+            Chapter 1  -> Character   | Text
+            Chapter 2  -> Character II  | Text II
+            Chapter 3  -> Character III | Text III
+            ...
+            Chapter 20 -> Character XX  | Text XX
+          A blank Character cell (with Text filled in) renders as a
+          narrator line. Leave unused columns/rows blank.
+       ============================================================ */
+    const SPREADSHEET_ID = "e/2PACX-1vR-1rs3P5A45vuZgRm5FwHWtYb4cJCkiaJpOBPYi5vxJWL3Jua-fVdmAi6RHgrf1aQoiteS_kq9JZqd";
 
-    // Parse CSV rows considering quotes and multi-line values
-    function parseCSV(text) {
-      const lines = text.trim().split(/\r?\n/);
-      if (lines.length === 0) return [];
-      
-      const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-      
-      return lines.slice(1).map(line => {
-        // Splitting by comma while ignoring commas inside double quotes
-        const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.trim().replace(/^"|"$/g, ''));
-        let rowObj = {};
-        headers.forEach((header, index) => {
-          rowObj[header] = values[index] || '';
-        });
-        return rowObj;
+    function buildSheetCsvUrl(sheetTabName) {
+      return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetTabName)}`;
+    }
+
+    // Roman numerals for chapter 2 through 30 (chapter 1 has no suffix)
+    function toRoman(num) {
+      const map = [[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
+      let n = num, result = '';
+      for (const [val, sym] of map) {
+        while (n >= val) { result += sym; n -= val; }
+      }
+      return result;
+    }
+
+    function getChapterColumnDefs(fields) {
+      const defs = [];
+      for (let n = 1; n <= 30; n++) {
+        const suffix = n === 1 ? '' : ' ' + toRoman(n);
+        const charKey = `Character${suffix}`;
+        const textKey = `Text${suffix}`;
+        if (fields.includes(charKey) || fields.includes(textKey)) {
+          defs.push({ n, charKey, textKey });
+        }
+      }
+      return defs;
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function renderChapter(rows, def) {
+      const container = document.getElementById('dialogue-container');
+      container.innerHTML = '';
+
+      const heading = document.createElement('h2');
+      heading.id = 'chapter-heading';
+      heading.textContent = `Chapter ${def.n}`;
+      container.appendChild(heading);
+
+      let rendered = 0;
+
+      rows.forEach(row => {
+        const dialogueText = (row[def.textKey] || '').trim();
+        if (!dialogueText) return;
+
+        const rawCharacter = (row[def.charKey] || '').trim();
+        const isNarrator = rawCharacter === '';
+        const characterName = isNarrator ? 'Narrator' : rawCharacter;
+        const characterKey = characterName.toLowerCase().replace(/\s+/g, '-');
+        const characterClass = `character-${characterKey}`;
+
+        const rowEl = document.createElement('div');
+        rowEl.className = `dialogue-row ${characterClass}`;
+
+        const safeText = escapeHtml(dialogueText).replace(/\n/g, '<br>');
+
+        if (isNarrator) {
+          rowEl.innerHTML = `
+            <div class="dialogue-body">
+              <div class="speech-bubble">${safeText}</div>
+            </div>
+          `;
+        } else {
+          const avatarUrl = `./avatars/${characterKey}.png`;
+          rowEl.innerHTML = `
+            <img src="${avatarUrl}" alt="${escapeHtml(characterName)}" class="avatar" onerror="this.onerror=null; this.src='./avatars/default.png';">
+            <div class="dialogue-body">
+              <span class="speaker-name">${escapeHtml(characterName)}</span>
+              <div class="speech-bubble">${safeText}</div>
+            </div>
+          `;
+        }
+
+        container.appendChild(rowEl);
+        rendered++;
+      });
+
+      if (rendered === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'status-msg';
+        empty.textContent = 'This chapter has no content yet.';
+        container.appendChild(empty);
+      }
+
+      window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+    }
+
+    function setActiveChapterLink(n) {
+      document.querySelectorAll('#chapter-list a').forEach(a => {
+        a.classList.toggle('active', a.dataset.chapter === String(n));
       });
     }
 
-    async function loadDialogue() {
+    async function loadStory() {
+      const params = new URLSearchParams(window.location.search);
+      const storyTab = params.get('story');
+
+      if (!storyTab) {
+        document.getElementById('dialogue-container').innerHTML =
+          `<div class="status-msg error">No story selected. Open this page from the Masterlist, or add ?story=Your%20Tab%20Name to the URL.</div>`;
+        document.getElementById('story-title').textContent = 'No story selected';
+        return;
+      }
+
+      document.getElementById('story-title').textContent = storyTab;
+
       try {
-        const response = await fetch(SHEET_CSV_URL);
-        const csvData = await response.text();
-        const rows = parseCSV(csvData);
+        const response = await fetch(buildSheetCsvUrl(storyTab));
+        if (!response.ok) throw new Error('Could not reach the spreadsheet.');
+        const csvText = await response.text();
 
-        const container = document.getElementById('dialogue-container');
-        container.innerHTML = ''; 
+        const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+        const rows = parsed.data;
+        const fields = parsed.meta.fields || [];
 
-        rows.forEach(row => {
-          // Detect headers dynamically (handles "Character" / "Name" or "Text" / "Dialogue")
-          const rawCharacter = (row.Character || row.Name || row.character || '').trim();
-          const dialogueText = (row.Text || row.Dialogue || row.text || '').trim();
+        const chapterDefs = getChapterColumnDefs(fields);
+        if (chapterDefs.length === 0) {
+          throw new Error('No Character/Text columns found on this tab.');
+        }
 
-          if (!dialogueText) return; 
+        // Only keep chapters that actually have at least one line of text
+        const chaptersWithContent = chapterDefs.filter(def =>
+          rows.some(row => (row[def.textKey] || '').trim() !== '')
+        );
 
-          const isNarrator = rawCharacter === '';
-          const characterName = isNarrator ? 'Narrator' : rawCharacter;
-          const characterKey = characterName.toLowerCase().replace(/\s+/g, '-');
-          const characterClass = `character-${characterKey}`;
+        if (chaptersWithContent.length === 0) {
+          throw new Error('This story has no translated lines yet.');
+        }
 
-          const rowEl = document.createElement('div');
-          rowEl.className = `dialogue-row ${characterClass}`;
-
-          if (isNarrator) {
-            rowEl.innerHTML = `
-              <div class="dialogue-body">
-                <div class="speech-bubble">${dialogueText}</div>
-              </div>
-            `;
-          } else {
-            // Automatically builds image path based on character name: /avatar/charactername.png
-            const avatarUrl = `./avatar/${characterKey}.png`;
-
-            rowEl.innerHTML = `
-              <img src="${avatarUrl}" alt="${characterName}" class="avatar" onerror="this.onerror=null; this.src='./avatar/default.png';">
-              <div class="dialogue-body">
-                <span class="speaker-name">${characterName}</span>
-                <div class="speech-bubble">${dialogueText}</div>
-              </div>
-            `;
-          }
-
-          container.appendChild(rowEl);
+        const list = document.getElementById('chapter-list');
+        list.innerHTML = '';
+        chaptersWithContent.forEach(def => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `#ch${def.n}`;
+          a.textContent = `Chapter ${def.n}`;
+          a.dataset.chapter = String(def.n);
+          a.addEventListener('click', () => {
+            renderChapter(rows, def);
+            setActiveChapterLink(def.n);
+          });
+          li.appendChild(a);
+          list.appendChild(li);
         });
+
+        // Pick chapter from URL hash if valid, else the first available
+        const hashMatch = window.location.hash.match(/^#ch(\d+)$/);
+        const requested = hashMatch ? parseInt(hashMatch[1], 10) : null;
+        const initialDef = chaptersWithContent.find(d => d.n === requested) || chaptersWithContent[0];
+
+        renderChapter(rows, initialDef);
+        setActiveChapterLink(initialDef.n);
+
       } catch (error) {
         console.error('Error fetching dialogue:', error);
-        document.getElementById('dialogue-container').innerHTML = `<div style="color:red; text-align:center;">Failed to load translation content.</div>`;
+        document.getElementById('dialogue-container').innerHTML =
+          `<div class="status-msg error">Failed to load this story. ${escapeHtml(error.message)}</div>`;
       }
     }
 
-    loadDialogue();
+    loadStory();
   </script>
 </body>
 </html>
