@@ -188,14 +188,26 @@
     /* ============================================================
        CONFIG
        ============================================================
-       1. SPREADSHEET_ID: the long ID in your sheet's URL, e.g.
-          https://docs.google.com/spreadsheets/d/*THIS_PART edit
-       2. The sheet must be shared as "Anyone with the link — Viewer".
-       3. Each story lives on its own TAB. The tab name is passed in
+       1. SPREADSHEET_ID must be the ID from the NORMAL share/edit
+          link — NOT a "Publish to web" link.
+
+          Open the sheet, click Share (top right) and set access to
+          "Anyone with the link — Viewer". Then copy the URL, which
+          looks like:
+            https://docs.google.com/spreadsheets/d/1AbCdEfGhIjKlMnOp.../edit
+          The part between /d/ and /edit is what goes below.
+          https://docs.google.com/spreadsheets/d/1zDubus8G08u9BMxvCpepCU8Kiq0bTJNarsO0q5oLvDc/edit?usp=sharing
+
+          (A "Publish to web" link — the kind starting with
+          .../d/e/2PACX-.../pub... — will NOT work here. That format
+          only supports the single sheet/gid it was published from,
+          and can't be queried by tab name.)
+
+       2. Each story lives on its own TAB. The tab name is passed in
           the URL as ?story=Tab%20Name (spaces/punctuation auto-encoded
-          if you build the link from index.html, so you don't need to
+          if you build the link from home.html, so you don't need to
           hand-encode it yourself).
-       4. Within a tab, chapters are column-pairs named:
+       3. Within a tab, chapters are column-pairs named:
             Chapter 1  -> Character   | Text
             Chapter 2  -> Character II  | Text II
             Chapter 3  -> Character III | Text III
@@ -204,7 +216,7 @@
           A blank Character cell (with Text filled in) renders as a
           narrator line. Leave unused columns/rows blank.
        ============================================================ */
-    const SPREADSHEET_ID = "e/2PACX-1vR-1rs3P5A45vuZgRm5FwHWtYb4cJCkiaJpOBPYi5vxJWL3Jua-fVdmAi6RHgrf1aQoiteS_kq9JZqd";
+    const SPREADSHEET_ID = "1zDubus8G08u9BMxvCpepCU8Kiq0bTJNarsO0q5oLvDc";
 
     function buildSheetCsvUrl(sheetTabName) {
       return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetTabName)}`;
