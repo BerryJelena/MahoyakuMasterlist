@@ -3,8 +3,8 @@
    ================================================== */
 :root {
   /* Paper & ink */
-  --bg-color: #F6EFDD;        /* warm cream page */
-  --bg-panel: #FCF8ED;        /* lifted paper (sidebar, cards) */
+  --bg-color: #FAF6EC;        /* soft pastel cream page */
+  --bg-panel: #FDFBF4;        /* lifted paper (sidebar, cards) */
   --text-dark: #3A3229;       /* warm ink, not pure black */
   --text-muted: #8A7C68;      /* faded ink for meta/labels */
   --line-color: #E3D6B8;      /* soft rule, like ruled paper */
@@ -20,10 +20,6 @@ body {
   background-color: var(--bg-color);
   font-family: var(--font-body);
   color: var(--text-dark);
-  background-image:
-    linear-gradient(var(--line-color) 1px, transparent 1px);
-  background-size: 100% 2.1em;
-  background-attachment: local;
 }
 
 /* ----------------------------------------------------
@@ -75,7 +71,7 @@ body {
 }
 
 /* --------------------------------------------------
-   Character Palette Tokens (True Tones — unchanged)
+   Character Palette Tokens (True Tones)
 -------------------------------------------------- */
 .character-oz {
   --bubble-bg: #D55B5B; 
