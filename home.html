@@ -220,11 +220,24 @@
           throw new Error('The sheet returned a sign-in page instead of data. Double-check it\'s shared as "Anyone with the link — Viewer" (Share button, not Publish to web).');
         }
 
-        const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
-        console.log('[DEBUG] Parsed fields:', parsed.meta.fields);
-        console.log('[DEBUG] Parsed rows:', parsed.data);
+        // Parse WITHOUT relying on header names — some trailing empty
+        // columns in this sheet are corrupting Papa's header row. We only
+        // need the first 5 columns (Title, Cover, Excerpt, Sheet, Chapters)
+        // by fixed position, which sidesteps that entirely.
+        const parsed = Papa.parse(csvText, { header: false, skipEmptyLines: true });
+        console.log('[DEBUG] Parse errors:', parsed.errors);
+        console.log('[DEBUG] Raw rows:', parsed.data);
 
-        const items = parsed.data.filter(row => (row.Sheet || '').trim() !== '');
+        const dataRows = parsed.data.slice(1); // drop the header row
+        const items = dataRows
+          .map(cols => ({
+            Title: (cols[0] || '').trim(),
+            Cover: (cols[1] || '').trim(),
+            Excerpt: (cols[2] || '').trim(),
+            Sheet: (cols[3] || '').trim(),
+            Chapters: (cols[4] || '').trim(),
+          }))
+          .filter(row => row.Sheet !== '');
         console.log('[DEBUG] Items after filter:', items);
 
         if (items.length === 0) {
